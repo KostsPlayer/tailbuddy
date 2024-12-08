@@ -1,0 +1,104 @@
+@use "../../../helpers/mixins" as m;
+@use "../../../helpers/variables" as v;
+
+@mixin business() {
+  @include m.section-default(
+    $bg: #fff,
+    $color-title: v.$main-dark,
+    $bg-button: transparent,
+    $color-button: v.$main-dark,
+    $border-button: v.$main-dark,
+    $bg-button-hover: v.$main-dark,
+    $color-button-hover: #fff,
+    $border-button-hover: v.$main-dark
+  );
+
+  &-categories {
+    width: v.$main-width;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+
+    .category {
+      @include m.flex($direction: column);
+      gap: 0.65rem;
+      min-height: 7rem;
+      border-bottom: 1px solid adjust-color($color: #fff, $blackness: 15%);
+      cursor: pointer;
+
+      &.active,
+      &:hover {
+        border-bottom: none;
+        border-left: 1px solid adjust-color($color: #fff, $blackness: 15%);
+        border-right: 1px solid adjust-color($color: #fff, $blackness: 15%);
+        border-top: 2.5px solid v.$main-orange;
+        background: linear-gradient(
+          adjust-color($color: v.$main-orange, $lightness: 30%) 0%,
+          #fff
+        );
+        font-weight: 600;
+      }
+
+      &-image {
+        width: 3rem;
+        height: auto;
+        object-fit: cover;
+      }
+
+      &-text {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  &-content {
+    width: v.$main-width;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.9rem;
+    justify-content: center;
+    align-items: center;
+
+    .item {
+      background-color: v.$main-dark;
+      min-height: 13rem;
+      position: relative;
+      border-radius: 0.4rem;
+
+      &-text-bg {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+
+      &-wrapper {
+        position: absolute;
+        background-color: #fff;
+        border-top-left-radius: 0.4rem;
+        border-top-right-radius: 0.4rem;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        min-height: 4rem;
+        width: 80%;
+        padding: 1rem 0.9rem 0.6rem;
+
+        &-date {
+          font-size: 0.8rem;
+          font-family: v.$comfortaa;
+          color: adjust-color($color: #fff, $blackness: 50%);
+          font-weight: 300;
+        }
+
+        &-text {
+          margin-top: 0.35rem;
+          font-size: 0.9rem;
+          color: v.$main-dark;
+        }
+      }
+    }
+  }
+}

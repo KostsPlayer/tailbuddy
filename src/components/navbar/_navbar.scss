@@ -1,0 +1,88 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+
+.navbar {
+  width: 100%;
+  @include m.flex($justify: space-between);
+  padding: 1.8rem v.$main-px 0.9rem;
+  background-color: v.$main-light;
+
+  &-logo {
+    @include m.flex();
+    gap: 0.6rem;
+
+    img {
+      width: 2.3rem;
+      height: auto;
+    }
+
+    .title {
+      font-family: v.$cherry;
+      font-size: 2.2rem;
+      color: v.$main-dark;
+
+      span {
+        color: v.$main-orange;
+      }
+    }
+  }
+
+  &-elements {
+    @include m.flex();
+    gap: 2.9rem;
+
+    .links {
+      @include m.flex();
+      gap: 1.6rem;
+
+      &-to {
+        text-decoration: none;
+        font-family: v.$comfortaa;
+        color: v.$main-dark;
+        font-size: 0.9rem;
+        transition: all ease-in 0.4s;
+
+        &:hover {
+          color: v.$main-orange;
+          transition: all ease-out 0.4s;
+        }
+
+        &.active {
+          color: v.$main-orange;
+        }
+      }
+    }
+
+    .auth {
+      @include m.flex();
+      gap: 0.6rem;
+
+      &-to {
+        text-decoration: none;
+        font-family: v.$funnel;
+        color: #fff;
+        padding: 0.5rem 0.8rem;
+        background-color: v.$main-dark;
+        border-radius: 0.25rem;
+        transition: all ease-out 0.4s;
+
+        &:hover {
+          background-color: adjust-color($color: v.$main-dark, $lightness: 10%);
+          transition: all ease-out 0.4s;
+        }
+
+        &:first-child {
+          background-color: v.$main-orange;
+
+          &:hover {
+            background-color: adjust-color(
+              $color: v.$main-orange,
+              $lightness: -4%
+            );
+            transition: all ease-out 0.4s;
+          }
+        }
+      }
+    }
+  }
+}

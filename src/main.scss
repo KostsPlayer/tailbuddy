@@ -1,0 +1,25 @@
+@use "./helpers/variables" as v;
+@use "./helpers/mixins" as m;
+
+@use "./components/navbar/navbar";
+@use "./pages/home/home";
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: v.$lato;
+  overflow: hidden auto;
+  width: 100%;
+  height: auto;
+}
+
+.toast {
+  z-index: 9999 !important;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
+}

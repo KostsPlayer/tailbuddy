@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Cat Toy",
+    "image": "cat-toy.jpg",
+    "price": 10000
+  },
+  {
+    "id": 2,
+    "name": "Pet Oil",
+    "image": "pet-oil.jpg",
+    "price": 30000
+  },
+  {
+    "id": 3,
+    "name": "Pet Food",
+    "image": "pet-food.jpg",
+    "price": 5000
+  },
+  {
+    "id": 4,
+    "name": "Pet Comb",
+    "image": "pet-comb.jpg",
+    "price": 20000
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Cutie Cat",
+    "image": "cutie-cat.jpg",
+    "location": "Hanoi",
+    "price": 100000,
+    "user_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Mockingbird",
+    "image": "mockingbird.jpg",
+    "location": "West Java",
+    "price": 300000,
+    "user_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Holland Rabbit",
+    "image": "holland-rabbit.jpg",
+    "location": "East Java",
+    "price": 50000,
+    "user_id": 1
+  },
+  {
+    "id": 4,
+    "name": "Orange Cat",
+    "image": "orange-cat.jpg",
+    "location": "London",
+    "price": 200000,
+    "user_id": 1
+  }
+]

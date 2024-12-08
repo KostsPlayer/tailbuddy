@@ -1,0 +1,45 @@
+@use "../../../helpers/mixins" as m;
+@use "../../../helpers/variables" as v;
+@use "sass:math";
+
+@mixin tag() {
+  background-color: v.$main-dark;
+  padding: v.$main-py v.$main-px;
+  width: 100%;
+  @include m.flex();
+
+  .wrapper {
+    width: v.$main-width;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 1.8rem;
+
+    &-item {
+      border: 1.25px solid v.$main-light;
+      color: v.$main-light;
+      @include m.flex($direction: column);
+      padding: 1.6rem;
+      border-radius: 0.6rem;
+      gap: 1rem;
+      cursor: pointer;
+      transition: all ease-out 0.3s;
+
+      .icon {
+        width: 4.3rem;
+        height: auto;
+      }
+
+      .text {
+        text-align: center;
+        font-size: 1.075rem;
+      }
+
+      &:hover {
+        background-color: v.$main-orange;
+        border-color: v.$main-orange;
+        transition: all ease-out 0.3s;
+        transform: scale(1.05);
+      }
+    }
+  }
+}

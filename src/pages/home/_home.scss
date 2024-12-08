@@ -1,0 +1,30 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+@use "./showItems/show-items" as show-items;
+@use "./hero/hero" as hero;
+@use "./tag/tag" as tag;
+@use "./business/business" as business;
+
+.home {
+  width: 100%;
+
+  .hero {
+    @include hero.hero();
+  }
+
+  .tag {
+    @include tag.tag();
+  }
+
+  .pets {
+    @include show-items.show-items($pets: true);
+  }
+
+  .business {
+    @include business.business();
+  }
+
+  .products {
+    @include show-items.show-items();
+  }
+}

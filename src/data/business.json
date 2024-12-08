@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "Annual Breeders Conference",
+    "business_category_id": 1,
+    "date": 1540847509
+  },
+  {
+    "id": 2,
+    "name": "Exotic Breeds Showcase",
+    "business_category_id": 1,
+    "date": 1534799509
+  },
+  {
+    "id": 3,
+    "name": "National Pet Breeders Meetup",
+    "business_category_id": 1,
+    "date": 1710882709
+  },
+  {
+    "id": 4,
+    "name": "Training Masters Workshop",
+    "business_category_id": 2,
+    "date": 1708809109
+  },
+  {
+    "id": 5,
+    "name": "Canine Education Fair",
+    "business_category_id": 2,
+    "date": 1448485909
+  },
+  {
+    "id": 6,
+    "name": "Pet Training Trends Summit",
+    "business_category_id": 2,
+    "date": 1601932309
+  },
+  {
+    "id": 7,
+    "name": "Winter Pet Fashion Week",
+    "business_category_id": 3,
+    "date": 1586553109
+  },
+  {
+    "id": 8,
+    "name": "Eco-Friendly Pet Wear Expo",
+    "business_category_id": 3,
+    "date": 1594242709
+  },
+  {
+    "id": 9,
+    "name": "Luxury Pet Apparel Gala",
+    "business_category_id": 3,
+    "date": 1684271509
+  },
+  {
+    "id": 10,
+    "name": "Pet Portraits Festival",
+    "business_category_id": 4,
+    "date": 1518988309
+  },
+  {
+    "id": 11,
+    "name": "Wildlife Photography with Pets",
+    "business_category_id": 4,
+    "date": 1469221909
+  },
+  {
+    "id": 12,
+    "name": "Creative Pet Photography Contest",
+    "business_category_id": 4,
+    "date": 1594761109
+  },
+  {
+    "id": 13,
+    "name": "Grooming Excellence Awards",
+    "business_category_id": 5,
+    "date": 1687900309
+  },
+  {
+    "id": 14,
+    "name": "Pet Grooming Innovations Expo",
+    "business_category_id": 5,
+    "date": 1553548309
+  },
+  {
+    "id": 15,
+    "name": "Luxury Spa Grooming Showcase",
+    "business_category_id": 5,
+    "date": 1435266709
+  },
+  {
+    "id": 16,
+    "name": "Interactive Pet Toys Fair",
+    "business_category_id": 6,
+    "date": 1657660309
+  },
+  {
+    "id": 17,
+    "name": "Smart Toys for Pets Expo",
+    "business_category_id": 6,
+    "date": 1431119509
+  },
+  {
+    "id": 18,
+    "name": "DIY Pet Toys Workshop",
+    "business_category_id": 6,
+    "date": 1427922709
+  }
+]

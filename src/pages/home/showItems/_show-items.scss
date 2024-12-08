@@ -1,0 +1,187 @@
+@use "../../../helpers/mixins" as m;
+@use "../../../helpers/variables" as v;
+
+@mixin show-items($pets: false) {
+  @if $pets {
+    @include m.section-default(
+      $bg: v.$main-orange,
+      $color-title: #fff,
+      $bg-button: transparent,
+      $color-button: #fff,
+      $border-button: #fff,
+      $bg-button-hover: #fff,
+      $color-button-hover: v.$main-orange,
+      $border-button-hover: v.$main-orange
+    );
+  } @else {
+    @include m.section-default(
+      $bg: v.$main-dark,
+      $color-title: #fff,
+      $bg-button: transparent,
+      $color-button: #fff,
+      $border-button: #fff,
+      $bg-button-hover: #fff,
+      $color-button-hover: v.$main-dark,
+      $border-button-hover: v.$main-dark
+    );
+  }
+
+  &-content {
+    @include m.flex();
+    gap: 3.4rem;
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+      font-size: 28px;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s ease-in;
+
+      &:hover {
+        transform: translateX(4px) scaleX(1);
+        transition: transform 0.3s ease-out;
+      }
+
+      &:first-child {
+        transform: scaleX(-1);
+
+        &:hover {
+          transform: translateX(-4px) scaleX(-1);
+        }
+      }
+    }
+
+    &-list {
+      width: v.$main-width;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 1.5rem;
+
+      .item {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-content: center;
+        border-radius: 0.5rem;
+        background-color: #fff;
+        position: relative;
+
+        @if $pets {
+          grid-template-rows: 1fr 1fr;
+        } @else {
+          grid-template-rows: 1fr auto;
+        }
+
+        &-favourite {
+          position: absolute;
+          top: 3.8%;
+          right: 6%;
+          font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+          font-size: 17px;
+          background-color: transparent;
+          padding: 0.25rem;
+          border-radius: 0.3rem;
+          border: #fff solid 1.5px;
+          color: #fff;
+          cursor: pointer;
+          transition: all 0.3s ease-in;
+
+          &:hover {
+            background-color: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
+            transition: all 0.3s ease-out;
+          }
+
+          &.active {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+            color: #fff;
+
+            &:hover {
+              border-color: #fff;
+              background-color: transparent;
+              color: #fff;
+            }
+          }
+        }
+
+        @if $pets {
+          &-user {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            @include m.circle($size: 2.1rem);
+            object-fit: cover;
+            border: #fff solid 2.5px;
+            object-position: center;
+          }
+        }
+
+        &-image {
+          width: 100%;
+          height: 100%;
+          max-height: 9rem;
+          object-fit: cover;
+          object-position: center;
+          border-top-left-radius: 0.5rem;
+          border-top-right-radius: 0.5rem;
+        }
+
+        &-wrapper {
+          border-bottom-left-radius: 0.5rem;
+          border-bottom-right-radius: 0.5rem;
+          padding: 0.9rem 1.1rem;
+          @include m.flex(
+            $direction: column,
+            $justify: flex-start,
+            $align: flex-start
+          );
+
+          @if $pets {
+            &-location {
+              @include m.flex($justify: flex-start);
+              gap: 0.125rem;
+              color: adjust-color($color: #fff, $blackness: 25%);
+
+              .material-symbols-rounded {
+                font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0,
+                  "opsz" 24;
+                font-size: 17px;
+                margin-left: -0.1rem;
+              }
+
+              .text {
+                font-size: 0.84rem;
+              }
+            }
+          }
+
+          &-name {
+            @if $pets {
+              margin-top: 0.8rem;
+            } @else {
+              width: 100%;
+              text-align: center;
+              margin-top: 0.1rem;
+            }
+          }
+
+          &-price {
+            font-family: v.$comfortaa;
+            color: adjust-color($color: #fff, $blackness: 40%);
+            font-size: 0.84rem;
+
+            @if $pets {
+              margin-top: 0.3rem;
+            } @else {
+              width: 100%;
+              margin: 0.3rem 0;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

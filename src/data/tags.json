@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "text": "Buy a Pet",
+    "image": "kitten_5267406.png"
+  },
+  {
+    "id": 2,
+    "text": "Pet Businesses",
+    "image": "dog-house.png"
+  },
+  {
+    "id": 3,
+    "text": "Pet Gadgets",
+    "image": "pet-collar.png"
+  },
+  {
+    "id": 4,
+    "text": "Pets Food",
+    "image": "pet-food.png"
+  }
+]
