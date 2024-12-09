@@ -209,7 +209,7 @@
   min-height: 100vh;
   height: auto;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 0.25fr 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas: "topbar topbar" "sidebar content";
   overflow-x: hidden;
@@ -1479,6 +1479,7 @@
 }
 
 .dashboard-user,
+.dashboard-seller,
 .dashboard-admin {
   display: flex;
   align-items: center;
@@ -1492,11 +1493,13 @@
   overflow-x: auto;
 }
 .dashboard-user span,
+.dashboard-seller span,
 .dashboard-admin span {
   color: #f3734c;
 }
 @media (max-width: 767.98px) {
   .dashboard-user,
+  .dashboard-seller,
   .dashboard-admin {
     justify-content: flex-start;
     min-height: 80vh;
@@ -1529,6 +1532,7 @@
   color: #fff;
   background-color: #2e2d31;
   transition: all 0.4s ease-in;
+  cursor: pointer;
 }
 .business-man .header-new-item .material-symbols-rounded {
   font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
@@ -1635,6 +1639,7 @@
   color: #fff;
   background-color: #2e2d31;
   transition: all 0.4s ease-in;
+  cursor: pointer;
 }
 .business-category-man .header-new-item .material-symbols-rounded {
   font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
@@ -1742,6 +1747,7 @@
   color: #fff;
   background-color: #2e2d31;
   transition: all 0.4s ease-in;
+  cursor: pointer;
 }
 .pets-man .header-new-item .material-symbols-rounded {
   font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
@@ -1848,6 +1854,7 @@
   color: #fff;
   background-color: #2e2d31;
   transition: all 0.4s ease-in;
+  cursor: pointer;
 }
 .products-man .header-new-item .material-symbols-rounded {
   font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;

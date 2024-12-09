@@ -11,6 +11,14 @@ function Sidebar() {
         <span className="material-symbols-rounded">dashboard</span>
         <div className="text">Dashboard</div>
       </NavLink>
+
+      {dataCookie && dataCookie.role === "seller" && (
+        <NavLink to={"/pets"} className="item">
+          <span className="material-symbols-rounded">pets</span>
+          <div className="text">Pets</div>
+        </NavLink>
+      )}
+
       {dataCookie && dataCookie.role === "admin" && (
         <>
           <NavLink to={"/users-management"} className="item">

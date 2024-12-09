@@ -225,7 +225,7 @@ function Auth({ type = null }) {
             </div>
           </form>
           <div className="note">
-            By signing {type === "signup" ? "uo" : "in"} , you agree to our{" "}
+            By signing {type === "signup" ? "up" : "in"} , you agree to our{" "}
             <span onClick={() => toastDevelop("terms of service")}>
               Terms of Service
             </span>{" "}

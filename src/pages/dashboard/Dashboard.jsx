@@ -26,16 +26,22 @@ function Dashboard() {
     <>
       {!dataCookie ? (
         <Error401 />
-      ) : dataCookie.role !== "admin" ? (
+      ) : dataCookie.role === "admin" ? (
         <LayoutDashboard>
-          <div className="dashboard-user">
-            Dashboard <span> User</span>
+          <div className="dashboard-admin">
+            Dashboard <span> Admin</span>
+          </div>
+        </LayoutDashboard>
+      ) : dataCookie.role === "seller" ? (
+        <LayoutDashboard>
+          <div className="dashboard-seller">
+            Dashboard <span> Seller</span>
           </div>
         </LayoutDashboard>
       ) : (
         <LayoutDashboard>
-          <div className="dashboard-admin">
-            Dashboard <span> Admin</span>
+          <div className="dashboard-user">
+            Dashboard <span> User</span>
           </div>
         </LayoutDashboard>
       )}
