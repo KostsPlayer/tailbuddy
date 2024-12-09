@@ -1,0 +1,52 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+@use "./sidebar/sidebar" as sidebar;
+@use "./topbar/topbar" as topbar;
+
+.layout-dashboard {
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "topbar topbar"
+    "sidebar content";
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &-sidebar {
+    grid-area: sidebar;
+    @include sidebar.sidebar();
+  }
+
+  &-topbar {
+    grid-area: topbar;
+    @include topbar.topbar();
+  }
+
+  &-content {
+    grid-area: content;
+    height: 100%;
+    width: 100%;
+    overflow-x: auto;
+    padding: 1.4rem 2.2rem;
+  }
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "content";
+
+    &-sidebar {
+      display: none;
+    }
+
+    &-content {
+      min-height: 110vh;
+    }
+  }
+}

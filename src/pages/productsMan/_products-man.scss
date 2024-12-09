@@ -1,0 +1,7 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+@use "../../components/layout/layoutSupport/layout-support" as support;
+
+.products-man {
+  @include support.showItems();
+}

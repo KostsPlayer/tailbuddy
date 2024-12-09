@@ -1,0 +1,26 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+
+@mixin text-loan() {
+  @include m.flex();
+  font-family: v.$cherry;
+  font-size: 5.2rem;
+  text-transform: lowercase;
+  min-height: 60vh;
+  color: v.$main-dark;
+  overflow-x: auto;
+
+  span {
+    color: v.$main-orange;
+  }
+}
+
+.dashboard-user,
+.dashboard-admin {
+  @include text-loan();
+
+  @media (max-width: 767.98px) {
+    justify-content: flex-start;
+    min-height: 80vh;
+  }
+}

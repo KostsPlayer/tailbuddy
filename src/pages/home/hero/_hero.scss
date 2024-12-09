@@ -113,7 +113,7 @@
   }
 
   &-image {
-    width: 35vw;
+    width: 28rem;
     height: auto;
     object-fit: cover;
   }
@@ -179,6 +179,15 @@
         background-color: adjust-color($color: v.$main-orange, $lightness: -4%);
         transition: all ease-out 0.4s;
       }
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    flex-direction: column;
+
+    &-image {
+      width: 20rem;
+      margin-left: 1rem;
     }
   }
 }

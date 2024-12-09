@@ -6,28 +6,12 @@
   @include m.flex($justify: space-between);
   padding: 1.8rem v.$main-px 0.9rem;
   background-color: v.$main-light;
+  position: relative;
 
-  &-logo {
-    @include m.flex();
-    gap: 0.6rem;
-
-    img {
-      width: 2.3rem;
-      height: auto;
-    }
-
-    .title {
-      font-family: v.$cherry;
-      font-size: 2.2rem;
-      color: v.$main-dark;
-
-      span {
-        color: v.$main-orange;
-      }
-    }
-  }
+  @include m.logo();
 
   &-elements {
+    width: 100%;
     @include m.flex();
     gap: 2.9rem;
 
@@ -53,11 +37,11 @@
       }
     }
 
-    .auth {
+    &-auth {
       @include m.flex();
       gap: 0.6rem;
 
-      &-to {
+      .auth-to {
         text-decoration: none;
         font-family: v.$funnel;
         color: #fff;
@@ -80,6 +64,114 @@
               $lightness: -4%
             );
             transition: all ease-out 0.4s;
+          }
+        }
+      }
+    }
+  }
+
+  .material-symbols-rounded {
+    display: none;
+  }
+}
+@media (max-width: 767.98px) {
+  .navbar {
+    padding-left: 1.8rem;
+    padding-right: 1.8rem;
+
+    &-elements {
+      display: none;
+    }
+
+    .material-symbols-rounded {
+      display: block;
+      margin-top: 0.4rem;
+      font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+      font-size: 32px;
+      color: v.$main-dark;
+      cursor: pointer;
+    }
+  }
+
+  .navbar-queries {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    top: 0;
+    left: 0;
+    z-index: 19;
+  }
+
+  .mobile-navbar {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 1.8rem 2.4rem 3.3rem;
+    z-index: 21;
+
+    @include m.logo($justify: center, $m: 0 0 2.1rem);
+
+    &-elements {
+      @include m.flex($direction: column);
+      gap: 2.7rem;
+
+      .links {
+        @include m.flex($direction: column);
+        gap: 1.6rem;
+
+        &-to {
+          text-decoration: none;
+          font-family: v.$comfortaa;
+          color: v.$main-dark;
+          font-size: 0.9rem;
+          transition: all ease-in 0.4s;
+
+          &:hover {
+            color: v.$main-orange;
+            transition: all ease-out 0.4s;
+          }
+
+          &.active {
+            color: v.$main-orange;
+          }
+        }
+      }
+
+      .elements-auth {
+        @include m.flex();
+        gap: 0.6rem;
+
+        .auth-to {
+          text-decoration: none;
+          font-family: v.$funnel;
+          color: #fff;
+          padding: 0.5rem 0.8rem;
+          background-color: v.$main-dark;
+          border-radius: 0.25rem;
+          transition: all ease-out 0.4s;
+
+          &:hover {
+            background-color: adjust-color(
+              $color: v.$main-dark,
+              $lightness: 10%
+            );
+            transition: all ease-out 0.4s;
+          }
+
+          &:first-child {
+            background-color: v.$main-orange;
+
+            &:hover {
+              background-color: adjust-color(
+                $color: v.$main-orange,
+                $lightness: -4%
+              );
+              transition: all ease-out 0.4s;
+            }
           }
         }
       }

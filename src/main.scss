@@ -2,7 +2,16 @@
 @use "./helpers/mixins" as m;
 
 @use "./components/navbar/navbar";
+@use "./components/layout/layout-dashboard";
 @use "./pages/home/home";
+@use "./pages/auth/auth";
+@use "./pages/dashboard/dashboard";
+@use "./pages/businessMan/business-man";
+@use "./pages/businessCategoryMan/business-category-man";
+@use "./pages/petsMan/pets-man";
+@use "./pages/productsMan/products-man";
+@use "./pages/usersMan/users-man";
+@use "./pages/Error/error";
 
 *,
 *::before,
@@ -15,11 +24,39 @@
 body {
   font-family: v.$lato;
   overflow: hidden auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   height: auto;
 }
 
-.toast {
-  z-index: 9999 !important;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
+.mobile-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 19;
+}
+
+.Toastify__toast {
+  z-index: 9999;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .Toastify__toast-container {
+    width: 30vw;
+  }
+}
+
+.Toastify__toast-icon {
+  margin-right: 1rem;
+}
+
+.Toastify__toast-body {
+  line-height: 127.5%;
 }

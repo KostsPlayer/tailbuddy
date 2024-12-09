@@ -3,18 +3,24 @@
     "id": 1,
     "username": "Example",
     "email": "example@gmail.com",
+    "password": "!@12QAZxsw",
+    "role": "admin",
     "image": "pexels-olly-712513.jpg"
   },
   {
     "id": 2,
     "username": "Todos",
     "email": "todos@gmail.com",
+    "password": "!@12QAZxsw",
+    "role": "user",
     "image": "pexels-olly-712513.jpg"
   },
   {
     "id": 3,
     "username": "Testing",
     "email": "testing@gmail.com",
+    "password": "!@12QAZxsw",
+    "role": "user",
     "image": "pexels-olly-712513.jpg"
   }
 ]
