@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Logo from "../../../helpers/Logo";
 import Cookies from "universal-cookie";
 import { getDecryptedCookie } from "../../../helpers/Crypto";
 import { useNavigate, NavLink } from "react-router-dom";
 import { toastDevelop } from "../../../helpers/AlertMessage";
+import Logo from "../../logo/Logo";
 
 function Topbar() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../../helpers/Logo";
+import Logo from "../logo/Logo";
 
 function Navbar() {
   const [openNavbar, setOpenNavbar] = useState(false);

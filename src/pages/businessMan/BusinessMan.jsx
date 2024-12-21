@@ -117,7 +117,7 @@ function BusinessMan() {
           <div className="business-category-man">
             <div className="header">
               <div className="header-title">
-                Business Categories <span> Management</span>
+                Business<span> Management</span>
               </div>
               {!isEditing && (
                 <div

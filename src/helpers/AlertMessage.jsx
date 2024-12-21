@@ -74,3 +74,23 @@ export function toastDevelop(info) {
     }
   );
 }
+// import { toast } from "react-hot-toast";
+
+// export const toastMessage = (type, messages, position = "top-center") => {
+//   if (type === "success") {
+//     toast.success(messages, {
+//       position,
+//       duration: 2500,
+//     });
+//   } else if (type === "error") {
+//     toast.error(messages, {
+//       position,
+//       duration: 2500,
+//     });
+//   } else {
+//     toast(messages, {
+//       position,
+//       duration: 2500,
+//     });
+//   }
+// };

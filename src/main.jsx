@@ -8,7 +8,8 @@ import BusinessCategoryMan from "./pages/businessCategoryMan/BusinessCategoryMan
 import UsersMan from "./pages/usersMan/UsersMan";
 import PetsMan from "./pages/petsMan/PetsMan";
 import ProductsMan from "./pages/productsMan/ProductsMan";
-import { Login, Signup } from "./pages/auth/Auth";
+import Auth from "./pages/auth/Auth";
+import ChooseRole from "./pages/chooseRole/ChooseRole";
 import { Error404, Error401, Error403 } from "./pages/Error/Error";
 import "./main.css";
 
@@ -20,8 +21,9 @@ createRoot(document.getElementById("root")).render(
         <Route path="*" element={<Error404 />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="/401" element={<Error401 />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Auth />} />
+        <Route path="/signup" element={<Auth signup />} />
+        <Route path="/choose-role" element={<ChooseRole />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users-management" element={<UsersMan />} />
         <Route path="/pets" element={<PetsMan />} />

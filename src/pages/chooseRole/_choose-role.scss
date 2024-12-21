@@ -1,0 +1,143 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+@use "../../components/logo/logo" as logo;
+
+.choose-role {
+  width: 100vw;
+  height: auto;
+  min-height: 100vh;
+  @include m.flex($direction: column);
+  background-color: v.$auth-color;
+  color: v.$main-dark;
+  padding: 3rem 4rem;
+
+  @include logo.logo($justify: center, $gap: 0.8rem, $is: 3.7rem, $fs: 3.1rem);
+
+  &-title {
+    font-family: v.$funnel;
+    font-size: 2.45rem;
+    text-transform: capitalize;
+    line-height: 110%;
+    text-align: center;
+    margin-top: 0.2rem;
+  }
+
+  &-content {
+    @include m.flex();
+    gap: 1.7rem;
+    margin: 3.3rem 0 4.5rem;
+
+    .template {
+      @include m.flex($direction: column, $justify: flex-start);
+      gap: 0.1rem;
+      cursor: pointer;
+      width: 20.5rem;
+      height: auto;
+      border-radius: 0.8rem;
+      background-color: transparent;
+      color: v.$main-orange;
+      box-shadow: 0 0 10px 2px rgba($color: v.$main-orange, $alpha: 0.6);
+      transition: all 0.4s ease-in;
+      padding: 1.4rem 3.4rem 2.9rem;
+
+      .material-symbols-rounded {
+        font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+        font-size: 4.9rem;
+        transition: all 0.4s ease-in;
+      }
+
+      .role {
+        font-size: 1.6rem;
+        text-transform: capitalize;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .desc {
+        margin-top: .05rem;
+        text-align: center;
+        font-size: 1rem;
+      }
+
+      &:hover {
+        color: #fff;
+        background-color: v.$main-orange;
+        transition: all 0.4s ease-out;
+
+        .material-symbols-rounded {
+          transition: all 0.4s ease-out;
+          font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+        }
+      }
+
+      &.active {
+        color: #fff;
+        background-color: v.$main-dark;
+        transition: all 0.4s ease-out;
+        box-shadow: 0 0 10px 2px rgba($color: v.$main-dark, $alpha: 0.4);
+
+        .material-symbols-rounded {
+          transition: all 0.4s ease-out;
+          font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+        }
+      }
+    }
+  }
+
+  &-button {
+    background-color: transparent;
+    border: 1.5px solid v.$main-dark;
+    padding: 0.95rem 3.3rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 50vw;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: v.$main-dark;
+    transition: all 0.4s ease-in;
+
+    &:hover {
+      color: #fff;
+      background-color: v.$main-dark;
+      transition: all 0.4s ease-out;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    @include logo.logo(
+      $justify: center,
+      $gap: 0.8rem,
+      $is: 3.1rem,
+      $fs: 2.6rem
+    );
+
+    &-title {
+      font-size: 1.9rem;
+      margin-top: 0.3rem;
+      line-height: 100%;
+    }
+
+    &-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      margin: 3.4rem 0 2.9rem;
+
+      .template {
+        .material-symbols-rounded {
+          font-variation-settings: "FILL" 0, "wght" 100, "GRAD" 0, "opsz" 24;
+        }
+
+        span {
+          font-weight: 400;
+        }
+      }
+    }
+
+    &-button {
+      padding: 0.95rem 2.4rem;
+      border-width: 1px;
+      font-weight: 500;
+    }
+  }
+}

@@ -27,6 +27,7 @@
   font-family: "Cherry Bomb One", system-ui;
   font-size: 2.2rem;
   color: #2e2d31;
+  line-height: auto;
 }
 .navbar .tailbuddy-logo-title span {
   color: #f3734c;
@@ -144,6 +145,7 @@
     font-family: "Cherry Bomb One", system-ui;
     font-size: 2.2rem;
     color: #2e2d31;
+    line-height: auto;
   }
   .mobile-navbar .tailbuddy-logo-title span {
     color: #f3734c;
@@ -293,6 +295,7 @@
   font-family: "Cherry Bomb One", system-ui;
   font-size: 2.2rem;
   color: #2e2d31;
+  line-height: auto;
 }
 .layout-dashboard-topbar .tailbuddy-logo-title span {
   color: #f3734c;
@@ -455,6 +458,7 @@
     font-family: "Cherry Bomb One", system-ui;
     font-size: 2.2rem;
     color: #2e2d31;
+    line-height: auto;
   }
   .layout-dashboard-topbar .mobile-sidebar-top .tailbuddy-logo-title span {
     color: #f3734c;
@@ -1304,6 +1308,7 @@
   font-family: "Cherry Bomb One", system-ui;
   font-size: 2.2rem;
   color: #2e2d31;
+  line-height: auto;
 }
 .auth-content .tailbuddy-logo-title span {
   color: #f3734c;
@@ -1475,6 +1480,173 @@
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
+  }
+}
+
+.choose-role {
+  width: 100vw;
+  height: auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #fff1e8;
+  color: #2e2d31;
+  padding: 3rem 4rem;
+}
+.choose-role .tailbuddy-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 0.8rem;
+  text-decoration: none;
+  width: 100%;
+  margin: 0;
+}
+.choose-role .tailbuddy-logo img {
+  width: 3.7rem;
+  height: auto;
+}
+.choose-role .tailbuddy-logo-title {
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 3.1rem;
+  color: #2e2d31;
+  line-height: auto;
+}
+.choose-role .tailbuddy-logo-title span {
+  color: #f3734c;
+}
+.choose-role-title {
+  font-family: "Funnel Display", sans-serif;
+  font-size: 2.45rem;
+  text-transform: capitalize;
+  line-height: 110%;
+  text-align: center;
+  margin-top: 0.2rem;
+}
+.choose-role-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1.7rem;
+  margin: 3.3rem 0 4.5rem;
+}
+.choose-role-content .template {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 0.1rem;
+  cursor: pointer;
+  width: 20.5rem;
+  height: auto;
+  border-radius: 0.8rem;
+  background-color: transparent;
+  color: #f3734c;
+  box-shadow: 0 0 10px 2px rgba(243, 115, 76, 0.6);
+  transition: all 0.4s ease-in;
+  padding: 1.4rem 3.4rem 2.9rem;
+}
+.choose-role-content .template .material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+  font-size: 4.9rem;
+  transition: all 0.4s ease-in;
+}
+.choose-role-content .template .role {
+  font-size: 1.6rem;
+  text-transform: capitalize;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.choose-role-content .template .desc {
+  margin-top: 0.05rem;
+  text-align: center;
+  font-size: 1rem;
+}
+.choose-role-content .template:hover {
+  color: #fff;
+  background-color: #f3734c;
+  transition: all 0.4s ease-out;
+}
+.choose-role-content .template:hover .material-symbols-rounded {
+  transition: all 0.4s ease-out;
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+.choose-role-content .template.active {
+  color: #fff;
+  background-color: #2e2d31;
+  transition: all 0.4s ease-out;
+  box-shadow: 0 0 10px 2px rgba(46, 45, 49, 0.4);
+}
+.choose-role-content .template.active .material-symbols-rounded {
+  transition: all 0.4s ease-out;
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+.choose-role-button {
+  background-color: transparent;
+  border: 1.5px solid #2e2d31;
+  padding: 0.95rem 3.3rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 50vw;
+  cursor: pointer;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #2e2d31;
+  transition: all 0.4s ease-in;
+}
+.choose-role-button:hover {
+  color: #fff;
+  background-color: #2e2d31;
+  transition: all 0.4s ease-out;
+}
+@media (max-width: 767.98px) {
+  .choose-role .tailbuddy-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 0.8rem;
+    text-decoration: none;
+    width: 100%;
+    margin: 0;
+  }
+  .choose-role .tailbuddy-logo img {
+    width: 3.1rem;
+    height: auto;
+  }
+  .choose-role .tailbuddy-logo-title {
+    font-family: "Cherry Bomb One", system-ui;
+    font-size: 2.6rem;
+    color: #2e2d31;
+    line-height: auto;
+  }
+  .choose-role .tailbuddy-logo-title span {
+    color: #f3734c;
+  }
+  .choose-role-title {
+    font-size: 1.9rem;
+    margin-top: 0.3rem;
+    line-height: 100%;
+  }
+  .choose-role-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 3.4rem 0 2.9rem;
+  }
+  .choose-role-content .template .material-symbols-rounded {
+    font-variation-settings: "FILL" 0, "wght" 100, "GRAD" 0, "opsz" 24;
+  }
+  .choose-role-content .template span {
+    font-weight: 400;
+  }
+  .choose-role-button {
+    padding: 0.95rem 2.4rem;
+    border-width: 1px;
+    font-weight: 500;
   }
 }
 

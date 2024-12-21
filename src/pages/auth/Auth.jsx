@@ -1,19 +1,24 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import SmoothScroll from "../../helpers/SmoothScroll";
 import facebook from "../../assets/images/login/facebook.png";
 import google from "../../assets/images/login/google.png";
 import whatsapp from "../../assets/images/login/whatsapp.png";
 import { Link } from "react-router-dom";
-import Logo from "../../helpers/Logo";
-import usersData from "../../data/users.json";
-import { toastDevelop, toastMessage } from "../../helpers/AlertMessage";
+import Logo from "../../components/logo/Logo";
+import {
+  toastDevelop,
+  toastMessage,
+  toastPromise,
+} from "../../helpers/AlertMessage";
 import { ToastContainer } from "react-toastify";
-import { useNavigate, useLocation } from "react-router-dom";
-import { setEncryptedCookie, getDecryptedCookie } from "../../helpers/Crypto";
+import { signupSchema } from "../../helpers/ValidationSchema";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import endpointsServer from "../../helpers/endpointsServer";
+import axios from "axios";
+import Cookies from "universal-cookie";
 
-function Auth({ type = null }) {
-  const navigate = useNavigate();
-  const location = useLocation();
+function Auth({ signup }) {
+  axios.defaults.withCredentials = true;
 
   const [hidePassword, setHidePassword] = useState(true);
   const [activeRemember, setActiveRemember] = useState(false);
@@ -22,10 +27,15 @@ function Auth({ type = null }) {
     email: "",
     password: "",
   });
-  const [users, setUsers] = useState(usersData);
-  const [newUser, setNewUser] = useState(() =>
-    location.state?.newUser ? [location.state.newUser] : []
-  );
+
+  const loginStatus = useRef(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const verifyEmail = searchParams.get("message");
+
+  const cookies = new Cookies(null, { path: "/" });
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -42,65 +52,124 @@ function Auth({ type = null }) {
     (e) => {
       e.preventDefault();
 
-      if (type === "signup") {
-        const isEmailExists = users.some((user) => user.email === values.email);
+      if (signup) {
+        signupSchema
+          .validate(
+            {
+              email: values.email,
+              username: values.username,
+              password: values.password,
+            },
+            { abortEarly: false }
+          )
+          .then(() => {
+            const signupPromise = axios.post(endpointsServer.registration, {
+              username: values.username,
+              email: values.email,
+              password: values.password,
+            });
 
-        if (isEmailExists) {
-          toastMessage("error", "Email already exists!", {
-            position: "top-center",
+            toastPromise(
+              signupPromise,
+              {
+                pending: "Signup in progress, please wait..",
+                success: "Signup successful! 🎉",
+                error: "Failed to signup, please try again!",
+              },
+              {
+                position: "top-center",
+                autoClose: 3000,
+              },
+              () => {
+                navigate("/choose-role", {
+                  state: {
+                    email: values.email,
+                  },
+                });
+              }
+            );
+
+            signupPromise
+              .then((res) => {
+                setValues("");
+              })
+              .catch((err) => {
+                toastMessage("error", err, {
+                  position: "top-center",
+                });
+              });
+          })
+          .catch((errors) => {
+            errors.inner.forEach((error) => {
+              toastMessage("error", error.message, {
+                position: "top-center",
+                autoClose: 3500,
+              });
+            });
           });
-          return;
-        }
-
-        const newUser = {
-          id: users.length + 1,
-          username: values.username,
+      } else {
+        const loginPromise = axios.post(endpointsServer.login, {
           email: values.email,
           password: values.password,
-          role: "user",
-          image: "pexels-olly-712513.jpg",
-        };
-
-        setUsers((prevUsers) => [...prevUsers, newUser]);
-        navigate("/login", {
-          state: { newUser, messageSignup: "Signup successful!" },
         });
-        setValues({ username: "", email: "", password: "" });
-      } else {
-        const getUser =
-          users.find(
-            (user) =>
-              (user.email === values.email ||
-                user.username === values.username) &&
-              user.password === values.password
-          ) || newUser[0];
 
-        if (getUser) {
-          setEncryptedCookie("tailbuddy", getUser, 18);
-          navigate("/dashboard", {
-            state: {
-              messageLogin: `Login successful! Welcome, ${getUser.username}`,
-            },
-          });
-        } else {
-          toastMessage("error", "Invalid email or password!", {
+        toastPromise(
+          loginPromise,
+          {
+            pending: "Login in progress, please wait.",
+            success: "Login successful! 🎉",
+            error: "Failed to login, please try again!",
+          },
+          {
             position: "top-center",
+            autoClose: 3000,
+          },
+          () => {
+            if (loginStatus.current === 200) {
+              navigate("/dashboard");
+            } else {
+              return;
+            }
+          }
+        );
+
+        loginPromise
+          .then((res) => {
+            loginStatus.current = res.status;
+
+            if (loginStatus.current === 200) {
+              const token = res.data.token;
+
+              cookies.set("tailbuddy", token);
+            } else {
+              return;
+            }
+          })
+          .catch((err) => {
+            console.error(err);
           });
-        }
       }
     },
-    [values, users, navigate, toastMessage]
+    [values, signup]
   );
 
   useEffect(() => {
-    if (location.state?.messageSignup) {
-      toastMessage("success", location.state.messageSignup);
-      navigate(location.pathname, {
-        state: { ...location.state, messageSignup: undefined },
-        replace: true,
+    if (verifyEmail) {
+      toastMessage("success", verifyEmail, {
+        position: "top-center",
       });
-    }
 
+      const params = new URLSearchParams(window.location.search);
+      params.delete("message");
+      const newUrl = params.toString()
+        ? `${window.location.pathname}?${params.toString()}`
+        : window.location.pathname;
+
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }, [verifyEmail]);
+
+  useEffect(() => {
     if (location.state?.messageLogout) {
       toastMessage("success", location.state.messageLogout);
       navigate(location.pathname, {
@@ -118,10 +187,10 @@ function Auth({ type = null }) {
         <div className="auth-content">
           <Logo />
           <div className="title">
-            {type === "signup" ? "Signup" : "Login"} to get started
+            {signup ? "Signup" : "Login"} to get started
           </div>
           <div className="preface">
-            Welcome {type === "signup" ? "" : "back"}! Let's Groove
+            Welcome {signup ? "" : "back"}! Let's Groove
           </div>
           <div className="integration">
             <img
@@ -145,7 +214,7 @@ function Auth({ type = null }) {
           </div>
           <div className="divider"></div>
           <form className="form" onSubmit={handleSubmit}>
-            {type === "signup" && (
+            {signup && (
               <div className="form-group">
                 <input
                   type="text"
@@ -163,9 +232,7 @@ function Auth({ type = null }) {
                 name="email"
                 autoComplete="email"
                 placeholder={
-                  type === "signup"
-                    ? "Email address"
-                    : "Email address or username"
+                  signup ? "Email address" : "Email address or username"
                 }
                 onChange={handleChange}
                 value={values.email}
@@ -212,20 +279,20 @@ function Auth({ type = null }) {
               </div>
             </div>
             <button className="form-button" type="submit">
-              {type === "signup" ? "Submit" : "Login"}
+              {signup ? "Submit" : "Login"}
             </button>
             <div className="to-other">
               Don't have an account?{" "}
               <Link
                 className="to-other-item"
-                to={type === "signup" ? "/login" : "/signup"}
+                to={signup ? "/login" : "/signup"}
               >
-                {type === "signup" ? "Login" : "Signup"}
+                {signup ? "Login" : "Signup"}
               </Link>
             </div>
           </form>
           <div className="note">
-            By signing {type === "signup" ? "up" : "in"} , you agree to our{" "}
+            By signing {signup ? "up" : "in"} , you agree to our{" "}
             <span onClick={() => toastDevelop("terms of service")}>
               Terms of Service
             </span>{" "}
@@ -242,10 +309,4 @@ function Auth({ type = null }) {
   );
 }
 
-export function Login() {
-  return <Auth />;
-}
-
-export function Signup() {
-  return <Auth type="signup" />;
-}
+export default Auth;

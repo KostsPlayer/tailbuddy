@@ -1,5 +1,6 @@
 @use "../../../helpers/mixins" as m;
 @use "../../../helpers/variables" as v;
+@use "../../logo/logo" as logo;
 
 @mixin topbar() {
   width: 100%;
@@ -8,7 +9,7 @@
   @include m.flex($justify: space-between);
   height: 5rem;
 
-  @include m.logo();
+  @include logo.logo();
 
   .config {
     @include m.flex($justify: flex-end);
@@ -159,7 +160,7 @@
           }
         }
 
-        @include m.logo($m: 0 0 0.9rem);
+        @include logo.logo($m: 0 0 0.9rem);
       }
 
       .item {

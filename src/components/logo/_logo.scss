@@ -1,0 +1,35 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+
+@mixin logo(
+  $justify: flex-start,
+  $m: 0,
+  $gap: 0.6rem,
+  $is: 2.3rem,
+  $fs: 2.2rem,
+  $ln: auto
+) {
+  .tailbuddy-logo {
+    @include m.flex($justify: $justify);
+    gap: $gap;
+    text-decoration: none;
+    width: 100%;
+    margin: $m;
+
+    img {
+      width: $is;
+      height: auto;
+    }
+
+    &-title {
+      font-family: v.$cherry;
+      font-size: $fs;
+      color: v.$main-dark;
+      line-height: $ln;
+
+      span {
+        color: v.$main-orange;
+      }
+    }
+  }
+}

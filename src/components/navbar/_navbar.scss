@@ -1,5 +1,6 @@
 @use "../../helpers/mixins" as m;
 @use "../../helpers/variables" as v;
+@use "../logo/logo" as logo;
 
 .navbar {
   width: 100%;
@@ -8,7 +9,7 @@
   background-color: v.$main-light;
   position: relative;
 
-  @include m.logo();
+  @include logo.logo();
 
   &-elements {
     width: 100%;
@@ -113,7 +114,7 @@
     padding: 1.8rem 2.4rem 3.3rem;
     z-index: 21;
 
-    @include m.logo($justify: center, $m: 0 0 2.1rem);
+    @include logo.logo($justify: center, $m: 0 0 2.1rem);
 
     &-elements {
       @include m.flex($direction: column);

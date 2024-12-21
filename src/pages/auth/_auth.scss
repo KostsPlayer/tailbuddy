@@ -1,7 +1,6 @@
 @use "../../helpers/mixins" as m;
 @use "../../helpers/variables" as v;
-
-$bg-color: #fff1e8;
+@use "../../components/logo/logo" as logo;
 
 .auth {
   width: 100%;
@@ -25,10 +24,10 @@ $bg-color: #fff1e8;
   &-content {
     border-radius: 1.7rem;
     @include m.flex($direction: column, $justify: flex-start);
-    background-color: $bg-color;
+    background-color: v.$auth-color;
     padding: 1.7rem 3.1rem;
 
-    @include m.logo($justify: center);
+    @include logo.logo($justify: center);
 
     .title {
       margin-top: 2.3rem;
@@ -77,7 +76,7 @@ $bg-color: #fff1e8;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 4rem;
-        background-color: $bg-color;
+        background-color: v.$auth-color;
         text-align: center;
         font-size: 0.85rem;
         color: adjust-color($color: #fff, $blackness: 50%);
@@ -170,7 +169,10 @@ $bg-color: #fff1e8;
         transition: all 0.5s ease-in;
 
         &:hover {
-          background-color: adjust-color($color: v.$main-orange, $lightness: 2.5%);
+          background-color: adjust-color(
+            $color: v.$main-orange,
+            $lightness: 2.5%
+          );
           transition: all 0.5s ease-out;
         }
       }
