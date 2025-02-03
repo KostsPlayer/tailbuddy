@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import Modal from "../../components/layout/Modal/Modal";
+import Modal from "../../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
-import apiConfig from "../../helpers/apiConfig";
-import { businessSchema } from "../../validations/Business";
-import endpointsServer from "../../helpers/endpointsServer";
-import DashboardCore from "../../context/dashboardCore/DashboardCore";
+import apiConfig from "../../../helpers/apiConfig";
+import { businessCategoriesSchema } from "../../../validations/BusinessCategories";
+import endpointsServer from "../../../helpers/endpointsServer";
+import LandingCore from "../../../context/landingCore/LandingCore";
 
 function BusinessCategoryManModal({
   type = "create",
@@ -18,85 +18,33 @@ function BusinessCategoryManModal({
     preview: null,
     name: "",
   });
-  const [values, setValues] = useState({
-    business: "",
-    business_category_id: "",
-  });
-  const [categories, setCategories] = useState([]);
-  const [openCategories, setOpenCategories] = useState(false);
+  const [values, setValues] = useState({ pet: "", location: "", price: "" });
 
-  const categoriesRef = useRef(null);
   const businessCategoriesModal = useRef(null);
   const createStatus = useRef(false);
   const updateStatus = useRef(false);
   const deleteStatus = useRef(false);
 
-  const { token, toastPromise, toastMessage } = DashboardCore();
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (categoriesRef.current && !categoriesRef.current.contains(e.target)) {
-        setOpenCategories(false);
-      }
-    };
-
-    if (openCategories) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [categoriesRef, openCategories]);
-
-  const fetchCategories = useCallback(async () => {
-    try {
-      const response = await apiConfig.get(
-        endpointsServer.businessCategoriesAll,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setCategories(response.data.data);
-    } catch (error) {
-      console.error("Failed to fetch data!", error);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+  const { token, toastPromise, toastMessage } = LandingCore();
 
   useEffect(() => {
     if (type === "create") {
-      setValues({ business: "", business_category_id: "" });
+      setValues({ pet: "", location: "", price: "" });
       setSelectedImage({ file: null, preview: null, name: "" });
     } else {
       if (dataId) {
         apiConfig
-          .get(`${endpointsServer.businessId}?id=${dataId}`, {
+          .get(`${endpointsServer.businessCategoriesID}/${dataId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           })
           .then((res) => {
-            const getData = res.data.data[0];
-
-            console.log("Data:", getData);
-
-            setValues({
-              business: getData.business,
-              business_category_id: getData.business_category_id,
-            });
+            setValues({ name: res.data.data.name });
             setSelectedImage({
-              file: getData.image,
-              preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business/${getData.image}`,
-              name: getData.image,
+              file: res.data.data.image,
+              preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business_categories/${res.data.data.image}`,
+              name: res.data.data.image,
             });
           })
           .catch((err) => {
@@ -127,28 +75,27 @@ function BusinessCategoryManModal({
 
       if (type === "create") {
         const formData = new FormData();
-        formData.append("business", values.business);
-        formData.append("business_category_id", values.business_category_id);
+        formData.append("name", values.name);
         if (selectedImage.file) {
           formData.append("image", selectedImage.file);
         }
 
         try {
-          await businessSchema.validate(
-            {
-              business: values.business,
-              business_category_id: values.business_category_id,
-              image: selectedImage.file,
-            },
+          await businessCategoriesSchema.validate(
+            { name: values.name, image: selectedImage.file },
             { abortEarly: false }
           );
 
-          const promise = apiConfig.post(endpointsServer.business, formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          });
+          const promise = apiConfig.post(
+            endpointsServer.businessCategoriesCreate,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
 
           toastPromise(
             promise,
@@ -187,24 +134,19 @@ function BusinessCategoryManModal({
         }
       } else {
         const formData = new FormData();
-        formData.append("business", values.business);
-        formData.append("business_category_id", values.business_category_id);
+        formData.append("name", values.name);
         if (selectedImage.file) {
           formData.append("image", selectedImage.file);
         }
 
         try {
-          await businessSchema.validate(
-            {
-              business: values.business,
-              business_category_id: values.business_category_id,
-              image: selectedImage.file,
-            },
+          await businessCategoriesSchema.validate(
+            { name: values.name, image: selectedImage.file },
             { abortEarly: false }
           );
 
           const promise = apiConfig.put(
-            `${endpointsServer.business}?id=${dataId}`,
+            `${endpointsServer.businessCategoriesUpdate}/${dataId}`,
             formData,
             {
               headers: {
@@ -259,7 +201,7 @@ function BusinessCategoryManModal({
       e.preventDefault();
 
       const promise = apiConfig.delete(
-        `${endpointsServer.business}?id=${dataId}`,
+        `${endpointsServer.businessCategoriesDelete}/${dataId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -329,81 +271,22 @@ function BusinessCategoryManModal({
         >
           <form className="modal-form" onSubmit={handleSubmit}>
             <div className="modal-form-group">
-              <label htmlFor="business">
-                Business's Name <span>(Required)</span>
+              <label htmlFor="name">
+                Business Category's Name <span>(Required)</span>
               </label>
               <input
                 type="text"
-                id="business"
-                name="business"
-                placeholder="Pet Business"
-                value={values.business}
+                id="name"
+                name="name"
+                placeholder="Pet Business Category"
+                value={values.name}
                 onChange={handleChange}
               />
             </div>
 
             <div className="modal-form-group">
-              <div className="modal-form-group">
-                <div className="label">
-                  Business Category's Parent <span>(Required)</span>
-                </div>
-                <div
-                  className="select-default"
-                  onClick={() => setOpenCategories(true)}
-                >
-                  <div className="text">
-                    {values.business_category_id === ""
-                      ? "Select Business Category's Parent"
-                      : categories
-                          .filter(
-                            (item) =>
-                              item.business_categories_id ===
-                              values.business_category_id
-                          )
-                          .map((data) => data.name)}
-                  </div>
-                  <span
-                    className={`material-symbols-outlined ${
-                      openCategories ? "default-closed" : ""
-                    }`}
-                  >
-                    south_east
-                  </span>
-                </div>
-                {openCategories && (
-                  <div className="select-list" ref={categoriesRef}>
-                    {categories
-                      .filter(
-                        (item) =>
-                          item.business_categories_id !==
-                          values.business_category_id
-                      )
-                      .map((data) => {
-                        return (
-                          <div
-                            className="select-list-item"
-                            key={data.business_categories_id}
-                            onClick={() => {
-                              setValues((prev) => ({
-                                ...prev,
-                                business_category_id:
-                                  data.business_categories_id,
-                              }));
-                              setOpenCategories(false);
-                            }}
-                          >
-                            <div className="name">{data.name}</div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="modal-form-group">
               <div className="label">
-                Business's Image <span>(Required)</span>
+                Business Category's Image <span>(Required)</span>
               </div>
               <div className="select-image-wrapper">
                 <div className="select-image">

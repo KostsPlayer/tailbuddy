@@ -28,13 +28,6 @@ function BusinessCategoryManModal({
   const { token, toastPromise, toastMessage } = DashboardCore();
 
   useEffect(() => {
-    if (type === "update" && isOpen === false) {
-      setValues({ name: "" });
-      setSelectedImage({ file: null, preview: null, name: "" });
-    }
-  }, [type, isOpen]);
-
-  useEffect(() => {
     if (type === "create") {
       setValues({ name: "" });
       setSelectedImage({ file: null, preview: null, name: "" });
@@ -276,8 +269,8 @@ function BusinessCategoryManModal({
           setIsOpen={setIsOpen}
           modalRef={businessCategoriesModal}
         >
-          <form className="modal-dashboard-form" onSubmit={handleSubmit}>
-            <div className="modal-dashboard-form-group">
+          <form className="modal-form" onSubmit={handleSubmit}>
+            <div className="modal-form-group">
               <label htmlFor="name">
                 Business Category's Name <span>(Required)</span>
               </label>
@@ -291,7 +284,7 @@ function BusinessCategoryManModal({
               />
             </div>
 
-            <div className="modal-dashboard-form-group">
+            <div className="modal-form-group">
               <div className="label">
                 Business Category's Image <span>(Required)</span>
               </div>

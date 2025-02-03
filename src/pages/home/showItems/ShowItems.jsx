@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import products from "../../../data/products.json";
 // import pets from "../../../data/pets.json";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 import imgUser from "/users/pexels-olly-712513.jpg";
 import axios from "axios";
 import endpointsServer from "../../../helpers/endpointsServer";
+import Modal from "../../../components/layout/Modal/Modal";
 
 function ShowItems({ itemsData, items }) {
   const [activeFavorite, setActiveFavorite] = useState([]);
+  const [openTransaction, setOpenTransaction] = useState(false);
 
   const handleActiveFavorite = useCallback(
     (id) => {
@@ -20,6 +22,29 @@ function ShowItems({ itemsData, items }) {
     },
     [activeFavorite]
   );
+
+  const refTransaction = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        refTransaction.current &&
+        !refTransaction.current.contains(e.target)
+      ) {
+        setOpenTransaction(false);
+      }
+    };
+
+    if (openTransaction) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [refTransaction, openTransaction]);
 
   return (
     <div className={`${items}`}>
