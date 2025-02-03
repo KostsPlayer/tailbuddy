@@ -184,7 +184,7 @@ function Auth({ signup }) {
 
   return (
     <>
-      <SmoothScroll />
+      {/* <SmoothScroll /> */}
       <div className="auth">
         <div className="auth-image"></div>
         <div className="auth-content">

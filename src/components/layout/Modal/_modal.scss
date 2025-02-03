@@ -1,6 +1,6 @@
 @use "../../../helpers/mixins" as m;
 @use "../../../helpers/variables" as v;
-@use "../Support/support-dashboard" as support;
+@use "../support/support" as support;
 
 .overlay-modal-dashboard {
   position: fixed;
@@ -11,7 +11,7 @@
   background-color: rgba($color: #000, $alpha: 0.5);
   z-index: 31;
 
-  @mixin modal($max: 50vw, $p: 2.2rem 3.1rem 3.1rem) {
+  @mixin modal($max: 45vw, $p: 2.2rem 3.3rem 3.1rem, $max-h: 80vh) {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -21,8 +21,10 @@
     z-index: 32;
     padding: $p;
     height: auto;
+    max-height: $max-h;
     max-width: $max;
     display: grid;
+    border-radius: 0.5rem;
   }
 
   .modal-dashboard {
@@ -30,32 +32,40 @@
 
     grid-template-areas:
       "title close"
+      "line line"
       "content content";
+    gap: 0.8rem;
+    overflow-y: auto;
 
     &-title {
-      font-size: 1.9rem;
-      text-align: center;
+      font-size: 1.6rem;
       line-height: 125%;
-      font-family: v.$bebas-neue;
-      letter-spacing: 0.1rem;
+      letter-spacing: 1.5px;
       width: fit-content;
-      font-weight: 100;
       grid-area: title;
+      font-family: v.$funnel;
+      @include m.flex($justify: flex-start);
+      font-weight: 500;
 
-      @include support.text-hover(0.12rem);
+      .other {
+        color: v.$main-orange;
+        margin-left: 0.55rem;
+      }
     }
 
     &-close {
-      margin: auto 0 auto auto;
+      margin-left: auto;
       width: fit-content;
+      height: fit-content;
       cursor: pointer;
       padding: 0.3rem;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
       color: #000;
       border-radius: 50%;
       transition: transform 0.4s ease-out, background-color 0.4s ease-out;
       background-color: #fff;
+      @include m.flex($justify: flex-end);
 
       &:hover {
         transform: rotate(90deg);
@@ -64,45 +74,110 @@
       }
     }
 
+    &-line {
+      width: 100%;
+      height: 0.08rem;
+      background-color: rgba($color: #000, $alpha: 0.1);
+      grid-area: line;
+    }
+
+    @mixin container(
+      $p: 0 0.9rem,
+      $w: 100%,
+      $h: 2.55rem,
+      $input: false,
+      $fs: 0.9rem,
+      $bdr-rds: 0.5rem
+    ) {
+      width: $w;
+      font-size: $fs;
+      padding: $p;
+      height: $h;
+      outline: none;
+      border-radius: $bdr-rds;
+      border: none;
+
+      @if $input {
+        border: 0.05rem solid rgba($color: #000, $alpha: 0.5);
+
+        &:focus {
+          border: 0.05rem solid v.$main-orange;
+        }
+      }
+    }
+
     &-form {
       grid-area: content;
       width: 100%;
-      gap: 0.95rem 1.3rem;
+      gap: 1.05rem;
       margin-top: 0.9rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-
-      @mixin container($p: 0 0.9rem, $h: 3rem, $input: false) {
-        width: 100%;
-        font-size: 0.95rem;
-        font-family: v.$raleway;
-        padding: $p;
-        height: $h;
-        outline: none;
-
-        @if $input {
-          border: 0.05rem solid rgba($color: #000, $alpha: 0.5);
-        }
-      }
 
       &-group {
         width: 100%;
         @include m.flex($direction: column, $start: true);
-        gap: 0.35rem;
+        gap: 0.6rem;
         position: relative;
 
-        label,
+        label:not(.special-image),
         .label {
           @include container($h: fit-content, $p: 0);
 
           span {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: adjust-color($color: #fff, $blackness: 50%);
           }
         }
 
-        input {
-          @include container($input: true);
+        input:not([type="file"]) {
+          @include container($input: true, $fs: 0.88rem);
+        }
+
+        input[type="file"] {
+          display: none;
+        }
+
+        .select-image-wrapper {
+          @include m.flex($start: true);
+          gap: 1.4rem;
+
+          .select-image {
+            padding: 0.35rem 0.85rem 0.35rem 0.75rem;
+            border: 0.05rem solid rgba($color: #000, $alpha: 0.5);
+            border-radius: 0.3rem;
+
+            &-button {
+              @include m.flex();
+              gap: 0.35rem;
+              cursor: pointer;
+
+              .material-symbols-rounded {
+                font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0,
+                  "opsz" 24;
+                font-size: 1.35rem;
+                color: #000;
+              }
+
+              .text {
+                color: #000;
+                font-size: 0.88rem;
+              }
+            }
+          }
+
+          .select-image-note {
+            &-file {
+              width: 16rem;
+              height: auto;
+              object-fit: cover;
+              margin-top: 0.2rem;
+            }
+
+            &-name {
+              margin-top: 0.4rem;
+              font-size: 0.925rem;
+            }
+          }
         }
 
         .select-default {
@@ -152,7 +227,7 @@
             }
 
             &:hover {
-              background-color: #000;
+              background-color: v.$main-orange;
               color: #fff;
             }
           }
@@ -168,7 +243,6 @@
           }
 
           .text {
-            font-family: v.$raleway;
             font-size: 0.9rem;
             letter-spacing: 0.05rem;
           }
@@ -176,15 +250,63 @@
       }
 
       button {
-        @include container();
+        @include container(
+          $w: 32%,
+          $fs: 0.85rem,
+          $bdr-rds: 0.35rem,
+          $h: 2.65rem
+        );
         color: #fff;
         background-color: #000;
-        border: none;
         text-transform: uppercase;
-        letter-spacing: 0.15rem;
-        margin-top: auto;
+        letter-spacing: 0.125rem;
+        margin: 1.35rem 0 0 auto;
+        transition: background-color 0.4s ease-in;
+        cursor: pointer;
 
-        @include support.button-hover($origin: top left);
+        &:hover {
+          background-color: v.$main-orange;
+          transition: background-color 0.4s ease-out;
+        }
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      @include modal($max: 90vw, $max-h: 90vh, $p: 2.2rem 2.2rem 3.1rem);
+
+      &-title {
+        @include m.flex($start: true, $direction: column);
+
+        .other {
+          margin: 0;
+        }
+      }
+
+      &-close {
+        font-size: 1.6rem;
+      }
+
+      &-form {
+        &-group {
+          .select-image-wrapper {
+            @include m.flex($start: true, $direction: column);
+
+            .select-image-note {
+              &-file {
+                width: 15rem;
+              }
+            }
+          }
+        }
+
+        button {
+          @include container(
+            $w: 40%,
+            $fs: 0.85rem,
+            $bdr-rds: 0.35rem,
+            $h: 2.65rem
+          );
+        }
       }
     }
   }
@@ -200,6 +322,7 @@
 
     &-desc {
       font-size: 0.92rem;
+      margin-bottom: 1.9rem;
     }
 
     &-action {

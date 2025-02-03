@@ -4,7 +4,6 @@ import { getDecryptedCookie } from "../../helpers/Crypto";
 import { Error401 } from "../Error/Error";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toastMessage } from "../../helpers/AlertMessage";
-import { ToastContainer } from "react-toastify";
 
 function Dashboard() {
   // const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
@@ -46,7 +45,6 @@ function Dashboard() {
         </LayoutDashboard>
       )} */}
       <LayoutDashboard>Dashboard</LayoutDashboard>
-      <ToastContainer />
     </>
   );
 }

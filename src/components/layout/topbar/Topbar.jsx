@@ -4,13 +4,15 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { toastDevelop } from "../../../helpers/AlertMessage";
 import Logo from "../../logo/Logo";
 import Cookies from "js-cookie";
+import DashboardCore from "../../../context/dashboardCore/DashboardCore";
 
 function Topbar() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
   const settingRef = useRef();
   const sidebarRef = useRef();
+
+  const { token } = DashboardCore();
 
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ function Topbar() {
   const handleLogout = useCallback(() => {
     Cookies.remove("tailbuddy");
     navigate("/login", { state: { messageLogout: "Logout successfully!" } });
-  }, [dataCookie]);
+  }, [token]);
 
   return (
     <div className="layout-dashboard-topbar">
@@ -58,8 +60,8 @@ function Topbar() {
           {isSettingOpen && (
             <div className="setting-modal" ref={settingRef}>
               <div className="setting-modal-profile">
-                <div className="username">{dataCookie?.username}</div>
-                <div className="email">{dataCookie?.email}</div>
+                <div className="username">{token?.username}</div>
+                <div className="email">{token?.email}</div>
               </div>
               <div
                 className="setting-modal-item"
@@ -109,7 +111,7 @@ function Topbar() {
                 <span className="material-symbols-rounded">pets</span>
                 <div className="text">Pets</div>
               </NavLink>
-            {/* {dataCookie && dataCookie.role === "seller" && (
+            {/* {token && token.role === "seller" && (
             )} */}
 
                 <NavLink to={"/users-management"} className="item">
@@ -134,12 +136,12 @@ function Topbar() {
                   <span className="material-symbols-rounded">category</span>
                   <div className="text">Business Category</div>
                 </NavLink>
-            {/* {dataCookie && dataCookie.role === "admin" && (
+            {/* {token && token.role === "admin" && (
               <>
               </>
             )} */}
-            <div className="username">{dataCookie?.username}</div>
-            <div className="email">{dataCookie?.email}</div>
+            {/* <div className="username">{token?.username}</div> */}
+            {/* <div className="email">{token?.email}</div> */}
             <div className="item" onClick={() => toastDevelop("help support")}>
               Help Support
             </div>

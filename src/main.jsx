@@ -1,36 +1,66 @@
-import { StrictMode } from "react";
+import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/home/Home";
-import Dashboard from "./pages/dashboard/Dashboard";
-import BusinessMan from "./pages/businessMan/BusinessMan";
-import BusinessCategoryMan from "./pages/businessCategoryMan/BusinessCategoryMan";
-import UsersMan from "./pages/usersMan/UsersMan";
-import PetsMan from "./pages/petsMan/PetsMan";
-import ProductsMan from "./pages/productsMan/ProductsMan";
-import Auth from "./pages/auth/Auth";
-import ChooseRole from "./pages/chooseRole/ChooseRole";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import useLoadable from "./hooks/useLoadable";
+import SearchProvider from "./context/search/SearchProvider";
+import DashboardCoreProvider from "./context/DashboardCore/DashboardCoreProvider";
 import { Error404, Error401, Error403 } from "./pages/Error/Error";
+
+const Home = useLoadable(lazy(() => import("./pages/home/Home")));
+const Dashboard = useLoadable(
+  lazy(() => import("./pages/dashboard/Dashboard"))
+);
+const BusinessMan = useLoadable(
+  lazy(() => import("./pages/businessMan/BusinessMan"))
+);
+const BusinessCategoryMan = useLoadable(
+  lazy(() => import("./pages/businessCategoryMan/BusinessCategoryMan"))
+);
+const UsersMan = useLoadable(lazy(() => import("./pages/usersMan/UsersMan")));
+const PetsMan = useLoadable(lazy(() => import("./pages/petsMan/PetsMan")));
+const ProductsMan = useLoadable(
+  lazy(() => import("./pages/productsMan/ProductsMan"))
+);
+const Auth = useLoadable(lazy(() => import("./pages/auth/Auth")));
+const ChooseRole = useLoadable(
+  lazy(() => import("./pages/chooseRole/ChooseRole"))
+);
+
 import "./main.css";
+
+const DashboardCore = () => {
+  return (
+    <DashboardCoreProvider>
+      <Outlet />
+    </DashboardCoreProvider>
+  );
+};
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<Error404 />} />
-        <Route path="/403" element={<Error403 />} />
-        <Route path="/401" element={<Error401 />} />
-        <Route path="/login" element={<Auth />} />
-        <Route path="/signup" element={<Auth signup />} />
-        <Route path="/choose-role" element={<ChooseRole />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/users-management" element={<UsersMan />} />
-        <Route path="/pets" element={<PetsMan />} />
-        <Route path="/products" element={<ProductsMan />} />
-        <Route path="/business" element={<BusinessMan />} />
-        <Route path="/business-category" element={<BusinessCategoryMan />} />
-      </Routes>
+      <SearchProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Error404 />} />
+          <Route path="/403" element={<Error403 />} />
+          <Route path="/401" element={<Error401 />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/signup" element={<Auth signup />} />
+          <Route path="/choose-role" element={<ChooseRole />} />
+          <Route element={<DashboardCore />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/users-management" element={<UsersMan />} />
+            <Route path="/pets" element={<PetsMan />} />
+            <Route path="/products" element={<ProductsMan />} />
+            <Route path="/business" element={<BusinessMan />} />
+            <Route
+              path="/business-category"
+              element={<BusinessCategoryMan />}
+            />
+          </Route>
+        </Routes>
+      </SearchProvider>
     </BrowserRouter>
   </StrictMode>
 );

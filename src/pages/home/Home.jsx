@@ -10,7 +10,7 @@ function Home() {
   return (
     <>
       <div className="home">
-        <SmoothScroll />
+        {/* <SmoothScroll /> */}
         <Navbar />
         <Hero />
         <Tag />

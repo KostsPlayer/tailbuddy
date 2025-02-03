@@ -4,7 +4,6 @@ import { getDecryptedCookie } from "../../helpers/Crypto";
 import { Error401, Error403 } from "../Error/Error";
 import products from "../../data/products.json";
 import { toastMessage } from "../../helpers/AlertMessage";
-import { ToastContainer } from "react-toastify";
 import { FormatCurrencyIDR } from "../../helpers/FormatCurrencyIDR";
 import LayoutSupport from "../../components/layout/layoutSupport/LayoutSupport";
 
@@ -213,7 +212,6 @@ function ProductsMan() {
           </div>
         </div>
       </LayoutDashboard>
-      <ToastContainer />
     </>
   );
 }

@@ -23,7 +23,7 @@
     &-new-item {
       @include m.flex();
       gap: 0.4em;
-      padding: 0.5rem 1.1rem;
+      padding: 0.65rem 1.1rem;
       border-radius: 0.4rem;
       color: #fff;
       background-color: v.$main-dark;
@@ -76,6 +76,11 @@
         background-color: v.$main-dark;
         color: #fff;
         padding: 1.2rem;
+
+        .category {
+          margin-top: .2rem;
+          font-size: .93rem;
+        }
 
         .core-data {
           font-size: 1.1rem;

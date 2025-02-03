@@ -1,199 +1,125 @@
-import React, { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import LayoutDashboard from "../../components/layout/LayoutDashboard";
-import { getDecryptedCookie } from "../../helpers/Crypto";
-import { Error401, Error403 } from "../Error/Error";
-import businessCategories from "../../data/businessCategories.json"; // Data kategori bisnis
-import business from "../../data/business.json"; // Data bisnis
-import { toastMessage } from "../../helpers/AlertMessage";
-import { ToastContainer } from "react-toastify";
+import DashboardCore from "../../context/dashboardCore/DashboardCore";
+import apiConfig from "../../helpers/apiConfig";
+import endpointsServer from "../../helpers/endpointsServer";
+import LoaderPages from "../../components/loader/LoaderPages";
+import BusinessManModal from "./BusinessManModal";
 
 function BusinessMan() {
-  const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
-  const [data, setData] = useState(business);
-  const [addItem, setAddItem] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editItemId, setEditItemId] = useState(null);
-  const [values, setValues] = useState({
-    name: "",
-    business_category_id: "", // Field untuk kategori
-  });
+  const [data, setData] = useState([]);
+  const [dataId, setDataId] = useState(null);
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
-  // Mengelola input teks
-  const handleOnChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setValues((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }, []);
+  const { token, isLoadingDashboardCore, setDashboardCoreLoader } =
+    DashboardCore();
 
-  // Menyimpan data form
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (values.name && values.business_category_id) {
-        const newItem = {
-          id: data.length + 1,
-          ...values,
-          business_category_id: parseInt(values.business_category_id), // Pastikan tipe data sesuai
-        };
-        setData((prevData) => [...prevData, newItem]);
-        setValues({
-          name: "",
-          business_category_id: "",
-        });
-        setAddItem(false);
-        toastMessage("success", "Item added successfully!");
-      } else {
-        toastMessage("error", "Please fill in all fields!");
-      }
-    },
-    [data, values]
-  );
+  const fetchBusiness = useCallback(async () => {
+    try {
+      setDashboardCoreLoader(true);
 
-  // Menghapus item
-  const handleDeleteItem = useCallback(
-    (id) => {
-      const newData = data.filter((item) => item.id !== id);
-      toastMessage("success", "Item deleted successfully!");
-      setData(newData);
-    },
-    [data]
-  );
+      const promise = await apiConfig.get(endpointsServer.business, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  // Memulai proses edit
-  const handleEditItem = useCallback(
-    (id) => {
-      const itemToEdit = data.find((item) => item.id === id);
-      if (itemToEdit) {
-        setValues({
-          name: itemToEdit.name,
-          business_category_id: itemToEdit.business_category_id.toString(), // Konversi ke string untuk dropdown
-        });
-        setIsEditing(true);
-        setEditItemId(id);
-      }
-    },
-    [data]
-  );
+      console.log(promise.data.data);
 
-  // Menyimpan perubahan data
-  const handleUpdateSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (values.name && values.business_category_id) {
-        const updatedData = data.map((item) =>
-          item.id === editItemId
-            ? {
-                ...item,
-                ...values,
-                business_category_id: parseInt(values.business_category_id),
-              }
-            : item
-        );
-        setData(updatedData);
-        setValues({
-          name: "",
-          business_category_id: "",
-        });
-        setIsEditing(false);
-        setEditItemId(null);
-        toastMessage("success", "Item updated successfully!");
-      } else {
-        toastMessage("error", "Please fill in all fields!");
-      }
-    },
-    [data, values, editItemId]
-  );
+      setData(promise.data.data);
+    } catch (error) {
+      console.error("Failed to fetch data!", error);
+      setDashboardCoreLoader(false);
+    } finally {
+      setDashboardCoreLoader(false);
+    }
+  }, [token, setDashboardCoreLoader]);
+
+  useEffect(() => {
+    fetchBusiness();
+  }, [fetchBusiness]);
 
   return (
     <>
-      {/* {!dataCookie ? (
-        <Error401 />
-      ) : dataCookie.role === "user" ? (
-        <Error403 />
+      {isLoadingDashboardCore ? (
+        <LoaderPages />
       ) : (
-      )} */}
         <LayoutDashboard>
           <div className="business-category-man">
             <div className="header">
               <div className="header-title">
                 Business<span> Management</span>
               </div>
-              {!isEditing && (
-                <div
-                  className="header-new-item"
-                  onClick={() => setAddItem(true)}
-                >
-                  <span className="material-symbols-rounded">add_task</span>
-                  <div className="text">add new item</div>
-                </div>
-              )}
-            </div>
-
-            {(addItem || isEditing) && (
-              <form
-                className="form"
-                onSubmit={isEditing ? handleUpdateSubmit : handleSubmit}
+              <div
+                className="header-new-item"
+                onClick={() => setOpenCreate(true)}
               >
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={values.name}
-                  onChange={handleOnChange}
-                />
-                <select
-                  name="business_category_id"
-                  value={values.business_category_id}
-                  onChange={handleOnChange}
-                >
-                  <option value="" disabled>
-                    Select Category
-                  </option>
-                  {businessCategories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">{isEditing ? "Update" : "Submit"}</button>
-              </form>
-            )}
+                <span className="material-symbols-rounded">add_task</span>
+                <div className="text">add new item</div>
+              </div>
+            </div>
 
             <div className="content">
-              {data.map((item) => (
-                <div className="content-item" key={item.id}>
-                  <div className="content-item-image"></div>
-                  <div className="content-item-core">
-                    <div className="name">{item.name}</div>
-                    <div className="category">
-                      Category:{" "}
-                      {businessCategories.find(
-                        (category) => category.id === item.business_category_id
-                      )?.name || "Unknown"}
-                    </div>
-                    <div className="core-action">
-                      <span
-                        className="material-symbols-rounded"
-                        onClick={() => handleEditItem(item.id)}
-                      >
-                        edit_square
-                      </span>
-                      <span
-                        className="material-symbols-rounded"
-                        onClick={() => handleDeleteItem(item.id)}
-                      >
-                        auto_delete
-                      </span>
+              {data.map((item) => {
+                const image = `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business/${item.image}`;
+
+                return (
+                  <div className="content-item" key={item.business_id}>
+                    <img
+                      className="content-item-image"
+                      src={image}
+                      alt={item.image}
+                    />
+                    <div className="content-item-core">
+                      <div className="name">{item.business}</div>
+                      <div className="category">
+                        {item.business_categories.name}
+                      </div>
+                      <div className="core-action">
+                        <span
+                          className="material-symbols-rounded"
+                          onClick={() => handleEditItem(item.id)}
+                        >
+                          edit_square
+                        </span>
+                        <span
+                          className="material-symbols-rounded"
+                          onClick={() => handleDeleteItem(item.id)}
+                        >
+                          auto_delete
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
+
+          <BusinessManModal
+            type="create"
+            isOpen={openCreate}
+            setIsOpen={setOpenCreate}
+            refreshData={fetchBusiness}
+          />
+          <BusinessManModal
+            type="update"
+            isOpen={openUpdate}
+            setIsOpen={setOpenUpdate}
+            refreshData={fetchBusiness}
+            dataId={dataId}
+          />
+          <BusinessManModal
+            type="delete"
+            isOpen={openDelete}
+            setIsOpen={setOpenDelete}
+            refreshData={fetchBusiness}
+            dataId={dataId}
+          />
         </LayoutDashboard>
-      <ToastContainer />
+      )}
     </>
   );
 }

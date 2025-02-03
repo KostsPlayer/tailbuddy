@@ -1,0 +1,114 @@
+@use "../../../helpers/mixins" as m;
+@use "../../../helpers/variables" as v;
+
+$blue: #0d6efd;
+$indigo: #6610f2;
+$purple: #6f42c1;
+$pink: #d63384;
+$red: #dc3545;
+$orange: #fd7e14;
+$yellow: #ffc107;
+$green: #198754;
+$teal: #20c997;
+$cyan: #0dcaf0;
+
+@mixin text-hover($h: 0.12rem, $color: #000, $pos: 0, $time: 0.8s) {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: $h;
+    background-color: $color;
+    left: 0;
+    bottom: $pos;
+    transform: scaleX(0);
+    transition: transform $time ease-in;
+    transform-origin: left;
+  }
+
+  &:hover {
+    &::after {
+      transform: scaleX(1);
+      transition: transform $time ease-out;
+    }
+  }
+}
+
+@mixin button-hover(
+  $bg: adjust-color($color: #000, $whiteness: 25%),
+  $origin: top right,
+  $time: 0.6s
+) {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-color: $bg;
+    bottom: 0;
+    left: 0;
+    transform: scale(0);
+    transform-origin: $origin;
+    transition: transform $time ease-in;
+  }
+
+  &:hover {
+    &::after {
+      transition: transform $time ease-out;
+      transform: scale(1);
+    }
+  }
+}
+
+@mixin header-icon(
+  $i-weight: 200,
+  $bg: adjust-color($color: #fff, $blackness: 7%),
+  $bg-hover: adjust-color($color: #fff, $blackness: 10.5%)
+) {
+  font-variation-settings: "FILL" 0, "wght" $i-weight, "GRAD" 0, "opsz" 24;
+  @include m.flex();
+  padding: 0.7rem;
+  height: 2.9rem;
+  background-color: $bg;
+  position: relative;
+  cursor: pointer;
+  z-index: 2;
+
+  @include button-hover($bg: $bg-hover, $origin: top left, $time: 0.5s);
+}
+
+@mixin icon-action(
+  $color,
+  $size: 1rem,
+  $weight: 200,
+  $default: false,
+  $p: 0.22rem
+) {
+  font-size: $size;
+  @include m.flex();
+  padding: $p;
+  transition: all 0.3s ease-in;
+  background-color: transparent;
+  color: $color;
+  font-variation-settings: "FILL" 0, "wght" $weight, "GRAD" 0, "opsz" 24;
+
+  @if $default == false {
+    border: $color solid 1px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color;
+      color: #fff;
+      font-variation-settings: "FILL" 1, "wght" $weight, "GRAD" 0, "opsz" 24;
+      transition: all 0.3s ease-out;
+    }
+  }
+}

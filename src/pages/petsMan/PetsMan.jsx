@@ -4,7 +4,6 @@ import { getDecryptedCookie } from "../../helpers/Crypto";
 import { Error401, Error403 } from "../Error/Error";
 import pets from "../../data/pets.json";
 import { toastMessage } from "../../helpers/AlertMessage";
-import { ToastContainer } from "react-toastify";
 import { FormatCurrencyIDR } from "../../helpers/FormatCurrencyIDR";
 import axios from "axios";
 import endpointsServer from "../../helpers/endpointsServer";
@@ -162,10 +161,10 @@ function PetsMan() {
             </div>
             {/* {!isEditing && (
             )} */}
-              <div className="header-new-item" onClick={() => setAddItem(true)}>
-                <span className="material-symbols-rounded">add_task</span>
-                <div className="text">add new item</div>
-              </div>
+            <div className="header-new-item" onClick={() => setAddItem(true)}>
+              <span className="material-symbols-rounded">add_task</span>
+              <div className="text">add new item</div>
+            </div>
           </div>
 
           {/* {(addItem || isEditing) && (
@@ -247,7 +246,6 @@ function PetsMan() {
           </div>
         </div>
       </LayoutDashboard>
-      <ToastContainer />
     </>
   );
 }

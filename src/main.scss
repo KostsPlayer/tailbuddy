@@ -1,6 +1,9 @@
 @use "./helpers/variables" as v;
 @use "./helpers/mixins" as m;
 
+@use "./pages/Error/error";
+@use "./components/loader/loader";
+@use "./components/layout/modal/modal";
 @use "./components/navbar/navbar";
 @use "./components/layout/layout-dashboard";
 @use "./pages/home/home";
@@ -12,7 +15,6 @@
 @use "./pages/petsMan/pets-man";
 @use "./pages/productsMan/products-man";
 @use "./pages/usersMan/users-man";
-@use "./pages/Error/error";
 
 *,
 *::before,
