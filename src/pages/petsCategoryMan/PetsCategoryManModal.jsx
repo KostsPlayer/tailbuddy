@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import Modal from "../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
 import apiConfig from "../../helpers/apiConfig";
-import { businessCategoriesSchema } from "../../validations/BusinessCategories";
+import { petCategoriesSchema } from "../../validations/PetCategories";
 import endpointsServer from "../../helpers/endpointsServer";
 import DashboardCore from "../../context/dashboardCore/DashboardCore";
 
@@ -13,11 +13,6 @@ function PetsCategoryManModal({
   refreshData,
   dataId = null,
 }) {
-  const [selectedImage, setSelectedImage] = useState({
-    file: null,
-    preview: null,
-    name: "",
-  });
   const [values, setValues] = useState({ name: "" });
 
   const businessCategoriesModal = useRef(null);
@@ -30,22 +25,16 @@ function PetsCategoryManModal({
   useEffect(() => {
     if (type === "create") {
       setValues({ name: "" });
-      setSelectedImage({ file: null, preview: null, name: "" });
     } else {
       if (dataId) {
         apiConfig
-          .get(`${endpointsServer.businessCategoriesID}/${dataId}`, {
+          .get(`${endpointsServer.petCategories}/${dataId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           })
           .then((res) => {
             setValues({ name: res.data.data.name });
-            setSelectedImage({
-              file: res.data.data.image,
-              preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business_categories/${res.data.data.image}`,
-              name: res.data.data.image,
-            });
           })
           .catch((err) => {
             console.log("Error:", err);
@@ -53,16 +42,6 @@ function PetsCategoryManModal({
       }
     }
   }, [type, dataId, token]);
-
-  const handleFileChange = useCallback((e) => {
-    if (e.target.files.length > 0) {
-      setSelectedImage({
-        file: e.target.files[0],
-        preview: URL.createObjectURL(e.target.files[0]),
-        name: e.target.files[0].name,
-      });
-    }
-  }, []);
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -74,25 +53,18 @@ function PetsCategoryManModal({
       e.preventDefault();
 
       if (type === "create") {
-        const formData = new FormData();
-        formData.append("name", values.name);
-        if (selectedImage.file) {
-          formData.append("image", selectedImage.file);
-        }
-
         try {
-          await businessCategoriesSchema.validate(
-            { name: values.name, image: selectedImage.file },
+          await petCategoriesSchema.validate(
+            { name: values.name },
             { abortEarly: false }
           );
 
           const promise = apiConfig.post(
-            endpointsServer.businessCategoriesCreate,
-            formData,
+            endpointsServer.petCategories,
+            { name: values.name },
             {
               headers: {
                 Authorization: `Bearer ${token}`,
-                "Content-Type": "multipart/form-data",
               },
             }
           );
@@ -101,7 +73,7 @@ function PetsCategoryManModal({
             promise,
             {
               pending:
-                "Creating business categories data on progress, please wait..!",
+                "Creating pet categories data on progress, please wait..!",
               success: "Data has been successfully created!",
               error: "Failed to create data!",
             },
@@ -133,25 +105,18 @@ function PetsCategoryManModal({
           }
         }
       } else {
-        const formData = new FormData();
-        formData.append("name", values.name);
-        if (selectedImage.file) {
-          formData.append("image", selectedImage.file);
-        }
-
         try {
-          await businessCategoriesSchema.validate(
-            { name: values.name, image: selectedImage.file },
+          await petCategoriesSchema.validate(
+            { name: values.name },
             { abortEarly: false }
           );
 
           const promise = apiConfig.put(
-            `${endpointsServer.businessCategoriesUpdate}/${dataId}`,
-            formData,
+            `${endpointsServer.petCategories}/${dataId}`,
+            { name: values.name },
             {
               headers: {
                 Authorization: `Bearer ${token}`,
-                "Content-Type": "multipart/form-data",
               },
             }
           );
@@ -160,7 +125,7 @@ function PetsCategoryManModal({
             promise,
             {
               pending:
-                "Updating business categories data on progress, please wait..!",
+                "Updating pet categories data on progress, please wait..!",
               success: "Data has been successfully updated!",
               error: "Failed to update data!",
             },
@@ -193,7 +158,7 @@ function PetsCategoryManModal({
         }
       }
     },
-    [values, selectedImage, token, refreshData, type]
+    [values, token, refreshData, type]
   );
 
   const handleDelete = useCallback(
@@ -201,7 +166,7 @@ function PetsCategoryManModal({
       e.preventDefault();
 
       const promise = apiConfig.delete(
-        `${endpointsServer.businessCategoriesDelete}/${dataId}`,
+        `${endpointsServer.petCategories}/${dataId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -212,8 +177,7 @@ function PetsCategoryManModal({
       toastPromise(
         promise,
         {
-          pending:
-            "deleting business categories data on progress, please wait..!",
+          pending: "deleting pet categories data on progress, please wait..!",
           success: "Data has been successfully deleted!",
           error: "Failed to delete data!",
         },
@@ -264,7 +228,7 @@ function PetsCategoryManModal({
       ) : (
         <Modal
           titleModal={type === "create" ? "Insert" : "Update"}
-          otherTitleModal={"Business Categories"}
+          otherTitleModal={"Pet Categories"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           modalRef={businessCategoriesModal}
@@ -272,51 +236,16 @@ function PetsCategoryManModal({
           <form className="modal-form" onSubmit={handleSubmit}>
             <div className="modal-form-group">
               <label htmlFor="name">
-                Business Category's Name <span>(Required)</span>
+                Pet Category's Name <span>(Required)</span>
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                placeholder="Pet Business Category"
+                placeholder="Orange Cat"
                 value={values.name}
                 onChange={handleChange}
               />
-            </div>
-
-            <div className="modal-form-group">
-              <div className="label">
-                Business Category's Image <span>(Required)</span>
-              </div>
-              <div className="select-image-wrapper">
-                <div className="select-image">
-                  <input
-                    type="file"
-                    id="image"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="image" className="select-image-button">
-                    <span className="material-symbols-rounded">
-                      cloud_upload
-                    </span>
-                    <span className="text">Choose File</span>
-                  </label>
-                </div>
-                {selectedImage.preview && (
-                  <div className="select-image-note">
-                    <img
-                      className="select-image-note-file"
-                      src={selectedImage.preview}
-                      alt={selectedImage.name}
-                    />
-                    <div className="select-image-note-name">
-                      {selectedImage.name}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
 
             <button type="submit">Submit</button>
