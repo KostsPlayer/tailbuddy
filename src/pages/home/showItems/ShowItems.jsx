@@ -11,6 +11,7 @@ import LandingCore from "../../../context/landingCore/LandingCore";
 function ShowItems({ itemsData, items }) {
   const [activeFavorite, setActiveFavorite] = useState([]);
   const [openTransaction, setOpenTransaction] = useState(false);
+  const [getPet, setGetPet] = useState([]);
 
   const handleActiveFavorite = useCallback(
     (id) => {
@@ -64,7 +65,12 @@ function ShowItems({ itemsData, items }) {
                 <div
                   className="item"
                   key={items === "pets" ? data.pets_id : data.id}
-                  onClick={() => setOpenTransaction(true)}
+                  onClick={() => {
+                    setOpenTransaction(true);
+                    if (items === "pets") {
+                      setGetPet(data);
+                    }
+                  }}
                 >
                   {items === "pets" ? (
                     <img
@@ -127,6 +133,7 @@ function ShowItems({ itemsData, items }) {
           isOpen={openTransaction}
           setIsOpen={setOpenTransaction}
           modalRef={refTransaction}
+          dataId={items === "pets" ? getPet.pets_id : ""}
         />
       ) : null}
     </>

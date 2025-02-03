@@ -29,6 +29,7 @@ const endpointsServer = {
   businessCategoriesUpdate: `${base}/api/businessCategory/update`,
   business: `${base}/api/business`,
   businessId: `${base}/api/business-id`,
+  petID: `/api/pets`,
 };
 
 export default endpointsServer;

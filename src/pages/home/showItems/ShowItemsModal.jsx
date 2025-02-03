@@ -5,76 +5,98 @@ import apiConfig from "../../../helpers/apiConfig";
 import { transactionsSchema } from "../../../validations/transactions";
 import endpointsServer from "../../../helpers/endpointsServer";
 import LandingCore from "../../../context/landingCore/LandingCore";
+import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 
-function TransactionModal({ isOpen, setIsOpen, modalRef }) {
+function TransactionModal({ isOpen, setIsOpen, modalRef, dataId }) {
   const [values, setValues] = useState({
     user_id: "",
     pet_id: "",
     seller_id: "",
     status: "",
   });
+  const [petId, setPetId] = useState({});
 
   const transactionStatus = useRef(null);
 
   const { token, toastPromise, toastMessage, isMe } = LandingCore();
 
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-
-      try {
-        await transactionsSchema.validate(
-          { user_id: isMe.user_id, status: "pending", ...values },
-          { abortEarly: false }
-        );
-
-        const promise = apiConfig.post(
-          endpointsServer.transactionCreate,
-          { user_id: isMe.user_id, status: "pending", ...values },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        toastPromise(
-          promise,
-          {
-            pending: "Transaction data on progress, please wait..!",
-            success: "Transaction has been successfully created!",
-            error: "Failed to transaction data!",
+  useEffect(() => {
+    if (dataId) {
+      apiConfig
+        .get(`${endpointsServer.petID}/${dataId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-          {
-            autoClose: 2500,
-            position: "top-center",
-          }
-        );
+        })
+        .then((res) => {
+          console.log(res.data.data);
+          const response = res.data.data;
 
-        promise.then((res) => {
-          transactionStatus.current = res.data.success;
+          setPetId(response);
+        })
+        .catch((err) => {
+          console.error(err);
         });
-      } catch (error) {
-        console.error("Error saat mengirim data:", error);
+    }
+  }, [dataId, token]);
 
-        if (error.inner) {
-          error.inner.forEach((err) => {
-            toastMessage("error", err.message, { position: "top-center" });
-          });
-        } else {
-          toastMessage("error", "Failed to create data!", {
-            position: "top-center",
-          });
-        }
-      }
-    },
-    [values, token]
-  );
+  // const handleChange = useCallback((e) => {
+  //   const { name, value } = e.target;
+  //   setValues((prev) => ({ ...prev, [name]: value }));
+  // }, []);
+
+  // const handleSubmit = useCallback(
+  //   async (e) => {
+  //     e.preventDefault();
+
+  //     try {
+  //       await transactionsSchema.validate(
+  //         { user_id: isMe.user_id, status: "pending", ...values },
+  //         { abortEarly: false }
+  //       );
+
+  //       const promise = apiConfig.post(
+  //         endpointsServer.transactionCreate,
+  //         { user_id: isMe.user_id, status: "pending", ...values },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       toastPromise(
+  //         promise,
+  //         {
+  //           pending: "Transaction data on progress, please wait..!",
+  //           success: "Transaction has been successfully created!",
+  //           error: "Failed to transaction data!",
+  //         },
+  //         {
+  //           autoClose: 2500,
+  //           position: "top-center",
+  //         }
+  //       );
+
+  //       promise.then((res) => {
+  //         transactionStatus.current = res.data.success;
+  //       });
+  //     } catch (error) {
+  //       console.error("Error saat mengirim data:", error);
+
+  //       if (error.inner) {
+  //         error.inner.forEach((err) => {
+  //           toastMessage("error", err.message, { position: "top-center" });
+  //         });
+  //       } else {
+  //         toastMessage("error", "Failed to create data!", {
+  //           position: "top-center",
+  //         });
+  //       }
+  //     }
+  //   },
+  //   [values, token]
+  // );
 
   return (
     <>
@@ -86,22 +108,21 @@ function TransactionModal({ isOpen, setIsOpen, modalRef }) {
         setIsOpen={setIsOpen}
         modalRef={modalRef}
       >
-        <form className="modal-form transaction" onSubmit={handleSubmit}>
-          <div className="modal-form-group">
-            <label htmlFor="name">
-              Business Category's Name <span>(Required)</span>
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Pet Business Category"
-              value={values.name}
-              onChange={handleChange}
+        <form className="modal-form transaction">
+          <div className="transaction-preview">
+            <img
+              className="image"
+              src={`https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/pets/${petId.image}`}
+              alt={petId.image}
             />
+            <span className="price">{FormatCurrencyIDR(petId.price)}</span>
+            <span className="name">{petId.pet}</span>
+            <span className="location">{petId.location}</span>
           </div>
-
-          <button type="submit">Submit</button>
+          <div className="transaction-button">
+            <button type="submit">Buy</button>
+            <button>Cancel</button>
+          </div>
         </form>
       </Modal>
     </>
