@@ -73,9 +73,9 @@
   font-family: "Funnel Display", sans-serif;
   color: #fff;
   padding: 0.5rem 0.8rem;
-  background-color: #2e2d31;
   border-radius: 0.25rem;
   transition: all ease-out 0.4s;
+  background-color: #2e2d31;
 }
 .navbar-elements-auth .auth-to:hover {
   background-color: #47454c;

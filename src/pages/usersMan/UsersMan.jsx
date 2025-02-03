@@ -8,17 +8,17 @@ function UsersMan() {
 
   return (
     <>
-      {!dataCookie ? (
+      {/* {!dataCookie ? (
         <Error401 />
       ) : dataCookie.role !== "admin" ? (
         <Error403 />
       ) : (
+      )} */}
         <LayoutDashboard>
           <div className="users-man">
             Users <span> Management</span>
           </div>
         </LayoutDashboard>
-      )}
     </>
   );
 }

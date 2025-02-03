@@ -7,7 +7,7 @@ import { toastMessage } from "../../helpers/AlertMessage";
 import { ToastContainer } from "react-toastify";
 
 function Dashboard() {
-  const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
+  // const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function Dashboard() {
 
   return (
     <>
-      {!dataCookie ? (
+      {/* {!dataCookie ? (
         <Error401 />
       ) : dataCookie.role === "admin" ? (
         <LayoutDashboard>
@@ -44,7 +44,8 @@ function Dashboard() {
             Dashboard <span> User</span>
           </div>
         </LayoutDashboard>
-      )}
+      )} */}
+      <LayoutDashboard>Dashboard</LayoutDashboard>
       <ToastContainer />
     </>
   );

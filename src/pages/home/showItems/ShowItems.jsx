@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import products from "../../../data/products.json";
-import pets from "../../../data/pets.json";
+// import pets from "../../../data/pets.json";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 import imgUser from "/users/pexels-olly-712513.jpg";
+import axios from "axios";
+import endpointsServer from "../../../helpers/endpointsServer";
 
 function ShowItems({ itemsData, items }) {
   const [activeFavorite, setActiveFavorite] = useState([]);
@@ -29,10 +31,22 @@ function ShowItems({ itemsData, items }) {
         <div className={`${items}-content-list`}>
           {itemsData.map((data) => {
             const setImg = `/${items}/${data.image}`;
+            const imgSupabase = `https://tailbuddy.supabase.co/storage/v1/object/public/${items}/${data.image}?t=2025-01-13T08%3A25%3A30.956Z`;
 
             return (
-              <div className="item" key={data.id}>
-                <img className="item-image" src={setImg} alt={data.name} />
+              <div
+                className="item"
+                key={items === "pets" ? data.pets_id : data.id}
+              >
+                {items === "pets" ? (
+                  <img
+                    className="item-image"
+                    src={imgSupabase}
+                    alt={data.name}
+                  />
+                ) : (
+                  <img className="item-image" src={setImg} alt={data.name} />
+                )}
                 <span
                   className={`material-symbols-rounded item-favourite ${
                     activeFavorite.includes(data.id) ? "active" : ""
@@ -74,6 +88,23 @@ function ShowItems({ itemsData, items }) {
 }
 
 export function Pets() {
+  const [pets, setPets] = useState([]);
+
+  const fetchPets = useCallback(async () => {
+    try {
+      const petsPromise = await axios.get(endpointsServer.pets);
+
+      setPets(petsPromise.data.data);
+      console.log(petsPromise.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPets();
+  }, [fetchPets]);
+
   return <ShowItems itemsData={pets} items={"pets"} />;
 }
 

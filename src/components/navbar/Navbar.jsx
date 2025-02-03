@@ -1,10 +1,22 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../logo/Logo";
+import Cookies from "js-cookie";
 
 function Navbar() {
   const [openNavbar, setOpenNavbar] = useState(false);
   const navbarMediaRef = useRef();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = Cookies.get("tailbuddy");
+
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   const handleClickOutside = useCallback(
     (e) => {
@@ -50,12 +62,20 @@ function Navbar() {
             </Link>
           </div>
           <div className="navbar-elements-auth">
-            <Link className="auth-to" to="/login">
-              Login
-            </Link>
-            <Link className="auth-to" to="/signup">
-              Signup
-            </Link>
+            {isAuthenticated ? (
+              <Link className="auth-to" to="/dashboard">
+                Go To Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link className="auth-to" to="/login">
+                  Login
+                </Link>
+                <Link className="auth-to" to="/signup">
+                  Signup
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <span

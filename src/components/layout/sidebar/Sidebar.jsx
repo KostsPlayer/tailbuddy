@@ -19,8 +19,6 @@ function Sidebar() {
         </NavLink>
       )}
 
-      {dataCookie && dataCookie.role === "admin" && (
-        <>
           <NavLink to={"/users-management"} className="item">
             <span className="material-symbols-rounded">manage_accounts</span>
             <div className="text">Users Management</div>
@@ -41,8 +39,10 @@ function Sidebar() {
             <span className="material-symbols-rounded">category</span>
             <div className="text">Business Category</div>
           </NavLink>
+      {/* {dataCookie && dataCookie.role === "admin" && (
+        <>
         </>
-      )}
+      )} */}
     </div>
   );
 }

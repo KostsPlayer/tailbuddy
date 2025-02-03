@@ -47,9 +47,9 @@
         font-family: v.$funnel;
         color: #fff;
         padding: 0.5rem 0.8rem;
-        background-color: v.$main-dark;
         border-radius: 0.25rem;
         transition: all ease-out 0.4s;
+        background-color: v.$main-dark;
 
         &:hover {
           background-color: adjust-color($color: v.$main-dark, $lightness: 10%);

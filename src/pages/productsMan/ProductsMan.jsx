@@ -126,100 +126,93 @@ function ProductsMan() {
 
   return (
     <>
-      {!dataCookie ? (
+      {/* {!dataCookie ? (
         <Error401 />
       ) : dataCookie.role === "user" ? (
         <Error403 />
-      ) : (
-        <LayoutDashboard>
-          <div className="products-man">
-            <div className="header">
-              <div className="header-title">
-                Products <span> Management</span>
-              </div>
-              {!isEditing && (
-                <div
-                  className="header-new-item"
-                  onClick={() => setAddItem(true)}
-                >
-                  <span className="material-symbols-rounded">add_task</span>
-                  <div className="text">add new item</div>
-                </div>
-              )}
+      ) : ()}*/}
+
+      <LayoutDashboard>
+        <div className="products-man">
+          <div className="header">
+            <div className="header-title">
+              Products <span> Management</span>
             </div>
-
-            {(addItem || isEditing) && (
-              <>
-                <form
-                  className="form"
-                  onSubmit={isEditing ? handleUpdateSubmit : handleSubmit}
-                >
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="name"
-                    value={values.name}
-                    onChange={handleOnChange}
-                  />
-                  <input
-                    type="number"
-                    name="price"
-                    placeholder="price"
-                    onChange={handleOnChange}
-                    value={values.price}
-                  />
-                  <input type="file" onChange={handleFileChange} />
-                  {previewImage && (
-                    <img
-                      src={previewImage}
-                      alt="Preview"
-                      style={{ width: 100, height: 100, marginTop: 10 }}
-                    />
-                  )}
-                  <button type="submit">
-                    {isEditing ? "Update" : "Submit"}
-                  </button>
-                </form>
-              </>
+            {!isEditing && (
+              <div className="header-new-item" onClick={() => setAddItem(true)}>
+                <span className="material-symbols-rounded">add_task</span>
+                <div className="text">add new item</div>
+              </div>
             )}
+          </div>
 
-            <div className="content">
-              {data.map((item) => {
-                const image = `products/${item.image}`;
-                return (
-                  <div className="content-item" key={item.id}>
-                    <img
-                      className="content-item-image"
-                      src={image}
-                      alt={item.name}
-                    />
-                    <div className="content-item-core">
-                      <div className="name">{item.name}</div>
-                      <div className="price">
-                        {FormatCurrencyIDR(item.price)}
-                      </div>
-                      <div className="core-action">
-                        <span
-                          className="material-symbols-rounded"
-                          onClick={() => handleEditItem(item.id)}
-                        >
-                          edit_square
-                        </span>
-                        <span
-                          className="material-symbols-rounded"
-                          onClick={() => handleDeleteItem(item.id)}
-                        >
-                          auto_delete
-                        </span>
-                      </div>
+          {(addItem || isEditing) && (
+            <>
+              <form
+                className="form"
+                onSubmit={isEditing ? handleUpdateSubmit : handleSubmit}
+              >
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="name"
+                  value={values.name}
+                  onChange={handleOnChange}
+                />
+                <input
+                  type="number"
+                  name="price"
+                  placeholder="price"
+                  onChange={handleOnChange}
+                  value={values.price}
+                />
+                <input type="file" onChange={handleFileChange} />
+                {previewImage && (
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    style={{ width: 100, height: 100, marginTop: 10 }}
+                  />
+                )}
+                <button type="submit">{isEditing ? "Update" : "Submit"}</button>
+              </form>
+            </>
+          )}
+
+          <div className="content">
+            {data.map((item) => {
+              const image = `products/${item.image}`;
+              return (
+                <div className="content-item" key={item.id}>
+                  <img
+                    className="content-item-image"
+                    src={image}
+                    alt={item.name}
+                  />
+                  <div className="content-item-core">
+                    <div className="name">{item.name}</div>
+                    <div className="price">{FormatCurrencyIDR(item.price)}</div>
+                    <div className="core-action">
+                      <span
+                        className="material-symbols-rounded"
+                        onClick={() => handleEditItem(item.id)}
+                      >
+                        edit_square
+                      </span>
+                      <span
+                        className="material-symbols-rounded"
+                        onClick={() => handleDeleteItem(item.id)}
+                      >
+                        auto_delete
+                      </span>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
-        </LayoutDashboard>
-      )}
+        </div>
+      </LayoutDashboard>
       <ToastContainer />
     </>
   );

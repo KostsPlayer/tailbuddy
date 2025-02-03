@@ -121,11 +121,12 @@ function BusinessCategoryMan() {
 
   return (
     <>
-      {!dataCookie ? (
+      {/* {!dataCookie ? (
         <Error401 />
       ) : dataCookie.role === "user" ? (
         <Error403 />
       ) : (
+      )} */}
         <LayoutDashboard>
           <div className="business-category-man">
             <div className="header">
@@ -204,7 +205,6 @@ function BusinessCategoryMan() {
             </div>
           </div>
         </LayoutDashboard>
-      )}
       <ToastContainer />
     </>
   );

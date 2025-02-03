@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Cookies from "universal-cookie";
 import { getDecryptedCookie } from "../../../helpers/Crypto";
 import { useNavigate, NavLink } from "react-router-dom";
 import { toastDevelop } from "../../../helpers/AlertMessage";
 import Logo from "../../logo/Logo";
+import Cookies from "js-cookie";
 
 function Topbar() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -38,12 +38,8 @@ function Topbar() {
   }, [isSettingOpen, isSidebarOpen]);
 
   const handleLogout = useCallback(() => {
-    if (dataCookie) {
-      const cookies = new Cookies();
-
-      cookies.remove("tailbuddy");
-      navigate("/login", { state: { messageLogout: "Logout successfully!" } });
-    }
+    Cookies.remove("tailbuddy");
+    navigate("/login", { state: { messageLogout: "Logout successfully!" } });
   }, [dataCookie]);
 
   return (
@@ -62,8 +58,8 @@ function Topbar() {
           {isSettingOpen && (
             <div className="setting-modal" ref={settingRef}>
               <div className="setting-modal-profile">
-                <div className="username">{dataCookie.username}</div>
-                <div className="email">{dataCookie.email}</div>
+                <div className="username">{dataCookie?.username}</div>
+                <div className="email">{dataCookie?.email}</div>
               </div>
               <div
                 className="setting-modal-item"
@@ -109,15 +105,13 @@ function Topbar() {
               <div className="text">Dashboard</div>
             </NavLink>
 
-            {dataCookie && dataCookie.role === "seller" && (
               <NavLink to={"/pets"} className="item">
                 <span className="material-symbols-rounded">pets</span>
                 <div className="text">Pets</div>
               </NavLink>
-            )}
+            {/* {dataCookie && dataCookie.role === "seller" && (
+            )} */}
 
-            {dataCookie && dataCookie.role === "admin" && (
-              <>
                 <NavLink to={"/users-management"} className="item">
                   <span className="material-symbols-rounded">
                     manage_accounts
@@ -140,10 +134,12 @@ function Topbar() {
                   <span className="material-symbols-rounded">category</span>
                   <div className="text">Business Category</div>
                 </NavLink>
+            {/* {dataCookie && dataCookie.role === "admin" && (
+              <>
               </>
-            )}
-            <div className="username">{dataCookie.username}</div>
-            <div className="email">{dataCookie.email}</div>
+            )} */}
+            <div className="username">{dataCookie?.username}</div>
+            <div className="email">{dataCookie?.email}</div>
             <div className="item" onClick={() => toastDevelop("help support")}>
               Help Support
             </div>

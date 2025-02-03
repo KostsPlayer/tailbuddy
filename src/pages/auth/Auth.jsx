@@ -15,7 +15,7 @@ import { signupSchema } from "../../helpers/ValidationSchema";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import endpointsServer from "../../helpers/endpointsServer";
 import axios from "axios";
-import Cookies from "universal-cookie";
+import Cookies from "js-cookie";
 
 function Auth({ signup }) {
   axios.defaults.withCredentials = true;
@@ -29,13 +29,12 @@ function Auth({ signup }) {
   });
 
   const loginStatus = useRef(null);
+  const regisStatus = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const verifyEmail = searchParams.get("message");
-
-  const cookies = new Cookies(null, { path: "/" });
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -81,16 +80,20 @@ function Auth({ signup }) {
                 autoClose: 3000,
               },
               () => {
-                navigate("/choose-role", {
-                  state: {
-                    email: values.email,
-                  },
-                });
+                if (regisStatus.current === 200) {
+                  navigate("/choose-role", {
+                    state: {
+                      email: values.email,
+                    },
+                  });
+                }
               }
             );
 
             signupPromise
               .then((res) => {
+                regisStatus.current = res.status;
+
                 setValues("");
               })
               .catch((err) => {
@@ -140,7 +143,7 @@ function Auth({ signup }) {
             if (loginStatus.current === 200) {
               const token = res.data.token;
 
-              cookies.set("tailbuddy", token);
+              Cookies.set("tailbuddy", token);
             } else {
               return;
             }
