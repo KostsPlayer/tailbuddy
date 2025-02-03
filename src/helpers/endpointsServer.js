@@ -7,7 +7,7 @@ const endpointsServer = {
   chooseRole: `${base}/auth/choose-role`,
   roles: `${base}/api/role`,
   pets: `${base}/api/pets/all`,
-  petsID: (id) => `${base}/api/pets/${id}`,
+  petsID:`${base}/api/pets/`,
   petsCreate: `${base}/api/pets/create`,
   petsUpdate: `${base}/api/pets/update`,
   petsDelete: `${base}/api/pets/delete`,
@@ -20,15 +20,6 @@ const endpointsServer = {
   businessId: `/api/business-id`,
   userId: `/api/user-id`,
   transactionCreate: `/api/transaction/create`,
-  petsUpdate: (id) => `${base}/api/pets/update/${id}`,
-  petsDelete: (id) => `${base}/api/pets/delete/${id}`,
-  businessCategoriesAll: `${base}/api/businessCategory/all`,
-  businessCategoriesID: `${base}/api/businessCategory`,
-  businessCategoriesCreate: `${base}/api/businessCategory/create`,
-  businessCategoriesDelete: `${base}/api/businessCategory/delete`,
-  businessCategoriesUpdate: `${base}/api/businessCategory/update`,
-  business: `${base}/api/business`,
-  businessId: `${base}/api/business-id`,
 };
 
 export default endpointsServer;
