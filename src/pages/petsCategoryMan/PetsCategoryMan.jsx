@@ -20,14 +20,11 @@ function PetsCategoryMan() {
     try {
       setDashboardCoreLoader(true);
 
-      const response = await apiConfig.get(
-        endpointsServer.businessCategoriesAll,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await apiConfig.get(endpointsServer.petCategories, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setData(response.data.data);
     } catch (error) {
@@ -48,10 +45,10 @@ function PetsCategoryMan() {
         <LoaderPages />
       ) : (
         <LayoutDashboard>
-          <div className="business-category-man">
+          <div className="pets-category-man">
             <div className="header">
               <div className="header-title">
-                Business Categories <span> Management</span>
+                Pet Categories <span> Management</span>
               </div>
               <div
                 className="header-new-item"
@@ -64,24 +61,18 @@ function PetsCategoryMan() {
 
             <div className="content">
               {data.map((item) => {
-                const image = `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business_categories/${item.image}`;
                 return (
                   <div
                     className="content-item"
-                    key={item.business_categories_id}
+                    key={item.pet_categories_id}
                   >
-                    <img
-                      className="content-item-image"
-                      src={image}
-                      alt={item.name}
-                    />
                     <div className="content-item-core">
                       <div className="name">{item.name}</div>
                       <div className="core-action">
                         <span
                           className="material-symbols-rounded"
                           onClick={() => {
-                            setDataId(item.business_categories_id);
+                            setDataId(item.pet_categories_id);
                             setOpenUpdate(true);
                           }}
                         >
@@ -90,7 +81,7 @@ function PetsCategoryMan() {
                         <span
                           className="material-symbols-rounded"
                           onClick={() => {
-                            setDataId(item.business_categories_id);
+                            setDataId(item.pet_categories_id);
                             setOpenDelete(true);
                           }}
                         >
