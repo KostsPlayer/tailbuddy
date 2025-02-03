@@ -1,0 +1,7 @@
+@use "../../helpers/mixins" as m;
+@use "../../helpers/variables" as v;
+@use "../../components/layout/layoutSupport/layout-support" as support;
+
+.pets-category-man {
+  @include support.showItems($icon: true);
+}

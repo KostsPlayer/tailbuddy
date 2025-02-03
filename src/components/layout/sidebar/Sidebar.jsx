@@ -12,14 +12,6 @@ function Sidebar() {
         <span className="material-symbols-rounded">dashboard</span>
         <div className="text">Dashboard</div>
       </NavLink>
-
-      {token && token?.role === "seller" && (
-        <NavLink to={"/pets"} className="item">
-          <span className="material-symbols-rounded">pets</span>
-          <div className="text">Pets</div>
-        </NavLink>
-      )}
-
       <NavLink to={"/users-management"} className="item">
         <span className="material-symbols-rounded">manage_accounts</span>
         <div className="text">Users Management</div>
@@ -27,6 +19,10 @@ function Sidebar() {
       <NavLink to={"/pets"} className="item">
         <span className="material-symbols-rounded">pets</span>
         <div className="text">Pets</div>
+      </NavLink>
+      <NavLink to={"/pet-categories"} className="item">
+        <span className="material-symbols-rounded">pet_supplies</span>
+        <div className="text">Pet Categories</div>
       </NavLink>
       <NavLink to={"/products"} className="item">
         <span className="material-symbols-rounded">inventory</span>
@@ -40,10 +36,6 @@ function Sidebar() {
         <span className="material-symbols-rounded">category</span>
         <div className="text">Business Category</div>
       </NavLink>
-      {/* {token && token.role === "admin" && (
-        <>
-        </>
-      )} */}
     </div>
   );
 }

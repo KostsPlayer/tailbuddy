@@ -106,12 +106,20 @@ function Navbar() {
                   </Link>
                 </div>
                 <div className="elements-auth">
-                  <Link className="auth-to" to="/login">
-                    Login
-                  </Link>
-                  <Link className="auth-to" to="/signup">
-                    Signup
-                  </Link>
+                  {isAuthenticated ? (
+                    <Link className="auth-to" to="/dashboard">
+                      Go To Dashboard
+                    </Link>
+                  ) : (
+                    <>
+                      <Link className="auth-to" to="/login">
+                        Login
+                      </Link>
+                      <Link className="auth-to" to="/signup">
+                        Signup
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

@@ -17,6 +17,9 @@ const BusinessMan = useLoadable(
 const BusinessCategoryMan = useLoadable(
   lazy(() => import("./pages/businessCategoryMan/BusinessCategoryMan"))
 );
+const PetsCategoryMan = useLoadable(
+  lazy(() => import("./pages/petsCategoryMan/PetsCategoryMan"))
+);
 const UsersMan = useLoadable(lazy(() => import("./pages/usersMan/UsersMan")));
 const PetsMan = useLoadable(lazy(() => import("./pages/petsMan/PetsMan")));
 const ProductsMan = useLoadable(
@@ -63,6 +66,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/users-management" element={<UsersMan />} />
             <Route path="/pets" element={<PetsMan />} />
+            <Route path="/pet-categories" element={<PetsCategoryMan />} />
             <Route path="/products" element={<ProductsMan />} />
             <Route path="/business" element={<BusinessMan />} />
             <Route

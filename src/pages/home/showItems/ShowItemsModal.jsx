@@ -8,14 +8,7 @@ import LandingCore from "../../../context/landingCore/LandingCore";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 
 function TransactionModal({ isOpen, setIsOpen, modalRef, dataId }) {
-  const [values, setValues] = useState({
-    user_id: "",
-    pet_id: "",
-    seller_id: "",
-    status: "",
-  });
   const [petId, setPetId] = useState({});
-
   const transactionStatus = useRef(null);
 
   const { token, toastPromise, toastMessage, isMe } = LandingCore();
@@ -23,13 +16,12 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId }) {
   useEffect(() => {
     if (dataId) {
       apiConfig
-        .get(`${endpointsServer.petID}/${dataId}`, {
+        .get(`${endpointsServer.petId}/${dataId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
-          console.log(res.data.data);
           const response = res.data.data;
 
           setPetId(response);
@@ -45,58 +37,73 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId }) {
   //   setValues((prev) => ({ ...prev, [name]: value }));
   // }, []);
 
-  // const handleSubmit = useCallback(
-  //   async (e) => {
-  //     e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-  //     try {
-  //       await transactionsSchema.validate(
-  //         { user_id: isMe.user_id, status: "pending", ...values },
-  //         { abortEarly: false }
-  //       );
+      try {
+        await transactionsSchema.validate(
+          {
+            user_id: isMe.users_id,
+            status: "pending",
+            seller_id: petId.user_id,
+            pet_id: petId.pets_id,
+          },
+          { abortEarly: false }
+        );
 
-  //       const promise = apiConfig.post(
-  //         endpointsServer.transactionCreate,
-  //         { user_id: isMe.user_id, status: "pending", ...values },
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
+        const promise = apiConfig.post(
+          endpointsServer.transactionCreate,
+          {
+            user_id: isMe.users_id,
+            status: "pending",
+            seller_id: petId.user_id,
+            pet_id: petId.pets_id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  //       toastPromise(
-  //         promise,
-  //         {
-  //           pending: "Transaction data on progress, please wait..!",
-  //           success: "Transaction has been successfully created!",
-  //           error: "Failed to transaction data!",
-  //         },
-  //         {
-  //           autoClose: 2500,
-  //           position: "top-center",
-  //         }
-  //       );
+        toastPromise(
+          promise,
+          {
+            pending: "Transaction data on progress, please wait..!",
+            success: "Transaction has been successfully created!",
+            error: "Failed to transaction data!",
+          },
+          {
+            autoClose: 2500,
+            position: "top-center",
+          },
+          () => {
+            if (transactionStatus.current === true) {
+              setIsOpen(false);
+            }
+          }
+        );
 
-  //       promise.then((res) => {
-  //         transactionStatus.current = res.data.success;
-  //       });
-  //     } catch (error) {
-  //       console.error("Error saat mengirim data:", error);
+        promise.then((res) => {
+          transactionStatus.current = res.data.success;
+        });
+      } catch (error) {
+        console.error("Error saat mengirim data:", error);
 
-  //       if (error.inner) {
-  //         error.inner.forEach((err) => {
-  //           toastMessage("error", err.message, { position: "top-center" });
-  //         });
-  //       } else {
-  //         toastMessage("error", "Failed to create data!", {
-  //           position: "top-center",
-  //         });
-  //       }
-  //     }
-  //   },
-  //   [values, token]
-  // );
+        if (error.inner) {
+          error.inner.forEach((err) => {
+            toastMessage("error", err.message, { position: "top-center" });
+          });
+        } else {
+          toastMessage("error", "Failed to create data!", {
+            position: "top-center",
+          });
+        }
+      }
+    },
+    [token, petId, isMe]
+  );
 
   return (
     <>
@@ -108,7 +115,7 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId }) {
         setIsOpen={setIsOpen}
         modalRef={modalRef}
       >
-        <form className="modal-form transaction">
+        <form className="modal-form transaction" onSubmit={handleSubmit}>
           <div className="transaction-preview">
             <img
               className="image"
@@ -121,7 +128,7 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId }) {
           </div>
           <div className="transaction-button">
             <button type="submit">Buy</button>
-            <button>Cancel</button>
+            <button onClick={() => setIsOpen(false)}>Cancel</button>
           </div>
         </form>
       </Modal>
