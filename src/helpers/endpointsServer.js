@@ -8,13 +8,16 @@ const endpointsServer = {
   roles: `${base}/api/role`,
   business: `${base}/api/business`,
   pets: `${base}/api/pets/all`,
-  businessCategoriesAll: "/api/businessCategory/all",
-  businessCategoriesID: "/api/businessCategory",
-  businessCategoriesCreate: "/api/businessCategory/create",
-  businessCategoriesDelete: "/api/businessCategory/delete",
-  businessCategoriesUpdate: "/api/businessCategory/update",
-  business: "/api/business",
-  businessId: "/api/business-id",
+  petsCreate: `${base}/api/pets/create`,
+  petsUpdate: `${base}/api/pets/update`,
+  petsDelete: `${base}/api/pets/delete`,
+  businessCategoriesAll: `${base}/api/businessCategory/all`,
+  businessCategoriesID: `${base}/api/businessCategory`,
+  businessCategoriesCreate: `${base}/api/businessCategory/create`,
+  businessCategoriesDelete: `${base}/api/businessCategory/delete`,
+  businessCategoriesUpdate: `${base}/api/businessCategory/update`,
+  business: `${base}/api/business`,
+  businessId: `${base}/api/business-id`,
 };
 
 export default endpointsServer;
