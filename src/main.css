@@ -131,6 +131,21 @@
   gap: 0.8rem;
   overflow-y: auto;
 }
+.overlay-modal .modal.transaction {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  background-color: #fff;
+  z-index: 32;
+  padding: 2.2rem 3.3rem 3.1rem;
+  height: auto;
+  max-height: 80vh;
+  max-width: 70vw;
+  display: grid;
+  border-radius: 0.5rem;
+}
 .overlay-modal .modal-title {
   font-size: 1.6rem;
   line-height: 125%;
@@ -185,6 +200,9 @@
   gap: 1.05rem;
   margin-top: 0.9rem;
   display: grid;
+}
+.overlay-modal .modal-form.transaction {
+  grid-template-columns: 1fr 1fr;
 }
 .overlay-modal .modal-form-group {
   width: 100%;
@@ -1422,6 +1440,7 @@
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease-in;
+  z-index: 12;
 }
 .home .pets-content-list .item-favourite:hover {
   background-color: #e74c3c;
@@ -1708,6 +1727,7 @@
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease-in;
+  z-index: 12;
 }
 .home .products-content-list .item-favourite:hover {
   background-color: #e74c3c;
@@ -2686,4 +2706,10 @@ body {
 
 .Toastify__toast-body {
   line-height: 127.5%;
-}/*# sourceMappingURL=main.css.map */
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

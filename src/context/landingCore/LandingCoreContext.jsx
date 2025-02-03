@@ -7,6 +7,9 @@ const LandingCoreContext = createContext({
   token: null,
   isLoadingDashboardCore: false,
   setDashboardCoreLoader: () => {},
+  business: [],
+  businessCategories: [],
+  isMe: {},
 });
 
 export default LandingCoreContext;

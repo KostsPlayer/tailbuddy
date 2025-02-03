@@ -5,7 +5,8 @@ import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 import imgUser from "/users/pexels-olly-712513.jpg";
 import axios from "axios";
 import endpointsServer from "../../../helpers/endpointsServer";
-import Modal from "../../../components/layout/Modal/Modal";
+import TransactionModal from "./ShowItemsModal";
+import LandingCore from "../../../context/landingCore/LandingCore";
 
 function ShowItems({ itemsData, items }) {
   const [activeFavorite, setActiveFavorite] = useState([]);
@@ -47,84 +48,109 @@ function ShowItems({ itemsData, items }) {
   }, [refTransaction, openTransaction]);
 
   return (
-    <div className={`${items}`}>
-      <div className={`${items}-title`}>
-        Featured <span>{items}</span>
-      </div>
-      <div className={`${items}-content`}>
-        <span className="material-symbols-outlined">trending_flat</span>
-        <div className={`${items}-content-list`}>
-          {itemsData.map((data) => {
-            const setImg = `/${items}/${data.image}`;
-            const imgSupabase = `https://tailbuddy.supabase.co/storage/v1/object/public/${items}/${data.image}?t=2025-01-13T08%3A25%3A30.956Z`;
+    <>
+      <div className={`${items}`}>
+        <div className={`${items}-title`}>
+          Featured <span>{items}</span>
+        </div>
+        <div className={`${items}-content`}>
+          <span className="material-symbols-outlined">trending_flat</span>
+          <div className={`${items}-content-list`}>
+            {itemsData.map((data) => {
+              const setImg = `/${items}/${data.image}`;
+              const imgSupabase = `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/${items}/${data.image}`;
 
-            return (
-              <div
-                className="item"
-                key={items === "pets" ? data.pets_id : data.id}
-              >
-                {items === "pets" ? (
-                  <img
-                    className="item-image"
-                    src={imgSupabase}
-                    alt={data.name}
-                  />
-                ) : (
-                  <img className="item-image" src={setImg} alt={data.name} />
-                )}
-                <span
-                  className={`material-symbols-rounded item-favourite ${
-                    activeFavorite.includes(data.id) ? "active" : ""
-                  }`}
-                  onClick={() => handleActiveFavorite(data.id)}
+              return (
+                <div
+                  className="item"
+                  key={items === "pets" ? data.pets_id : data.id}
+                  onClick={() => setOpenTransaction(true)}
                 >
-                  favorite
-                </span>
-                {items === "pets" && (
-                  <img
-                    className="item-user"
-                    src={imgUser}
-                    alt="User's nametag"
-                  />
-                )}
-                <div className="item-wrapper">
-                  {items === "pets" && (
-                    <div className="item-wrapper-location">
-                      <span className="material-symbols-rounded">
-                        share_location
-                      </span>
-                      <div className="text">{data.location}</div>
-                    </div>
+                  {items === "pets" ? (
+                    <img
+                      className="item-image"
+                      src={imgSupabase}
+                      alt={data.name}
+                    />
+                  ) : (
+                    <img className="item-image" src={setImg} alt={data.name} />
                   )}
-                  <div className="item-wrapper-name">{data.name}</div>
-                  <div className="item-wrapper-price">
-                    {FormatCurrencyIDR(data.price)}
+                  <span
+                    className={`material-symbols-rounded item-favourite ${
+                      items === "pets"
+                        ? activeFavorite.includes(data.pets_id)
+                          ? "active"
+                          : ""
+                        : activeFavorite.includes(data.id)
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleActiveFavorite(
+                        items === "pets" ? data.pets_id : data.id
+                      )
+                    }
+                  >
+                    favorite
+                  </span>
+                  {items === "pets" && (
+                    <img
+                      className="item-user"
+                      src={imgUser}
+                      alt="User's nametag"
+                    />
+                  )}
+                  <div className="item-wrapper">
+                    {items === "pets" && (
+                      <div className="item-wrapper-location">
+                        <span className="material-symbols-rounded">
+                          share_location
+                        </span>
+                        <div className="text">{data.location}</div>
+                      </div>
+                    )}
+                    <div className="item-wrapper-name">{data.name}</div>
+                    <div className="item-wrapper-price">
+                      {FormatCurrencyIDR(data.price)}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <span className="material-symbols-outlined">trending_flat</span>
         </div>
-        <span className="material-symbols-outlined">trending_flat</span>
+        <div className={`${items}-more`}>view all {items}</div>
       </div>
-      <div className={`${items}-more`}>view all {items}</div>
-    </div>
+      {openTransaction ? (
+        <TransactionModal
+          isOpen={openTransaction}
+          setIsOpen={setOpenTransaction}
+          modalRef={refTransaction}
+        />
+      ) : null}
+    </>
   );
 }
 
 export function Pets() {
   const [pets, setPets] = useState([]);
+  const { token } = LandingCore();
 
   const fetchPets = useCallback(async () => {
     try {
-      const petsPromise = await axios.get(endpointsServer.pets);
+      const petsPromise = await axios.get(endpointsServer.pets, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setPets(petsPromise.data.data);
       console.log(petsPromise.data.data);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     fetchPets();

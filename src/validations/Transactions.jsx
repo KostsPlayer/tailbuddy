@@ -1,13 +1,8 @@
 import * as yup from "yup";
 
-export const petsSchema = yup.object().shape({
-  name: yup.string().required("Pet's Name is required"),
-  location: yup.string().required("Pet's Location is required"),
-  price: yup
-    .number()
-    .positive("Price must be positive")
-    .required("Pet's Price is required"),
-  image: yup.mixed().test("required", "Pet's Image is required", (value) => {
-    return value instanceof File || (value && typeof value === "object");
-  }),
+export const transactionsSchema = yup.object().shape({
+  user_id: yup.string().required("Your Id is required"),
+  pet_id: yup.string().required("Pet Id is required"),
+  seller_id: yup.string().required("Seller Id is required"),
+  status: yup.string().required("Status is required"),
 });

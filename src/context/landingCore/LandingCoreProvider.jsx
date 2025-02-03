@@ -12,12 +12,14 @@ import {
 import LandingCoreContext from "./LandingCoreContext";
 import endpointsServer from "../../helpers/endpointsServer";
 import apiConfig from "../../helpers/apiConfig";
+import { jwtDecode } from "jwt-decode";
 
 const LandingCoreProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isLoadingLandingCore, setIsLoadingLandingCore] = useState(false);
   const [business, setBusiness] = useState([]);
   const [businessCategories, setBusinessCategories] = useState([]);
+  const [isMe, setIsMe] = useState(null);
 
   const navigate = useNavigate();
 
@@ -39,17 +41,27 @@ const LandingCoreProvider = ({ children }) => {
     try {
       setIsLoadingLandingCore(true);
 
-      const [businessPromise, businessCategoriesPromise] = await Promise.all([
-        apiConfig.get(endpointsServer.business, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        apiConfig.get(endpointsServer.businessCategoriesAll, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
+      const decodedToken = jwtDecode(token);
+
+      const [businessPromise, businessCategoriesPromise, userPromise] =
+        await Promise.all([
+          apiConfig.get(endpointsServer.business, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          apiConfig.get(endpointsServer.businessCategoriesAll, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          apiConfig.get(
+            `${endpointsServer.userId}?id=${decodedToken.user_id}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
+        ]);
 
       setBusiness(businessPromise.data.data);
       setBusinessCategories(businessCategoriesPromise.data.data);
+      setIsMe(userPromise.data.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -58,8 +70,10 @@ const LandingCoreProvider = ({ children }) => {
   }, [token, setIsLoadingLandingCore]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (token) {
+      fetchData();
+    }
+  }, [fetchData, token]);
 
   const contextValue = useMemo(
     () => ({
@@ -71,6 +85,7 @@ const LandingCoreProvider = ({ children }) => {
       setLandingCoreLoader,
       business,
       businessCategories,
+      isMe,
     }),
     [
       token,
@@ -78,6 +93,7 @@ const LandingCoreProvider = ({ children }) => {
       setLandingCoreLoader,
       business,
       businessCategories,
+      isMe,
     ]
   );
 
