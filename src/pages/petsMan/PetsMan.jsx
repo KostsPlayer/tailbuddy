@@ -66,10 +66,10 @@ function PetsMan() {
                   <img
                     className="content-item-image"
                     src={image}
-                    alt={item.name}
+                    alt={item.pet}
                   />
                   <div className="content-item-core">
-                    <div className="name">{item.name}</div>
+                    <div className="name">{item.pet}</div>
                     <div className="price">{FormatCurrencyIDR(item.price)}</div>
                     <div className="text">{item.location}</div>
                     <div className="core-action">
