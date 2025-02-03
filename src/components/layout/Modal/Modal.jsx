@@ -44,25 +44,25 @@ function Modal({
   return (
     <>
       {isOpen ? (
-        <div className="overlay-modal-dashboard">
+        <div className="overlay-modal">
           {type === "form" ? (
-            <div className="modal-dashboard" ref={modalRef}>
-              <div className="modal-dashboard-title">
+            <div className="modal" ref={modalRef}>
+              <div className="modal-title">
                 {titleModal} <span className="other">{otherTitleModal}</span>
               </div>
               <span
-                className="material-symbols-outlined modal-dashboard-close"
+                className="material-symbols-outlined modal-close"
                 onClick={() => setIsOpen(false)}
               >
                 close
               </span>
-              <div className="modal-dashboard-line"></div>
+              <div className="modal-line"></div>
               {children}
             </div>
           ) : (
-            <div className="confirm-dashboard" ref={modalRef}>
-              <span className="confirm-dashboard-title">{titleModal}</span>
-              <span className="confirm-dashboard-desc">{descModal}</span>
+            <div className="confirm" ref={modalRef}>
+              <span className="confirm-title">{titleModal}</span>
+              <span className="confirm-desc">{descModal}</span>
               {children}
             </div>
           )}

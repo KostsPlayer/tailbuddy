@@ -2,7 +2,7 @@
 @use "../../../helpers/variables" as v;
 @use "../support/support" as support;
 
-.overlay-modal-dashboard {
+.overlay-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -27,7 +27,7 @@
     border-radius: 0.5rem;
   }
 
-  .modal-dashboard {
+  .modal {
     @include modal();
 
     grid-template-areas:
