@@ -1,5 +1,5 @@
-// const base = "http://localhost:3000";
-const base = "https://tailbuddy-server.vercel.app";
+const base = "http://localhost:3000";
+// const base = "https://tailbuddy-server.vercel.app";
 
 const endpointsServer = {
   login: `${base}/auth/login`,

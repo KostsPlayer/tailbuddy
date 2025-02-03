@@ -21,19 +21,18 @@ function PetsManModal({
 
   const [values, setValues] = useState({ pet: "", location: "", price: "" });
 
-  const modalRef = useRef(null);
+  const petsModalRef = useRef(null);
   const { token, toastMessage } = DashboardCore();
 
-  // 🔄 Reset State saat Modal Dibuka
+  // ✅ Reset form saat modal dibuka
   useEffect(() => {
     if (isOpen) {
-      console.log("Resetting form values...");
       setValues({ pet: "", location: "", price: "" });
       setSelectedImage({ file: null, preview: null, name: "" });
     }
   }, [isOpen]);
 
-  // 🔥 Fetch data jika mode update
+  // ✅ Fetch data jika mode update
   useEffect(() => {
     if (type !== "create" && dataId) {
       apiConfig
@@ -41,17 +40,17 @@ function PetsManModal({
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          console.log("Fetched pet data:", res.data);
-
           const petData = res.data.data[0];
+          console.log("Fetched Pet Data:", petData);
+
           setValues({
-            pet: petData.pet || "",
-            location: petData.location || "",
-            price: petData.price || "",
+            pet: petData.pet,
+            location: petData.location,
+            price: petData.price,
           });
 
           setSelectedImage({
-            file: petData.image,
+            file: null,
             preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/pets/${petData.image}`,
             name: petData.image,
           });
@@ -60,40 +59,30 @@ function PetsManModal({
     }
   }, [type, dataId, token]);
 
-  // 🔥 Debugging `values`
-  useEffect(() => {
-    console.log("Updated Values State:", values);
-  }, [values]);
-
   // ✅ Handler perubahan input
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    console.log(`Input Changed: ${name} = ${value}`);
-
-    setValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setValues((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  // ✅ Handler perubahan file
+  // ✅ Handler perubahan file (menjaga nama file asli)
   const handleFileChange = useCallback((e) => {
     if (e.target.files.length > 0) {
       const file = e.target.files[0];
+      const fileName = `${Date.now()}-${file.name}`; // ✅ Menambahkan timestamp agar unik
+
       setSelectedImage({
         file: file,
         preview: URL.createObjectURL(file),
-        name: file.name,
+        name: fileName, // ✅ Menyimpan nama file asli yang akan diupload
       });
     }
   }, []);
 
-  // ✅ Submit data
+  // ✅ Handle Submit
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-
-      console.log("Submitting Values:", values);
 
       if (!values.pet.trim()) {
         toastMessage("error", "Pet's Name is required");
@@ -111,7 +100,7 @@ function PetsManModal({
       formData.append("price", values.price);
 
       if (selectedImage.file) {
-        formData.append("image", selectedImage.file);
+        formData.append("image", selectedImage.file, selectedImage.name); // ✅ Menggunakan nama file asli
       }
 
       console.log("🚀 Sending Data to API:", Object.fromEntries(formData));
@@ -139,10 +128,7 @@ function PetsManModal({
           toastMessage("error", "Failed to save pet!");
         }
       } catch (error) {
-        console.error(
-          "❌ API Error:",
-          error.response ? error.response.data : error
-        );
+        console.error("❌ API Error:", error);
         toastMessage("error", "Server Error. Please try again!");
       }
     },
@@ -154,7 +140,7 @@ function PetsManModal({
       titleModal={type === "create" ? "Insert Pet" : "Update Pet"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      modalRef={modalRef}
+      modalRef={petsModalRef}
     >
       <form className="modal-form" onSubmit={handleSubmit}>
         <div className="modal-form-group">
@@ -200,7 +186,7 @@ function PetsManModal({
           />
         </div>
         <div className="modal-form-group">
-          <label className="special-image" htmlFor="image">
+          <label htmlFor="image">
             Pet's Image <span>(Required)</span>
           </label>
           <div className="select-image-wrapper">
@@ -217,6 +203,7 @@ function PetsManModal({
                 <span className="text">Choose File</span>
               </label>
             </div>
+            {/* Tampilkan preview hanya jika ada file yang dipilih */}
             {selectedImage.preview && (
               <div className="select-image-note">
                 <img
@@ -231,6 +218,7 @@ function PetsManModal({
             )}
           </div>
         </div>
+
         <button type="submit">
           {type === "create" ? "Add Pet" : "Update Pet"}
         </button>
