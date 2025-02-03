@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import Modal from "../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
 import apiConfig from "../../helpers/apiConfig";
-import { petsSchema } from "../../validations/Pets";
 import endpointsServer from "../../helpers/endpointsServer";
 import DashboardCore from "../../context/dashboardCore/DashboardCore";
 
@@ -22,7 +21,7 @@ function PetsManModal({
   const [values, setValues] = useState({ pet: "", location: "", price: "" });
 
   const petsModalRef = useRef(null);
-  const { token, toastMessage } = DashboardCore();
+  const { token, toastMessage, toastPromise } = DashboardCore();
 
   // ✅ Reset form saat modal dibuka
   useEffect(() => {
@@ -32,16 +31,16 @@ function PetsManModal({
     }
   }, [isOpen]);
 
-  // ✅ Fetch data jika mode update
+  // ✅ Fetch data jika mode update (GET by ID)
   useEffect(() => {
-    if (type !== "create" && dataId) {
+    if (type === "update" && dataId) {
       apiConfig
-        .get(`${endpointsServer.pets}/${dataId}`, {
+        .get(endpointsServer.petsID(dataId), {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const petData = res.data.data[0];
-          console.log("Fetched Pet Data:", petData);
+          const petData = res.data.data;
+          console.log("✅ Fetched Pet Data:", petData);
 
           setValues({
             pet: petData.pet,
@@ -51,11 +50,11 @@ function PetsManModal({
 
           setSelectedImage({
             file: null,
-            preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/pets/${petData.image}`,
+            preview: petData.image,
             name: petData.image,
           });
         })
-        .catch((err) => console.error("Error fetching data:", err));
+        .catch((err) => console.error("❌ Error fetching data:", err));
     }
   }, [type, dataId, token]);
 
@@ -65,21 +64,21 @@ function PetsManModal({
     setValues((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  // ✅ Handler perubahan file (menjaga nama file asli)
+  // ✅ Handler perubahan file
   const handleFileChange = useCallback((e) => {
     if (e.target.files.length > 0) {
       const file = e.target.files[0];
-      const fileName = `${Date.now()}-${file.name}`; // ✅ Menambahkan timestamp agar unik
+      const fileName = `${Date.now()}-${file.name}`; // ✅ Tambah timestamp untuk unik
 
       setSelectedImage({
         file: file,
         preview: URL.createObjectURL(file),
-        name: fileName, // ✅ Menyimpan nama file asli yang akan diupload
+        name: fileName,
       });
     }
   }, []);
 
-  // ✅ Handle Submit
+  // ✅ Handle Submit (Create / Update)
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -100,7 +99,7 @@ function PetsManModal({
       formData.append("price", values.price);
 
       if (selectedImage.file) {
-        formData.append("image", selectedImage.file, selectedImage.name); // ✅ Menggunakan nama file asli
+        formData.append("image", selectedImage.file, selectedImage.name);
       }
 
       console.log("🚀 Sending Data to API:", Object.fromEntries(formData));
@@ -109,24 +108,31 @@ function PetsManModal({
         const endpoint =
           type === "create"
             ? endpointsServer.petsCreate
-            : `${endpointsServer.petsUpdate}/${dataId}`;
+            : endpointsServer.petsUpdate(dataId);
 
-        const response = await apiConfig.post(endpoint, formData, {
+        const promise = apiConfig.post(endpoint, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         });
 
-        console.log("✅ API Response:", response.data);
+        toastPromise(
+          promise,
+          {
+            pending: type === "create" ? "Adding pet..." : "Updating pet...",
+            success: "Pet saved successfully!",
+            error: "Failed to save pet!",
+          },
+          { autoClose: 2500 }
+        );
 
-        if (response.data.success) {
-          toastMessage("success", "Pet saved successfully!");
-          refreshData();
-          setIsOpen(false);
-        } else {
-          toastMessage("error", "Failed to save pet!");
-        }
+        promise.then((res) => {
+          if (res.data.success) {
+            refreshData();
+            setIsOpen(false);
+          }
+        });
       } catch (error) {
         console.error("❌ API Error:", error);
         toastMessage("error", "Server Error. Please try again!");
@@ -135,90 +141,87 @@ function PetsManModal({
     [values, selectedImage, token, type, dataId, refreshData, setIsOpen]
   );
 
-  return (
-    <Modal
-      titleModal={type === "create" ? "Insert Pet" : "Update Pet"}
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-      modalRef={petsModalRef}
-    >
+  // ✅ Handle Delete
+  const handleDelete = useCallback(
+    async (e) => {
+      e.preventDefault();
+
+      const promise = apiConfig.delete(endpointsServer.petsDelete(dataId), {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toastPromise(
+        promise,
+        {
+          pending: "Deleting pet...",
+          success: "Pet deleted successfully!",
+          error: "Failed to delete pet!",
+        },
+        { autoClose: 2500 }
+      );
+
+      promise.then((res) => {
+        if (res.data.success) {
+          refreshData();
+          setIsOpen(false);
+        }
+      });
+    },
+    [dataId, token, refreshData, setIsOpen]
+  );
+
+  return type === "delete" ? (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} modalRef={petsModalRef}>
+      <p>Are you sure you want to delete this pet?</p>
+      <button className="delete-button" onClick={handleDelete}>
+        Delete Pet
+      </button>
+    </Modal>
+  ) : (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} modalRef={petsModalRef}>
       <form className="modal-form" onSubmit={handleSubmit}>
         <div className="modal-form-group">
-          <label htmlFor="pet">
-            Pet Name <span>(Required)</span>
-          </label>
+          <label htmlFor="pet">Pet Name (Required)</label>
           <input
             type="text"
-            id="pet"
             name="pet"
-            placeholder="Enter pet name"
             value={values.pet}
             onChange={handleChange}
             required
           />
         </div>
         <div className="modal-form-group">
-          <label htmlFor="location">
-            Location <span>(Required)</span>
-          </label>
+          <label htmlFor="location">Location (Required)</label>
           <input
             type="text"
-            id="location"
             name="location"
-            placeholder="Enter location"
             value={values.location}
             onChange={handleChange}
             required
           />
         </div>
         <div className="modal-form-group">
-          <label htmlFor="price">
-            Price <span>(Required)</span>
-          </label>
+          <label htmlFor="price">Price (Required)</label>
           <input
             type="number"
-            id="price"
             name="price"
-            placeholder="Enter price"
             value={values.price}
             onChange={handleChange}
             required
           />
         </div>
         <div className="modal-form-group">
-          <label htmlFor="image">
-            Pet's Image <span>(Required)</span>
-          </label>
-          <div className="select-image-wrapper">
-            <div className="select-image">
-              <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="image" className="select-image-button">
-                <span className="material-symbols-rounded">cloud_upload</span>
-                <span className="text">Choose File</span>
-              </label>
-            </div>
-            {/* Tampilkan preview hanya jika ada file yang dipilih */}
-            {selectedImage.preview && (
-              <div className="select-image-note">
-                <img
-                  className="select-image-note-file"
-                  src={selectedImage.preview}
-                  alt={selectedImage.name}
-                />
-                <div className="select-image-note-name">
-                  {selectedImage.name}
-                </div>
-              </div>
-            )}
-          </div>
+          <label htmlFor="image">Pet's Image (Required)</label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          {selectedImage.preview && (
+            <img src={selectedImage.preview} alt="Preview" />
+          )}
         </div>
-
         <button type="submit">
           {type === "create" ? "Add Pet" : "Update Pet"}
         </button>
