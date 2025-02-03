@@ -104,7 +104,7 @@
   animation: matrix 1s infinite linear;
 }
 
-.overlay-modal-dashboard {
+.overlay-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -113,7 +113,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 31;
 }
-.overlay-modal-dashboard .modal-dashboard {
+.overlay-modal .modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -131,7 +131,7 @@
   gap: 0.8rem;
   overflow-y: auto;
 }
-.overlay-modal-dashboard .modal-dashboard-title {
+.overlay-modal .modal-title {
   font-size: 1.6rem;
   line-height: 125%;
   letter-spacing: 1.5px;
@@ -145,11 +145,11 @@
   justify-content: flex-start;
   font-weight: 500;
 }
-.overlay-modal-dashboard .modal-dashboard-title .other {
+.overlay-modal .modal-title .other {
   color: #f3734c;
   margin-left: 0.55rem;
 }
-.overlay-modal-dashboard .modal-dashboard-close {
+.overlay-modal .modal-close {
   margin-left: auto;
   width: -moz-fit-content;
   width: fit-content;
@@ -168,25 +168,25 @@
   align-items: center;
   justify-content: flex-end;
 }
-.overlay-modal-dashboard .modal-dashboard-close:hover {
+.overlay-modal .modal-close:hover {
   transform: rotate(90deg);
   transition: transform 0.4s ease-out, background-color 0.4s ease-out;
   background-color: #f3f3f3;
 }
-.overlay-modal-dashboard .modal-dashboard-line {
+.overlay-modal .modal-line {
   width: 100%;
   height: 0.08rem;
   background-color: rgba(0, 0, 0, 0.1);
   grid-area: line;
 }
-.overlay-modal-dashboard .modal-dashboard-form {
+.overlay-modal .modal-form {
   grid-area: content;
   width: 100%;
   gap: 1.05rem;
   margin-top: 0.9rem;
   display: grid;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group {
+.overlay-modal .modal-form-group {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -195,8 +195,8 @@
   gap: 0.6rem;
   position: relative;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group label:not(.special-image),
-.overlay-modal-dashboard .modal-dashboard-form-group .label {
+.overlay-modal .modal-form-group label:not(.special-image),
+.overlay-modal .modal-form-group .label {
   width: 100%;
   font-size: 0.9rem;
   padding: 0;
@@ -206,12 +206,12 @@
   border-radius: 0.5rem;
   border: none;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group label:not(.special-image) span,
-.overlay-modal-dashboard .modal-dashboard-form-group .label span {
+.overlay-modal .modal-form-group label:not(.special-image) span,
+.overlay-modal .modal-form-group .label span {
   font-size: 0.78rem;
   color: #aaaaaa;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group input:not([type=file]) {
+.overlay-modal .modal-form-group input:not([type=file]) {
   width: 100%;
   font-size: 0.88rem;
   padding: 0 0.9rem;
@@ -221,25 +221,25 @@
   border: none;
   border: 0.05rem solid rgba(0, 0, 0, 0.5);
 }
-.overlay-modal-dashboard .modal-dashboard-form-group input:not([type=file]):focus {
+.overlay-modal .modal-form-group input:not([type=file]):focus {
   border: 0.05rem solid #f3734c;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group input[type=file] {
+.overlay-modal .modal-form-group input[type=file] {
   display: none;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper {
+.overlay-modal .modal-form-group .select-image-wrapper {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 1.4rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image {
+.overlay-modal .modal-form-group .select-image-wrapper .select-image {
   padding: 0.35rem 0.85rem 0.35rem 0.75rem;
   border: 0.05rem solid rgba(0, 0, 0, 0.5);
   border-radius: 0.3rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image-button {
+.overlay-modal .modal-form-group .select-image-wrapper .select-image-button {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -247,27 +247,27 @@
   gap: 0.35rem;
   cursor: pointer;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image-button .material-symbols-rounded {
+.overlay-modal .modal-form-group .select-image-wrapper .select-image-button .material-symbols-rounded {
   font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
   font-size: 1.35rem;
   color: #000;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image-button .text {
+.overlay-modal .modal-form-group .select-image-wrapper .select-image-button .text {
   color: #000;
   font-size: 0.88rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image-note-file {
+.overlay-modal .modal-form-group .select-image-wrapper .select-image-note-file {
   width: 16rem;
   height: auto;
   -o-object-fit: cover;
      object-fit: cover;
   margin-top: 0.2rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image-note-name {
+.overlay-modal .modal-form-group .select-image-wrapper .select-image-note-name {
   margin-top: 0.4rem;
   font-size: 0.925rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-default {
+.overlay-modal .modal-form-group .select-default {
   width: 100%;
   font-size: 0.9rem;
   padding: 0 0.9rem;
@@ -283,22 +283,22 @@
   gap: 1.7rem;
   cursor: pointer;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-default:focus {
+.overlay-modal .modal-form-group .select-default:focus {
   border: 0.05rem solid #f3734c;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-default .text {
+.overlay-modal .modal-form-group .select-default .text {
   text-transform: capitalize;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-default .material-symbols-outlined {
+.overlay-modal .modal-form-group .select-default .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
   font-size: 1.3rem;
   transition: transform 0.6s ease;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-default .material-symbols-outlined.default-closed {
+.overlay-modal .modal-form-group .select-default .material-symbols-outlined.default-closed {
   transform: rotate(180deg);
   transition: transform 0.6s ease;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-list {
+.overlay-modal .modal-form-group .select-list {
   position: absolute;
   width: 100%;
   height: 9rem;
@@ -308,11 +308,11 @@
   background-color: #e8e8e8;
   overflow-y: auto;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-list.no-more {
+.overlay-modal .modal-form-group .select-list.no-more {
   height: -moz-fit-content;
   height: fit-content;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-list-item {
+.overlay-modal .modal-form-group .select-list-item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -327,14 +327,14 @@
   text-transform: capitalize;
   cursor: pointer;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-list-item:not(:last-child) {
+.overlay-modal .modal-form-group .select-list-item:not(:last-child) {
   border-bottom: #fff solid 0.1rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .select-list-item:hover {
+.overlay-modal .modal-form-group .select-list-item:hover {
   background-color: #f3734c;
   color: #fff;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .check-option {
+.overlay-modal .modal-form-group .check-option {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -342,14 +342,14 @@
   gap: 0.3rem;
   cursor: pointer;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .check-option .material-symbols-outlined {
+.overlay-modal .modal-form-group .check-option .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
 }
-.overlay-modal-dashboard .modal-dashboard-form-group .check-option .text {
+.overlay-modal .modal-form-group .check-option .text {
   font-size: 0.9rem;
   letter-spacing: 0.05rem;
 }
-.overlay-modal-dashboard .modal-dashboard-form button {
+.overlay-modal .modal-form button {
   width: 32%;
   font-size: 0.85rem;
   padding: 0 0.9rem;
@@ -365,12 +365,12 @@
   transition: background-color 0.4s ease-in;
   cursor: pointer;
 }
-.overlay-modal-dashboard .modal-dashboard-form button:hover {
+.overlay-modal .modal-form button:hover {
   background-color: #f3734c;
   transition: background-color 0.4s ease-out;
 }
 @media (max-width: 767.98px) {
-  .overlay-modal-dashboard .modal-dashboard {
+  .overlay-modal .modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -385,28 +385,28 @@
     display: grid;
     border-radius: 0.5rem;
   }
-  .overlay-modal-dashboard .modal-dashboard-title {
+  .overlay-modal .modal-title {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
   }
-  .overlay-modal-dashboard .modal-dashboard-title .other {
+  .overlay-modal .modal-title .other {
     margin: 0;
   }
-  .overlay-modal-dashboard .modal-dashboard-close {
+  .overlay-modal .modal-close {
     font-size: 1.6rem;
   }
-  .overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper {
+  .overlay-modal .modal-form-group .select-image-wrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
   }
-  .overlay-modal-dashboard .modal-dashboard-form-group .select-image-wrapper .select-image-note-file {
+  .overlay-modal .modal-form-group .select-image-wrapper .select-image-note-file {
     width: 15rem;
   }
-  .overlay-modal-dashboard .modal-dashboard-form button {
+  .overlay-modal .modal-form button {
     width: 40%;
     font-size: 0.85rem;
     padding: 0 0.9rem;
@@ -416,7 +416,7 @@
     border: none;
   }
 }
-.overlay-modal-dashboard .confirm-dashboard {
+.overlay-modal .confirm-dashboard {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -432,15 +432,15 @@
   border-radius: 0.5rem;
   gap: 0.3rem;
 }
-.overlay-modal-dashboard .confirm-dashboard-title {
+.overlay-modal .confirm-dashboard-title {
   font-weight: 800;
   margin-bottom: 0.1rem;
 }
-.overlay-modal-dashboard .confirm-dashboard-desc {
+.overlay-modal .confirm-dashboard-desc {
   font-size: 0.92rem;
   margin-bottom: 1.9rem;
 }
-.overlay-modal-dashboard .confirm-dashboard-action {
+.overlay-modal .confirm-dashboard-action {
   margin-top: 1.5rem;
   display: flex;
   flex-direction: row;
@@ -452,12 +452,12 @@
   letter-spacing: 0.04rem;
   font-weight: 700;
 }
-.overlay-modal-dashboard .confirm-dashboard-action .confirm {
+.overlay-modal .confirm-dashboard-action .confirm {
   cursor: pointer;
   color: #bd2130;
   position: relative;
 }
-.overlay-modal-dashboard .confirm-dashboard-action .confirm::after {
+.overlay-modal .confirm-dashboard-action .confirm::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -469,16 +469,16 @@
   transition: transform 0.8s ease-in;
   transform-origin: left;
 }
-.overlay-modal-dashboard .confirm-dashboard-action .confirm:hover::after {
+.overlay-modal .confirm-dashboard-action .confirm:hover::after {
   transform: scaleX(1);
   transition: transform 0.8s ease-out;
 }
-.overlay-modal-dashboard .confirm-dashboard-action .cancel {
+.overlay-modal .confirm-dashboard-action .cancel {
   cursor: pointer;
   color: #8e8e8e;
   position: relative;
 }
-.overlay-modal-dashboard .confirm-dashboard-action .cancel::after {
+.overlay-modal .confirm-dashboard-action .cancel::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -490,7 +490,7 @@
   transition: transform 0.8s ease-in;
   transform-origin: left;
 }
-.overlay-modal-dashboard .confirm-dashboard-action .cancel:hover::after {
+.overlay-modal .confirm-dashboard-action .cancel:hover::after {
   transform: scaleX(1);
   transition: transform 0.8s ease-out;
 }

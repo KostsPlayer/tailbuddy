@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import useLoadable from "./hooks/useLoadable";
 import SearchProvider from "./context/search/SearchProvider";
 import DashboardCoreProvider from "./context/DashboardCore/DashboardCoreProvider";
+import LandingCoreProvider from "./context/landingCore/LandingCoreProvider";
 import { Error404, Error401, Error403 } from "./pages/Error/Error";
 
 const Home = useLoadable(lazy(() => import("./pages/home/Home")));
@@ -36,12 +37,22 @@ const DashboardCore = () => {
   );
 };
 
+const LandingCore = () => {
+  return (
+    <LandingCoreProvider>
+      <Outlet />
+    </LandingCoreProvider>
+  );
+};
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <SearchProvider>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route element={<LandingCore />}>
+            <Route path="/" element={<Home />} />
+          </Route>
           <Route path="*" element={<Error404 />} />
           <Route path="/403" element={<Error403 />} />
           <Route path="/401" element={<Error401 />} />

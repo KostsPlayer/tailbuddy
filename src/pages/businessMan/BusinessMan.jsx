@@ -26,8 +26,6 @@ function BusinessMan() {
         },
       });
 
-      console.log(promise.data.data);
-
       setData(promise.data.data);
     } catch (error) {
       console.error("Failed to fetch data!", error);
@@ -80,13 +78,19 @@ function BusinessMan() {
                       <div className="core-action">
                         <span
                           className="material-symbols-rounded"
-                          onClick={() => handleEditItem(item.id)}
+                          onClick={() => {
+                            setDataId(item.business_id);
+                            setOpenUpdate(true);
+                          }}
                         >
                           edit_square
                         </span>
                         <span
                           className="material-symbols-rounded"
-                          onClick={() => handleDeleteItem(item.id)}
+                          onClick={() => {
+                            setDataId(item.business_id);
+                            setOpenDelete(true);
+                          }}
                         >
                           auto_delete
                         </span>
