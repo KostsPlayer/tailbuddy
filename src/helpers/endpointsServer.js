@@ -9,7 +9,7 @@ const endpointsServer = {
   pets: `${base}/api/pets/all`,
   petsID: `${base}/api/pets/`,
   petsCreate: `${base}/api/pets/create`,
-  petsUpdate: `${base}/api/pets/update`,
+  petsUpdate: `/api/pets/update`,
   petsDelete: `${base}/api/pets/delete`,
   businessCategoriesAll: `/api/businessCategory/all`,
   businessCategoriesID: `/api/businessCategory`,
@@ -19,7 +19,7 @@ const endpointsServer = {
   business: `/api/business`,
   businessId: `/api/business-id`,
   userId: `/api/user-id`,
-  transactionCreate: `/api/transactions/create`,
+  transactionCreate: `/api/transaction/create`,
   petsUpdate: (id) => `${base}/api/pets/update/${id}`,
   petsDelete: (id) => `${base}/api/pets/delete/${id}`,
   businessCategoriesAll: `${base}/api/businessCategory/all`,
@@ -29,7 +29,6 @@ const endpointsServer = {
   businessCategoriesUpdate: `${base}/api/businessCategory/update`,
   business: `${base}/api/business`,
   businessId: `${base}/api/business-id`,
-  petId: `/api/pets`,
 };
 
 export default endpointsServer;
