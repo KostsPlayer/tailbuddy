@@ -20,7 +20,7 @@ function PetsManModal({
   });
 
   const [values, setValues] = useState({ pet: "", location: "", price: "" });
-
+  const deleteStatus = useRef(false);
   const modalRef = useRef(null);
 
   const { token, toastPromise, toastMessage } = DashboardCore();
@@ -95,7 +95,7 @@ function PetsManModal({
         const endpoint =
           type === "create"
             ? endpointsServer.petsCreate
-            : `${endpointsServer.petsUpdate}${dataId}`;
+            : `${endpointsServer.petsUpdate}/${dataId}`;
         const method = type === "create" ? "post" : "put";
 
         const promise = apiConfig[method](endpoint, formData, {
@@ -133,12 +133,11 @@ function PetsManModal({
   );
 
   const handleDelete = useCallback(
-    async (e) => {
+    (e) => {
       e.preventDefault();
 
-      try {
         const promise = apiConfig.delete(
-          `${endpointsServer.petsDelete}?id=${dataId}`,
+          `${endpointsServer.petsDelete}$id=${dataId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -158,13 +157,20 @@ function PetsManModal({
             position: "top-center",
           },
           () => {
-            refreshData();
+            if (deleteStatus.current === true) {              
+              refreshData();
+            }
           }
         );
-      } catch (error) {
-        console.error("Error deleting pet data:", error);
-      }
-    },
+
+        promise
+         .then((res) => {
+            deleteStatus.current = res.data.success;
+          })
+         .catch((error) => {
+            console.error("Error deleting pet data:", error);
+          });
+      },
     [dataId, token, refreshData]
   );
 
