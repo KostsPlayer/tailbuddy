@@ -137,7 +137,7 @@ function PetsManModal({
       e.preventDefault();
 
         const promise = apiConfig.delete(
-          `${endpointsServer.petsDelete}$id=${dataId}`,
+          `${endpointsServer.petsDelete}/${dataId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
