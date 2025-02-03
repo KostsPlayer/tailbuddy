@@ -17,7 +17,7 @@ function PetsMan() {
     axios
       .get(endpointsServer.pets)
       .then((res) => {
-        console.log("Fetched pets data:", res.data); // Debugging
+        console.log("Fetched pets data:", res.data);
         if (Array.isArray(res.data.data)) {
           setData(res.data.data);
         } else {
@@ -62,7 +62,7 @@ function PetsMan() {
             data.map((item, index) => {
               const image = `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/pets/${item.image}`;
               return (
-                <div className="content-item" key={item.id || index}>
+                <div className="content-item" key={item.pets_id || index}>
                   <img
                     className="content-item-image"
                     src={image}
@@ -75,13 +75,13 @@ function PetsMan() {
                     <div className="core-action">
                       <span
                         className="material-symbols-rounded"
-                        onClick={() => handleEditItem(item.id)}
+                        onClick={() => handleEditItem(item.pets_id)}
                       >
                         edit_square
                       </span>
                       <span
                         className="material-symbols-rounded"
-                        onClick={() => handleDeleteItem(item.id)}
+                        onClick={() => handleDeleteItem(item.pets_id)}
                       >
                         auto_delete
                       </span>
