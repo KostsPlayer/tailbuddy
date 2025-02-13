@@ -1,5 +1,5 @@
-const base = "http://localhost:3000";
-// const base = "https://tailbuddy-server.vercel.app";
+// const base = "http://localhost:3000";
+const base = "https://tailbuddy-server.vercel.app";
 
 const endpointsServer = {
   login: `${base}/auth/login`,
@@ -20,8 +20,10 @@ const endpointsServer = {
   business: `/api/business`,
   businessId: `/api/business-id`,
   userId: `/api/user-id`,
-  transactionCreate: `/api/transaction/create`,
+  transactionCreate: `/api/transactions/create`,
   petCategories: `/api/pet-categories`,
+  products: `/api/products`,
+  productId: `/api/product-id`,
 };
 
 export default endpointsServer;

@@ -69,7 +69,7 @@ export function Error403() {
   return (
     <ErrorComponent
       type={403}
-      message={"You’re not allowed to access this page."}
+      message={"You're not allowed to access this page."}
     />
   );
 }

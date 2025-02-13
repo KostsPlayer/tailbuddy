@@ -2,11 +2,12 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import Modal from "../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
 import apiConfig from "../../helpers/apiConfig";
-import { businessSchema } from "../../validations/Business";
+import { productsSchema } from "../../validations/Products";
 import endpointsServer from "../../helpers/endpointsServer";
 import DashboardCore from "../../context/dashboardCore/DashboardCore";
+import { FormatCurrencyIDR } from "../../helpers/FormatCurrencyIDR";
 
-function BusinessManModal({
+function ProductsManModal({
   type = "create",
   isOpen,
   setIsOpen,
@@ -19,14 +20,12 @@ function BusinessManModal({
     name: "",
   });
   const [values, setValues] = useState({
-    business: "",
-    business_category_id: "",
+    name: "",
+    price: null,
+    stock: null,
   });
-  const [categories, setCategories] = useState([]);
-  const [openCategories, setOpenCategories] = useState(false);
 
-  const categoriesRef = useRef(null);
-  const businessModal = useRef(null);
+  const productsModal = useRef(null);
   const createStatus = useRef(false);
   const updateStatus = useRef(false);
   const deleteStatus = useRef(false);
@@ -34,68 +33,30 @@ function BusinessManModal({
   const { token, toastPromise, toastMessage } = DashboardCore();
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (categoriesRef.current && !categoriesRef.current.contains(e.target)) {
-        setOpenCategories(false);
-      }
-    };
-
-    if (openCategories) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [categoriesRef, openCategories]);
-
-  const fetchCategories = useCallback(async () => {
-    try {
-      const response = await apiConfig.get(
-        endpointsServer.businessCategoriesAll,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setCategories(response.data.data);
-    } catch (error) {
-      console.error("Failed to fetch data!", error);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
-
-  useEffect(() => {
     if (type === "create") {
-      setValues({ business: "", business_category_id: "" });
+      setValues({ name: "", price: null, stock: null });
       setSelectedImage({ file: null, preview: null, name: "" });
     } else {
       if (dataId) {
         apiConfig
-          .get(`${endpointsServer.businessId}?id=${dataId}`, {
+          .get(`${endpointsServer.productId}?id=${dataId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           })
           .then((res) => {
-            const getData = res.data.data[0];
+            const getData = res.data.data;
 
-            console.log("Data:", getData);
+            // console.log("Data:", getData);
 
             setValues({
-              business: getData.business,
-              business_category_id: getData.business_category_id,
+              name: getData.name,
+              price: getData.price,
+              stock: getData.stock,
             });
             setSelectedImage({
               file: getData.image,
-              preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business/${getData.image}`,
+              preview: `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/products/${getData.image}`,
               name: getData.image,
             });
           })
@@ -121,29 +82,35 @@ function BusinessManModal({
     setValues((prev) => ({ ...prev, [name]: value }));
   }, []);
 
+  // useEffect(() => {
+  //   console.log(values);
+  // }, [values]);
+
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
 
       if (type === "create") {
         const formData = new FormData();
-        formData.append("business", values.business);
-        formData.append("business_category_id", values.business_category_id);
+        formData.append("name", values.name);
+        formData.append("price", values.price);
+        formData.append("stock", values.stock);
         if (selectedImage.file) {
           formData.append("image", selectedImage.file);
         }
 
         try {
-          await businessSchema.validate(
+          await productsSchema.validate(
             {
-              business: values.business,
-              business_category_id: values.business_category_id,
+              name: values.name,
+              price: values.price,
+              stock: values.stock,
               image: selectedImage.file,
             },
             { abortEarly: false }
           );
 
-          const promise = apiConfig.post(endpointsServer.business, formData, {
+          const promise = apiConfig.post(endpointsServer.products, formData, {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "multipart/form-data",
@@ -153,7 +120,7 @@ function BusinessManModal({
           toastPromise(
             promise,
             {
-              pending: "Creating business data on progress, please wait..!",
+              pending: "Creating products data on progress, please wait..!",
               success: "Data has been successfully created!",
               error: "Failed to create data!",
             },
@@ -186,24 +153,27 @@ function BusinessManModal({
         }
       } else {
         const formData = new FormData();
-        formData.append("business", values.business);
-        formData.append("business_category_id", values.business_category_id);
+        formData.append("name", values.name);
+        formData.append("price", values.price);
+        formData.append("stock", values.stock);
+
         if (selectedImage.file) {
           formData.append("image", selectedImage.file);
         }
 
         try {
-          await businessSchema.validate(
+          await productsSchema.validate(
             {
-              business: values.business,
-              business_category_id: values.business_category_id,
+              name: values.name,
+              price: values.price,
+              stock: values.stock,
               image: selectedImage.file,
             },
             { abortEarly: false }
           );
 
           const promise = apiConfig.put(
-            `${endpointsServer.business}?id=${dataId}`,
+            `${endpointsServer.products}?id=${dataId}`,
             formData,
             {
               headers: {
@@ -216,7 +186,7 @@ function BusinessManModal({
           toastPromise(
             promise,
             {
-              pending: "Updating business data on progress, please wait..!",
+              pending: "Updating products data on progress, please wait..!",
               success: "Data has been successfully updated!",
               error: "Failed to update data!",
             },
@@ -233,6 +203,8 @@ function BusinessManModal({
 
           promise.then((res) => {
             updateStatus.current = res.data.success;
+
+            // console.log(res.data);
           });
         } catch (error) {
           console.error("Error saat mengirim data:", error);
@@ -257,7 +229,7 @@ function BusinessManModal({
       e.preventDefault();
 
       const promise = apiConfig.delete(
-        `${endpointsServer.business}?id=${dataId}`,
+        `${endpointsServer.products}?id=${dataId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -268,7 +240,7 @@ function BusinessManModal({
       toastPromise(
         promise,
         {
-          pending: "deleting business data on progress, please wait..!",
+          pending: "deleting products data on progress, please wait..!",
           success: "Data has been successfully deleted!",
           error: "Failed to delete data!",
         },
@@ -300,7 +272,7 @@ function BusinessManModal({
         <Modal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          modalRef={businessModal}
+          modalRef={productsModal}
           type="confirm"
           titleModal={"Are you sure you want to delete this?"}
           descModal={
@@ -319,88 +291,57 @@ function BusinessManModal({
       ) : (
         <Modal
           titleModal={type === "create" ? "Insert" : "Update"}
-          otherTitleModal={"Business"}
+          otherTitleModal={"Products"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          modalRef={businessModal}
+          modalRef={productsModal}
         >
           <form className="modal-form" onSubmit={handleSubmit}>
             <div className="modal-form-group">
-              <label htmlFor="business">
-                Business's Name <span>(Required)</span>
+              <label htmlFor="name">
+                Product's Name <span>(Required)</span>
               </label>
               <input
                 type="text"
-                id="business"
-                name="business"
-                placeholder="Pet Business"
-                value={values.business}
+                id="name"
+                name="name"
+                placeholder="Product's Name"
+                value={values.name}
                 onChange={handleChange}
               />
             </div>
 
             <div className="modal-form-group">
-              <div className="modal-form-group">
-                <div className="label">
-                  Business Category's Parent <span>(Required)</span>
-                </div>
-                <div
-                  className="select-default"
-                  onClick={() => setOpenCategories(true)}
-                >
-                  <div className="text">
-                    {values.business_category_id === ""
-                      ? "Select Business Category's Parent"
-                      : categories
-                          .filter(
-                            (item) =>
-                              item.business_categories_id ===
-                              values.business_category_id
-                          )
-                          .map((data) => data.name)}
-                  </div>
-                  <span
-                    className={`material-symbols-outlined ${
-                      openCategories ? "default-closed" : ""
-                    }`}
-                  >
-                    south_east
-                  </span>
-                </div>
-                {openCategories && (
-                  <div className="select-list" ref={categoriesRef}>
-                    {categories
-                      .filter(
-                        (item) =>
-                          item.business_categories_id !==
-                          values.business_category_id
-                      )
-                      .map((data) => {
-                        return (
-                          <div
-                            className="select-list-item"
-                            key={data.business_categories_id}
-                            onClick={() => {
-                              setValues((prev) => ({
-                                ...prev,
-                                business_category_id:
-                                  data.business_categories_id,
-                              }));
-                              setOpenCategories(false);
-                            }}
-                          >
-                            <div className="name">{data.name}</div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                )}
-              </div>
+              <label htmlFor="price">
+                Price — Rp <span>(Required)</span>
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                placeholder="Product's Price"
+                value={values.price}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="modal-form-group">
+              <label htmlFor="stock">
+                Stock <span>(Required)</span>
+              </label>
+              <input
+                type="number"
+                id="stock"
+                name="stock"
+                placeholder="Product's Stock"
+                value={values.stock}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="modal-form-group">
               <div className="label">
-                Business's Image <span>(Required)</span>
+                Products's Image <span>(Required)</span>
               </div>
               <div className="select-image-wrapper">
                 <div className="select-image">
@@ -441,7 +382,7 @@ function BusinessManModal({
   );
 }
 
-BusinessManModal.propTypes = {
+ProductsManModal.propTypes = {
   type: PropTypes.string,
   isOpen: PropTypes.bool,
   setIsOpen: PropTypes.func,
@@ -449,4 +390,4 @@ BusinessManModal.propTypes = {
   dataId: PropTypes.string,
 };
 
-export default BusinessManModal;
+export default ProductsManModal;

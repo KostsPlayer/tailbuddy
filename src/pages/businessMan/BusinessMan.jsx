@@ -45,7 +45,7 @@ function BusinessMan() {
         <LoaderPages />
       ) : (
         <LayoutDashboard>
-          <div className="business-category-man">
+          <div className="business-man">
             <div className="header">
               <div className="header-title">
                 Business<span> Management</span>

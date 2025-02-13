@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import LandingCore from "../../../context/landingCore/LandingCore";
+import { convertTime } from "../../../helpers/convertTime";
 
 function Business() {
   const [activeCategory, setActiveCategory] = useState(
@@ -11,63 +12,6 @@ function Business() {
   const handleActiveCatgeory = useCallback((id) => {
     setActiveCategory(id);
   }, []);
-
-  const convertTime = (timestamp) => {
-    // Buat objek Date dari timestamp
-    const date = new Date(timestamp);
-
-    // Array nama hari dan nama bulan dalam bahasa Indonesia
-    const days = [
-      "Minggu",
-      "Senin",
-      "Selasa",
-      "Rabu",
-      "Kamis",
-      "Jumat",
-      "Sabtu",
-    ];
-    const months = [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
-    ];
-
-    // Ambil data waktu sesuai zona waktu Jakarta (UTC+7)
-    const options = {
-      timeZone: "Asia/Jakarta",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    };
-
-    const formatter = new Intl.DateTimeFormat("id-ID", options);
-    const formattedDate = formatter.formatToParts(date);
-
-    // Ekstrak bagian-bagian tanggal yang diperlukan
-    const day = date.getUTCDay(); // Hari dalam format angka (0-6)
-    const dateNumber = formattedDate.find((part) => part.type === "day").value;
-    const month = formattedDate.find((part) => part.type === "month").value - 1; // Sesuaikan index bulan
-    const year = formattedDate.find((part) => part.type === "year").value;
-    const hour = formattedDate.find((part) => part.type === "hour").value;
-    const minute = formattedDate.find((part) => part.type === "minute").value;
-    // const second = formattedDate.find((part) => part.type === "second").value;
-
-    // Gabungkan ke dalam format yang diinginkan
-    return `${days[day]}, ${dateNumber} ${months[month]} ${year}, ${hour}.${minute} WIB`;
-  };
 
   return (
     <div className="business">
@@ -104,20 +48,33 @@ function Business() {
         {business
           .filter((item) => item.business_category_id === activeCategory)
           .map((data) => {
+            const businessImg = `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/business/${data.image}`;
+
             return (
-              <div className="item" key={data.business_id}>
-                <div className="item-text-bg">{data.business}</div>
+              <div
+                className="item"
+                key={data.business_id}
+                style={{
+                  backgroundImage: `url(${businessImg})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
                 <div className="item-wrapper">
                   <div className="item-wrapper-date">
                     {convertTime(data.created_at)}
                   </div>
-                  <div className="item-wrapper-text">{data.name}</div>
                 </div>
               </div>
             );
           })}
       </div>
-      <div className="business-more">view all business</div>
+      <div className="business-more">
+        {activeCategory === "a67555c1-4472-4320-8ae3-5287ea9d2aa9"
+          ? "book now"
+          : "view all business"}
+      </div>
     </div>
   );
 }

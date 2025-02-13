@@ -4,7 +4,7 @@ import { getDecryptedCookie } from "../../helpers/Crypto";
 import { Error401, Error403 } from "../Error/Error";
 
 function UsersMan() {
-  const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
+  // const [dataCookie, setDataCookie] = useState(getDecryptedCookie("tailbuddy"));
 
   return (
     <>

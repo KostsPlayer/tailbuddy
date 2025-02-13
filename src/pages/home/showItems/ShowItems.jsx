@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import products from "../../../data/products.json";
+// import products from "../../../data/products.json";
 // import pets from "../../../data/pets.json";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 import imgUser from "/users/pexels-olly-712513.jpg";
@@ -12,6 +12,7 @@ function ShowItems({ itemsData, items }) {
   const [activeFavorite, setActiveFavorite] = useState([]);
   const [openTransaction, setOpenTransaction] = useState(false);
   const [getPet, setGetPet] = useState([]);
+  const [getProduct, setGetProduct] = useState([]);
 
   const handleActiveFavorite = useCallback(
     (id) => {
@@ -58,7 +59,6 @@ function ShowItems({ itemsData, items }) {
           <span className="material-symbols-outlined">trending_flat</span>
           <div className={`${items}-content-list`}>
             {itemsData.map((data) => {
-              const setImg = `/${items}/${data.image}`;
               const imgSupabase = `https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/${items}/${data.image}`;
 
               return (
@@ -69,31 +69,29 @@ function ShowItems({ itemsData, items }) {
                     setOpenTransaction(true);
                     if (items === "pets") {
                       setGetPet(data);
+                    } else if (items === "products") {
+                      setGetProduct(data);
                     }
                   }}
                 >
-                  {items === "pets" ? (
-                    <img
-                      className="item-image"
-                      src={imgSupabase}
-                      alt={data.name}
-                    />
-                  ) : (
-                    <img className="item-image" src={setImg} alt={data.name} />
-                  )}
+                  <img
+                    className="item-image"
+                    src={imgSupabase}
+                    alt={data.name}
+                  />
                   <span
                     className={`material-symbols-rounded item-favourite ${
                       items === "pets"
                         ? activeFavorite.includes(data.pets_id)
                           ? "active"
                           : ""
-                        : activeFavorite.includes(data.id)
+                        : activeFavorite.includes(data.products_id)
                         ? "active"
                         : ""
                     }`}
                     onClick={() =>
                       handleActiveFavorite(
-                        items === "pets" ? data.pets_id : data.id
+                        items === "pets" ? data.pets_id : data.products_id
                       )
                     }
                   >
@@ -133,7 +131,14 @@ function ShowItems({ itemsData, items }) {
           isOpen={openTransaction}
           setIsOpen={setOpenTransaction}
           modalRef={refTransaction}
-          dataId={items === "pets" ? getPet.pets_id : ""}
+          dataId={
+            items === "pets"
+              ? getPet.pets_id
+              : items === "products"
+              ? getProduct.products_id
+              : null
+          }
+          type={items}
         />
       ) : null}
     </>
@@ -141,31 +146,13 @@ function ShowItems({ itemsData, items }) {
 }
 
 export function Pets() {
-  const [pets, setPets] = useState([]);
-  const { token } = LandingCore();
-
-  const fetchPets = useCallback(async () => {
-    try {
-      const petsPromise = await axios.get(endpointsServer.pets, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setPets(petsPromise.data.data);
-      console.log(petsPromise.data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchPets();
-  }, [fetchPets]);
+  const { pets } = LandingCore();
 
   return <ShowItems itemsData={pets} items={"pets"} />;
 }
 
 export function Products() {
+  const { products } = LandingCore();
+
   return <ShowItems itemsData={products} items={"products"} />;
 }

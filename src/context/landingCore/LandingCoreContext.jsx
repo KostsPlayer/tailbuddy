@@ -9,6 +9,8 @@ const LandingCoreContext = createContext({
   setDashboardCoreLoader: () => {},
   business: [],
   businessCategories: [],
+  pets: [],
+  products: [],
   isMe: {},
 });
 

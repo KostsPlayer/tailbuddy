@@ -1,13 +1,13 @@
 [
   {
     "id": 1,
-    "name": "Cat Toy",
+    "name": "Adult Toy",
     "image": "cat-toy.jpg",
     "price": 10000
   },
   {
     "id": 2,
-    "name": "Pet Oil",
+    "name": "Pididi Oil",
     "image": "pet-oil.jpg",
     "price": 30000
   },

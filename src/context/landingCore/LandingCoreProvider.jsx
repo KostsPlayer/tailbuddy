@@ -13,12 +13,15 @@ import LandingCoreContext from "./LandingCoreContext";
 import endpointsServer from "../../helpers/endpointsServer";
 import apiConfig from "../../helpers/apiConfig";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const LandingCoreProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isLoadingLandingCore, setIsLoadingLandingCore] = useState(false);
   const [business, setBusiness] = useState([]);
   const [businessCategories, setBusinessCategories] = useState([]);
+  const [pets, setPets] = useState([]);
+  const [products, setProducts] = useState([]);
   const [isMe, setIsMe] = useState(null);
 
   const navigate = useNavigate();
@@ -32,8 +35,6 @@ const LandingCoreProvider = ({ children }) => {
 
     if (tokenFromCookies) {
       setToken(tokenFromCookies);
-    } else {
-      navigate("/login", { replace: true });
     }
   }, [navigate]);
 
@@ -41,39 +42,54 @@ const LandingCoreProvider = ({ children }) => {
     try {
       setIsLoadingLandingCore(true);
 
-      const decodedToken = jwtDecode(token);
-
-      const [businessPromise, businessCategoriesPromise, userPromise] =
-        await Promise.all([
-          apiConfig.get(endpointsServer.business, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          apiConfig.get(endpointsServer.businessCategoriesAll, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          apiConfig.get(
-            `${endpointsServer.userId}?id=${decodedToken.user_id}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          ),
-        ]);
+      const [
+        businessPromise,
+        businessCategoriesPromise,
+        petsPromise,
+        productsPromise,
+      ] = await Promise.all([
+        apiConfig.get(endpointsServer.business),
+        apiConfig.get(endpointsServer.businessCategoriesAll),
+        axios.get(endpointsServer.pets, {
+          withCredentials: true,
+        }),
+        apiConfig.get(endpointsServer.products),
+      ]);
 
       setBusiness(businessPromise.data.data);
       setBusinessCategories(businessCategoriesPromise.data.data);
-      setIsMe(userPromise.data.data);
+      setPets(petsPromise.data.data);
+      setProducts(productsPromise.data.data);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoadingLandingCore(false);
     }
-  }, [token, setIsLoadingLandingCore]);
+  }, [setIsLoadingLandingCore]);
 
   useEffect(() => {
+    fetchData();
+
     if (token) {
-      fetchData();
+      const decodedToken = jwtDecode(token);
+
+      setIsLoadingLandingCore(true);
+
+      apiConfig
+        .get(`${endpointsServer.userId}?id=${decodedToken.user_id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setIsMe(res.data.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingLandingCore(false);
+        });
     }
-  }, [fetchData, token]);
+  }, [fetchData, token, setIsLoadingLandingCore]);
 
   const contextValue = useMemo(
     () => ({
@@ -85,6 +101,8 @@ const LandingCoreProvider = ({ children }) => {
       setLandingCoreLoader,
       business,
       businessCategories,
+      pets,
+      products,
       isMe,
     }),
     [
@@ -93,6 +111,8 @@ const LandingCoreProvider = ({ children }) => {
       setLandingCoreLoader,
       business,
       businessCategories,
+      pets,
+      products,
       isMe,
     ]
   );

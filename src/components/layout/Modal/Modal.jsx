@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 function Modal({
   type = "form",
+  typeFor = null,
   titleModal = null,
   otherTitleModal = null,
   descModal = null,
@@ -46,7 +47,7 @@ function Modal({
       {isOpen ? (
         <div className="overlay-modal">
           {type === "form" ? (
-            <div className="modal" ref={modalRef}>
+            <div className={`modal`} ref={modalRef}>
               <div className="modal-title">
                 {titleModal} <span className="other">{otherTitleModal}</span>
               </div>
@@ -60,9 +61,9 @@ function Modal({
               {children}
             </div>
           ) : (
-            <div className="confirm" ref={modalRef}>
-              <span className="confirm-title">{titleModal}</span>
-              <span className="confirm-desc">{descModal}</span>
+            <div className="confirm-dashboard" ref={modalRef}>
+              <span className="confirm-dashboard-title">{titleModal}</span>
+              <span className="confirm-dashboard-desc">{descModal}</span>
               {children}
             </div>
           )}
@@ -74,6 +75,7 @@ function Modal({
 
 Modal.propTypes = {
   type: PropTypes.string,
+  typeFor: PropTypes.string,
   titleModal: PropTypes.string,
   otherTitleModal: PropTypes.string,
   descModal: PropTypes.string,

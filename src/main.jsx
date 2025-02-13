@@ -7,6 +7,7 @@ import DashboardCoreProvider from "./context/DashboardCore/DashboardCoreProvider
 import LandingCoreProvider from "./context/landingCore/LandingCoreProvider";
 import { Error404, Error401, Error403 } from "./pages/Error/Error";
 
+const Loader = useLoadable(lazy(() => import("./components/loader/LoaderPages")));
 const Home = useLoadable(lazy(() => import("./pages/home/Home")));
 const Dashboard = useLoadable(
   lazy(() => import("./pages/dashboard/Dashboard"))
@@ -53,6 +54,7 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <SearchProvider>
         <Routes>
+          <Route path="/loader" element={<Loader />} />
           <Route element={<LandingCore />}>
             <Route path="/" element={<Home />} />
           </Route>

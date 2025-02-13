@@ -75,7 +75,7 @@ function PetsMan() {
                       <div className="price">
                         {FormatCurrencyIDR(item.price)}
                       </div>
-                      <div className="text">{item.location}</div>
+                      <div className="location">{item.location}</div>
                       <div className="core-action">
                         <span
                           className="material-symbols-rounded"
