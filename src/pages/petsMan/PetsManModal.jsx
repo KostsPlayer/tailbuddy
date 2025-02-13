@@ -25,6 +25,50 @@ function PetsManModal({
 
   const { token, toastPromise, toastMessage } = DashboardCore();
 
+  const [categories, setCategories] = useState([]);
+  const [openCategories, setOpenCategories] = useState(false);
+  const categoriesRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (categoriesRef.current && !categoriesRef.current.contains(e.target)) {
+        setOpenCategories(false);
+      }
+    };
+
+    if (openCategories) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [categoriesRef, openCategories]);
+  
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await apiConfig.get(
+        endpointsServer.businessCategoriesAll,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setCategories(response.data.data);
+    } catch (error) {
+      console.error("Failed to fetch data!", error);
+    }
+  }, [token]);
+  
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+  
+
   useEffect(() => {
     if (isOpen) {
       setValues({ pet: "", location: "", price: "" });
@@ -89,8 +133,10 @@ function PetsManModal({
       formData.append("pet", values.pet.trim());
       formData.append("location", values.location.trim());
       formData.append("price", values.price);
+      formData.append("business_category_id", values.business_category_id);
       formData.append("image", selectedImage.file);
-
+      console.log("formData");
+      
       try {
         const endpoint =
           type === "create"
@@ -136,44 +182,44 @@ function PetsManModal({
     (e) => {
       e.preventDefault();
 
-        const promise = apiConfig.delete(
-          `${endpointsServer.petsDelete}/${dataId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        toastPromise(
-          promise,
-          {
-            pending: "Deleting pet data on progress, please wait..!",
-            success: "Data has been successfully deleted!",
-            error: "Failed to delete data!",
+      const promise = apiConfig.delete(
+        `${endpointsServer.petsDelete}/${dataId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-          {
-            autoClose: 2500,
-            position: "top-center",
-          },
-          () => {
-            if (deleteStatus.current === true) {              
-              refreshData();
-            }
-          }
-        );
+        }
+      );
 
-        promise
-         .then((res) => {
-            deleteStatus.current = res.data.success;
-          })
-         .catch((error) => {
-            console.error("Error deleting pet data:", error);
-          });
-      },
+      toastPromise(
+        promise,
+        {
+          pending: "Deleting pet data on progress, please wait..!",
+          success: "Data has been successfully deleted!",
+          error: "Failed to delete data!",
+        },
+        {
+          autoClose: 2500,
+          position: "top-center",
+        },
+        () => {
+          if (deleteStatus.current === true) {
+            refreshData();
+          }
+        }
+      );
+
+      promise
+        .then((res) => {
+          deleteStatus.current = res.data.success;
+        })
+        .catch((error) => {
+          console.error("Error deleting pet data:", error);
+        });
+    },
     [dataId, token, refreshData]
   );
-
+  
   return (
     <>
       {type === "delete" ? (
@@ -198,7 +244,8 @@ function PetsManModal({
         </Modal>
       ) : (
         <Modal
-          titleModal={type === "create" ? "Insert Pet" : "Update Pet"}
+          titleModal={type === "create" ? "Insert" : "Update"}
+          otherTitleModal={"Pet"}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           modalRef={modalRef}
@@ -245,6 +292,64 @@ function PetsManModal({
                 onChange={handleChange}
                 required
               />
+            </div>
+            <div className="modal-form-group">
+              <div className="modal-form-group">
+                <div className="label">
+                  Business Category's Parent <span>(Required)</span>
+                </div>
+                <div
+                  className="select-default"
+                  onClick={() => setOpenCategories(true)}
+                >
+                  <div className="text">
+                    {values.business_category_id === ""
+                      ? "Select Business Category's Parent"
+                      : categories
+                          .filter(
+                            (item) =>
+                              item.business_categories_id ===
+                              values.business_category_id
+                          )
+                          .map((data) => data.name)}
+                  </div>
+                  <span
+                    className={`material-symbols-outlined ${
+                      openCategories ? "default-closed" : ""
+                    }`}
+                  >
+                    south_east
+                  </span>
+                </div>
+                {openCategories && (
+                  <div className="select-list" ref={categoriesRef}>
+                    {categories
+                      .filter(
+                        (item) =>
+                          item.business_categories_id !==
+                          values.business_category_id
+                      )
+                      .map((data) => {
+                        return (
+                          <div
+                            className="select-list-item"
+                            key={data.business_categories_id}
+                            onClick={() => {
+                              setValues((prev) => ({
+                                ...prev,
+                                business_category_id:
+                                  data.business_categories_id,
+                              }));
+                              setOpenCategories(false);
+                            }}
+                          >
+                            <div className="name">{data.name}</div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
             </div>
             <div className="modal-form-group">
               <label className="special-image" htmlFor="image">
