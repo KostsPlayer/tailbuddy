@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import useLoadable from "./hooks/useLoadable";
 import SearchProvider from "./context/search/SearchProvider";
-import DashboardCoreProvider from "./context/DashboardCore/DashboardCoreProvider";
+import DashboardCoreProvider from "./context/dashboardCore/DashboardCoreProvider";
 import LandingCoreProvider from "./context/landingCore/LandingCoreProvider";
 import { Error404, Error401, Error403 } from "./pages/Error/Error";
 
