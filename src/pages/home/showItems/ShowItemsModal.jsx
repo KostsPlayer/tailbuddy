@@ -3,13 +3,16 @@ import Modal from "../../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
 import apiConfig from "../../../helpers/apiConfig";
 import { transactionsSchema } from "../../../validations/transactions";
+import { petSalesSchema } from "../../../validations/PetSales";
 import endpointsServer from "../../../helpers/endpointsServer";
 import LandingCore from "../../../context/landingCore/LandingCore";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
+import LoaderProgress from "../../../components/loader/LoaderProgress";
 
 function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
   const [petId, setPetId] = useState({});
   const [productId, setProductId] = useState({});
+  const [transactionLoading, setTransactionLoading] = useState(false);
   const transactionStatus = useRef(null);
 
   const { token, toastPromise, toastMessage, isMe } = LandingCore();
@@ -60,68 +63,52 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
     async (e) => {
       e.preventDefault();
 
-      if (type === "pets") {
-        try {
-          await transactionsSchema.validate(
-            {
-              user_id: isMe.users_id,
-              status: "pending",
-              type: "pets",
-            },
-            { abortEarly: false }
-          );
+      try {
+        setTransactionLoading(true);
 
-          const promise = apiConfig.post(
-            endpointsServer.transactionCreate,
-            {
-              user_id: isMe.users_id,
-              status: "pending",
-              type: "pets",
+        const promiseTransaction = await apiConfig.post(
+          `${endpointsServer.transactions}/create`,
+          {
+            status: "pending",
+            type: "pets",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          toastPromise(
-            promise,
-            {
-              pending: "Transaction data on progress, please wait..!",
-              success: "Transaction has been successfully created!",
-              error: "Failed to transaction data!",
-            },
-            {
-              autoClose: 2500,
-              position: "top-center",
-            },
-            () => {
-              if (transactionStatus.current === true) {
-                setIsOpen(false);
-              }
-            }
-          );
-
-          promise.then((res) => {
-            transactionStatus.current = res.data.success;
-          });
-        } catch (error) {
-          console.error("Error saat mengirim data:", error);
-
-          if (error.inner) {
-            error.inner.forEach((err) => {
-              toastMessage("error", err.message, { position: "top-center" });
-            });
-          } else {
-            toastMessage("error", "Failed to create data!", {
-              position: "top-center",
-            });
           }
+        );
+
+        if (type === "pets") {
+          apiConfig
+            .post(
+              `${endpointsServer.petSales}/create`,
+              {
+                transaction_id: promiseTransaction.data.data[0].transactions_id,
+                pet_id: dataId,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((res) => {
+              // console.log(res.data.data);
+              toastMessage("success", "Success to create data!");
+            });
         }
+      } catch (error) {
+        console.error("Error saat mengirim data:", error);
+        toastMessage("error", "Failed to create data!", {
+          position: "top-center",
+        });
+      } finally {
+        setTransactionLoading(false);
+        setIsOpen(false);
       }
     },
-    [token, petId, isMe]
+    [token, dataId, type]
   );
 
   return (
@@ -135,46 +122,64 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
         modalRef={modalRef}
       >
         <form className="modal-form transaction" onSubmit={handleSubmit}>
-          <div className="transaction-preview">
-            <img
-              className="image"
-              src={`https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/${type}/${
-                type === "pets"
-                  ? petId.image
-                  : type === "products"
-                  ? productId.image
-                  : ""
-              }`}
-              alt={
-                type === "pets"
-                  ? petId.name
-                  : type === "products"
-                  ? productId.name
-                  : ""
-              }
+          {transactionLoading ? (
+            <LoaderProgress
+              style={{
+                height: "40vh",
+              }}
             />
-            <span className="price">
-              {type === "pets"
-                ? FormatCurrencyIDR(petId.price)
-                : type === "products"
-                ? FormatCurrencyIDR(productId.price)
-                : "0.00"}
-            </span>
-            <span className="name">
-              {type === "pets"
-                ? petId.pet
-                : type === "products"
-                ? productId.name
-                : "No Name"}
-            </span>
-            {type === "pets" ? (
-              <span className="location">{petId.location}</span>
-            ) : null}
-          </div>
-          <div className="transaction-button">
-            <button type="submit">Buy</button>
-            <button onClick={() => setIsOpen(false)}>Cancel</button>
-          </div>
+          ) : (
+            <>
+              <div className="transaction-preview">
+                <img
+                  className="image"
+                  src={`https://zvgpdykyzhgpqvrpsmrf.supabase.co/storage/v1/object/public/${type}/${
+                    type === "pets"
+                      ? petId.image
+                      : type === "products"
+                      ? productId.image
+                      : ""
+                  }`}
+                  alt={
+                    type === "pets"
+                      ? petId.name
+                      : type === "products"
+                      ? productId.name
+                      : ""
+                  }
+                />
+                <span className="price">
+                  {type === "pets"
+                    ? FormatCurrencyIDR(petId.price)
+                    : type === "products"
+                    ? FormatCurrencyIDR(productId.price)
+                    : "0.00"}
+                </span>
+                <span className="name">
+                  {type === "pets"
+                    ? petId.pet
+                    : type === "products"
+                    ? productId.name
+                    : "No Name"}
+                </span>
+                {type === "pets" ? (
+                  <span className="location">{petId.location}</span>
+                ) : null}
+                {type === "products" ? (
+                  <>
+                    <button>+</button>
+                    <input type="text" />
+
+                    <button>-</button>
+                  </>
+                ) : null}
+              </div>
+              <div className="transaction-button">
+                <button type="submit">Buy</button>
+                <button onClick={() => setIsOpen(false)}>Cancel</button>
+              </div>
+            </>
+          )}
         </form>
       </Modal>
     </>

@@ -20,10 +20,11 @@ const endpointsServer = {
   business: `/api/business`,
   businessId: `/api/business-id`,
   userId: `/api/user-id`,
-  transactionCreate: `/api/transactions/create`,
   petCategories: `/api/pet-categories`,
   products: `/api/products`,
   productId: `/api/product-id`,
+  transactions: `/api/transactions`,
+  petSales: `/api/pet-sales`,
 };
 
 export default endpointsServer;

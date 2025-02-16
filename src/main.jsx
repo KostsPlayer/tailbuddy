@@ -7,7 +7,9 @@ import DashboardCoreProvider from "./context/dashboardCore/DashboardCoreProvider
 import LandingCoreProvider from "./context/landingCore/LandingCoreProvider";
 import { Error404, Error401, Error403 } from "./pages/Error/Error";
 
-const Loader = useLoadable(lazy(() => import("./components/loader/LoaderPages")));
+const Loader = useLoadable(
+  lazy(() => import("./components/loader/LoaderProgress"))
+);
 const Home = useLoadable(lazy(() => import("./pages/home/Home")));
 const Dashboard = useLoadable(
   lazy(() => import("./pages/dashboard/Dashboard"))
