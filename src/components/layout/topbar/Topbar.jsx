@@ -12,7 +12,7 @@ function Topbar() {
   const settingRef = useRef();
   const sidebarRef = useRef();
 
-  const { token } = DashboardCore();
+  const { token, isMe } = DashboardCore();
 
   const navigate = useNavigate();
 
@@ -39,6 +39,10 @@ function Topbar() {
     };
   }, [isSettingOpen, isSidebarOpen]);
 
+  useEffect(() => {
+    console.log(isMe);
+  }, [isMe]);
+
   const handleLogout = useCallback(() => {
     Cookies.remove("tailbuddy");
     navigate("/login", { state: { messageLogout: "Logout successfully!" } });
@@ -60,8 +64,8 @@ function Topbar() {
           {isSettingOpen && (
             <div className="setting-modal" ref={settingRef}>
               <div className="setting-modal-profile">
-                <div className="username">{token?.username}</div>
-                <div className="email">{token?.email}</div>
+                <div className="username">{isMe?.username}</div>
+                <div className="email">{isMe?.email}</div>
               </div>
               <div
                 className="setting-modal-item"
@@ -107,41 +111,32 @@ function Topbar() {
               <div className="text">Dashboard</div>
             </NavLink>
 
-              <NavLink to={"/pets"} className="item">
-                <span className="material-symbols-rounded">pets</span>
-                <div className="text">Pets</div>
-              </NavLink>
-            {/* {token && token.role === "seller" && (
-            )} */}
-
-                <NavLink to={"/users-management"} className="item">
-                  <span className="material-symbols-rounded">
-                    manage_accounts
-                  </span>
-                  <div className="text">Users Management</div>
-                </NavLink>
-                <NavLink to={"/pets"} className="item">
-                  <span className="material-symbols-rounded">pets</span>
-                  <div className="text">Pets</div>
-                </NavLink>
-                <NavLink to={"/products"} className="item">
-                  <span className="material-symbols-rounded">inventory</span>
-                  <div className="text">Products</div>
-                </NavLink>
-                <NavLink to={"/business"} className="item">
-                  <span className="material-symbols-rounded">equalizer</span>
-                  <div className="text">Business</div>
-                </NavLink>
-                <NavLink to={"/business-category"} className="item">
-                  <span className="material-symbols-rounded">category</span>
-                  <div className="text">Business Category</div>
-                </NavLink>
-            {/* {token && token.role === "admin" && (
-              <>
-              </>
-            )} */}
-            {/* <div className="username">{token?.username}</div> */}
-            {/* <div className="email">{token?.email}</div> */}
+            <NavLink to={"/pets"} className="item">
+              <span className="material-symbols-rounded">pets</span>
+              <div className="text">Pets</div>
+            </NavLink>
+            <NavLink to={"/users-management"} className="item">
+              <span className="material-symbols-rounded">manage_accounts</span>
+              <div className="text">Users Management</div>
+            </NavLink>
+            <NavLink to={"/pets"} className="item">
+              <span className="material-symbols-rounded">pets</span>
+              <div className="text">Pets</div>
+            </NavLink>
+            <NavLink to={"/products"} className="item">
+              <span className="material-symbols-rounded">inventory</span>
+              <div className="text">Products</div>
+            </NavLink>
+            <NavLink to={"/business"} className="item">
+              <span className="material-symbols-rounded">equalizer</span>
+              <div className="text">Business</div>
+            </NavLink>
+            <NavLink to={"/business-category"} className="item">
+              <span className="material-symbols-rounded">category</span>
+              <div className="text">Business Category</div>
+            </NavLink>
+            <div className="username">{isMe?.username}</div>
+            <div className="email">{isMe?.email}</div>
             <div className="item" onClick={() => toastDevelop("help support")}>
               Help Support
             </div>

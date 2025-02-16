@@ -7,6 +7,7 @@ const DashboardCoreContext = createContext({
   token: null,
   isLoadingDashboardCore: false,
   setDashboardCoreLoader: () => {},
+  isMe: {},
 });
 
 export default DashboardCoreContext;

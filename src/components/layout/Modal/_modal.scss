@@ -140,7 +140,7 @@
           }
 
           .location {
-            margin-top: .2rem;
+            margin-top: 0.2rem;
             font-size: 1rem;
             color: adjust-color($color: #fff, $blackness: 40%);
           }
@@ -149,7 +149,7 @@
         .transaction-button {
           @include m.flex($start: true);
           gap: 0.5rem;
-          margin-top:1rem;
+          margin-top: 1rem;
 
           button {
             margin: 0;
@@ -176,7 +176,7 @@
         gap: 0.6rem;
         position: relative;
 
-        label:not(.special-image),
+        label,
         .label {
           @include container($h: fit-content, $p: 0);
 
@@ -268,6 +268,7 @@
           z-index: 24;
           background-color: adjust-color($color: #fff, $blackness: 10%);
           overflow-y: auto;
+          border-radius: 0.5rem;
 
           &.no-more {
             height: fit-content;
@@ -275,7 +276,7 @@
 
           &-item {
             @include m.flex($justify: flex-start);
-            @include container();
+            @include container($bdr-rds: 0);
             text-transform: capitalize;
             cursor: pointer;
 

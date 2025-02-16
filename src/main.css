@@ -223,7 +223,7 @@
   gap: 0.6rem;
   position: relative;
 }
-.overlay-modal .modal-form-group label:not(.special-image),
+.overlay-modal .modal-form-group label,
 .overlay-modal .modal-form-group .label {
   width: 100%;
   font-size: 0.9rem;
@@ -234,7 +234,7 @@
   border-radius: 0.5rem;
   border: none;
 }
-.overlay-modal .modal-form-group label:not(.special-image) span,
+.overlay-modal .modal-form-group label span,
 .overlay-modal .modal-form-group .label span {
   font-size: 0.78rem;
   color: #aaaaaa;
@@ -335,6 +335,7 @@
   z-index: 24;
   background-color: #e8e8e8;
   overflow-y: auto;
+  border-radius: 0.5rem;
 }
 .overlay-modal .modal-form-group .select-list.no-more {
   height: -moz-fit-content;
@@ -350,7 +351,7 @@
   padding: 0 0.9rem;
   height: 2.55rem;
   outline: none;
-  border-radius: 0.5rem;
+  border-radius: 0;
   border: none;
   text-transform: capitalize;
   cursor: pointer;

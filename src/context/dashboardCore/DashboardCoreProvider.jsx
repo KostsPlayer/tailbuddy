@@ -10,11 +10,15 @@ import {
   toastPromise,
 } from "../../helpers/AlertMessage";
 import DashboardCoreContext from "./DashboardCoreContext";
+import { jwtDecode } from "jwt-decode";
+import endpointsServer from "../../helpers/endpointsServer";
+import apiConfig from "../../helpers/apiConfig";
 
 const DashboardCoreProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isLoadingDashboardCore, setIsLoadingDashboardCore] = useState(false);
   const navigate = useNavigate();
+  const [isMe, setIsMe] = useState({});
 
   const setDashboardCoreLoader = useCallback((loading) => {
     setIsLoadingDashboardCore((prev) => (prev !== loading ? loading : prev));
@@ -30,6 +34,30 @@ const DashboardCoreProvider = ({ children }) => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+
+      setIsLoadingDashboardCore(true);
+
+      apiConfig
+        .get(`${endpointsServer.userId}?id=${decodedToken.user_id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          // console.log(res.data.data);
+
+          setIsMe(res.data.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoadingDashboardCore(false);
+        });
+    }
+  }, [token, setIsLoadingDashboardCore]);
+
   const contextValue = useMemo(
     () => ({
       toastMessage,
@@ -38,8 +66,9 @@ const DashboardCoreProvider = ({ children }) => {
       token,
       isLoadingDashboardCore,
       setDashboardCoreLoader,
+      isMe,
     }),
-    [token, isLoadingDashboardCore, setDashboardCoreLoader]
+    [token, isLoadingDashboardCore, setDashboardCoreLoader, isMe]
   );
 
   return (

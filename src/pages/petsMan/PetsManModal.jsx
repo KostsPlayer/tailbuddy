@@ -18,8 +18,12 @@ function PetsManModal({
     preview: null,
     name: "",
   });
-
-  const [values, setValues] = useState({ pet: "", location: "", price: "" });
+  const [values, setValues] = useState({
+    pet: "",
+    location: "",
+    price: "",
+    pet_category_id: "",
+  });
   const deleteStatus = useRef(false);
   const modalRef = useRef(null);
 
@@ -46,32 +50,28 @@ function PetsManModal({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [categoriesRef, openCategories]);
-  
+
   const fetchCategories = useCallback(async () => {
     try {
-      const response = await apiConfig.get(
-        endpointsServer.businessCategoriesAll,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await apiConfig.get(endpointsServer.petCategories, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setCategories(response.data.data);
     } catch (error) {
       console.error("Failed to fetch data!", error);
     }
   }, [token]);
-  
+
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
-  
 
   useEffect(() => {
     if (isOpen) {
-      setValues({ pet: "", location: "", price: "" });
+      setValues({ pet: "", location: "", price: "", pet_category_id: "" });
       setSelectedImage({ file: null, preview: null, name: "" });
     }
   }, [isOpen]);
@@ -88,6 +88,7 @@ function PetsManModal({
             pet: getData.pet || "",
             location: getData.location || "",
             price: getData.price || "",
+            pet_category_id: getData.pet_category_id || "",
           });
           setSelectedImage({
             file: getData.image,
@@ -133,10 +134,10 @@ function PetsManModal({
       formData.append("pet", values.pet.trim());
       formData.append("location", values.location.trim());
       formData.append("price", values.price);
-      formData.append("business_category_id", values.business_category_id);
+      formData.append("pet_category_id", values.pet_category_id);
       formData.append("image", selectedImage.file);
       console.log("formData");
-      
+
       try {
         const endpoint =
           type === "create"
@@ -219,7 +220,7 @@ function PetsManModal({
     },
     [dataId, token, refreshData]
   );
-  
+
   return (
     <>
       {type === "delete" ? (
@@ -296,20 +297,20 @@ function PetsManModal({
             <div className="modal-form-group">
               <div className="modal-form-group">
                 <div className="label">
-                  Business Category's Parent <span>(Required)</span>
+                  Pet Category's Parent <span>(Required)</span>
                 </div>
                 <div
                   className="select-default"
                   onClick={() => setOpenCategories(true)}
                 >
                   <div className="text">
-                    {values.business_category_id === ""
-                      ? "Select Business Category's Parent"
+                    {values.pet_category_id === ""
+                      ? "Select Pet Parent"
                       : categories
                           .filter(
                             (item) =>
-                              item.business_categories_id ===
-                              values.business_category_id
+                              item.pet_categories_id ===
+                              values.pet_category_id
                           )
                           .map((data) => data.name)}
                   </div>
@@ -326,19 +327,17 @@ function PetsManModal({
                     {categories
                       .filter(
                         (item) =>
-                          item.business_categories_id !==
-                          values.business_category_id
+                          item.pet_categories_id !== values.pet_category_id
                       )
                       .map((data) => {
                         return (
                           <div
                             className="select-list-item"
-                            key={data.business_categories_id}
+                            key={data.pet_categories_id}
                             onClick={() => {
                               setValues((prev) => ({
                                 ...prev,
-                                business_category_id:
-                                  data.business_categories_id,
+                                pet_category_id: data.pet_categories_id,
                               }));
                               setOpenCategories(false);
                             }}
@@ -352,7 +351,7 @@ function PetsManModal({
               </div>
             </div>
             <div className="modal-form-group">
-              <label className="special-image" htmlFor="image">
+              <label className="label" htmlFor="image">
                 Pet's Image <span>(Required)</span>
               </label>
               <div className="select-image-wrapper">
