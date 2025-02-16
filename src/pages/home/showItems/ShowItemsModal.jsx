@@ -3,7 +3,6 @@ import Modal from "../../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
 import apiConfig from "../../../helpers/apiConfig";
 import { transactionsSchema } from "../../../validations/transactions";
-import { petSalesSchema } from "../../../validations/PetSales";
 import endpointsServer from "../../../helpers/endpointsServer";
 import LandingCore from "../../../context/landingCore/LandingCore";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
