@@ -3,6 +3,7 @@ import Modal from "../../../components/layout/Modal/Modal";
 import LandingCore from "../../../context/landingCore/LandingCore";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
 import grommingServices from "../../../data/grommingServices.json";
+import photographyServices from "../../../data/photographyServices.json";
 import apiConfig from "../../../helpers/apiConfig";
 import endpointsServer from "../../../helpers/endpointsServer";
 import LoaderProgress from "../../../components/loader/LoaderProgress";
@@ -72,8 +73,8 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
             type:
               type === "gromming"
                 ? "gromming"
-                : type === "photo"
-                ? "photo"
+                : type === "photography"
+                ? "photography"
                 : "idk",
           },
           {
@@ -83,32 +84,67 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
           }
         );
 
-        apiConfig
-          .post(
-            `${endpointsServer.grommingReservation}/create`,
-            {
-              transaction_id: promiseTransaction.data.data[0].transactions_id,
-              service: values.service,
-              schedule: values.schedule,
-              price: values.price,
-              status: "pending",
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
+        if (type === "grooming") {
+          apiConfig
+            .post(
+              `${endpointsServer.grommingReservation}/create`,
+              {
+                transaction_id: promiseTransaction.data.data[0].transactions_id,
+                service: values.service,
+                schedule: values.schedule,
+                price: values.price,
+                status: "pending",
               },
-            }
-          )
-          .then((res) => {
-            toastMessage("success", "Success to take gromming reservation!");
-          });
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((res) => {
+              toastMessage("success", "Success to take gromming reservation!");
+            });
+        } else if (type === "photography") {
+          apiConfig
+            .post(
+              `${endpointsServer.photograpy}/create`,
+              {
+                transaction_id: promiseTransaction.data.data[0].transactions_id,
+                service: values.service,
+                schedule: values.schedule,
+                price: values.price,
+                status: "pending",
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then(() => {
+              toastMessage(
+                "success",
+                "Success to take photography reservation!"
+              );
+            })
+            .finally(() => {
+              setBookLoading(false);
+              setIsOpen(false);
+              setValues({
+                service: "",
+                schedule: "",
+                price: "",
+              });
+            });
+        }
       } catch (err) {
         console.log(err);
 
-        toastMessage("error", "Failed to take gromming reservation!");
-      } finally {
-        setBookLoading(false);
-        setIsOpen(false);
+        if (type === "gromming") {
+          toastMessage("error", "Failed to take gromming reservation!");
+        } else if (type === "photography") {
+          toastMessage("error", "Failed to take photography reservation!");
+        }
       }
     },
     [values, token, setIsOpen, type]
@@ -116,7 +152,7 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
 
   return (
     <Modal
-      titleModal={"Gromming"}
+      titleModal={type === "gromming" ? "Gromming" : "Photography"}
       otherTitleModal={"Reservation"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
@@ -142,9 +178,13 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                 <div className="text">
                   {values.service === 0
                     ? "Select Service"
-                    : grommingServices
-                        .filter((item) => item.id === values.service)
-                        .map((data) => data.name)}
+                    : type === "gromming"
+                    ? grommingServices.find(
+                        (item) => item.id === values.service
+                      )?.name || "Unknown Service"
+                    : photographyServices.find(
+                        (item) => item.id === values.service
+                      )?.name || "Unknown Service"}
                 </div>
                 <span
                   className={`material-symbols-outlined ${
@@ -154,33 +194,34 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                   south_east
                 </span>
               </div>
+
               {openService && (
                 <div className="select-list" ref={serviceRef}>
-                  {grommingServices
-                    .filter((item) => item.id !== values.service)
-                    .map((data) => {
-                      return (
-                        <div
-                          className="select-list-item"
-                          key={data.id}
-                          onClick={() => {
-                            setValues((prev) => ({
-                              ...prev,
-                              service: data.id,
-                              price: data.price,
-                            }));
-                            setOpenService(false);
-                          }}
-                        >
-                          <div className="name">
-                            {data.name} — {FormatCurrencyIDR(data.price)}
-                          </div>
-                        </div>
-                      );
-                    })}
+                  {(type === "gromming"
+                    ? grommingServices
+                    : photographyServices
+                  ).map((data) => (
+                    <div
+                      className="select-list-item"
+                      key={data.id}
+                      onClick={() => {
+                        setValues((prev) => ({
+                          ...prev,
+                          service: data.id,
+                          price: data.price,
+                        }));
+                        setOpenService(false);
+                      }}
+                    >
+                      <div className="name">
+                        {data.name} — {FormatCurrencyIDR(data.price)}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
+
             <div className="modal-form-group">
               <label htmlFor="schedule">
                 Schedule <span>(required)</span>
@@ -200,7 +241,7 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
           </>
         )}
         <div className="transaction-button">
-          <button type="submit">Buy</button>
+          <button type="submit">Take Now</button>
           <button onClick={() => setIsOpen(false)}>Cancel</button>
         </div>
       </form>

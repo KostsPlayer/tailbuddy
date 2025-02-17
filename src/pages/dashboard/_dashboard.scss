@@ -15,13 +15,287 @@
   }
 }
 
-.dashboard-user,
-.dashboard-seller,
-.dashboard-admin {
-  @include text-loan();
+@mixin badge($bg-color, $bg-color-more) {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: $bg-color;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  @include m.flex($justify: flex-start);
+  gap: 0.3rem;
+
+  .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: $bg-color-more;
+  }
+}
+
+@mixin button($clr) {
+  cursor: pointer;
+  @include m.flex();
+  background-color: transparent;
+  outline: none;
+  padding: 0.2rem;
+  border: 1px solid $clr;
+  border-radius: 0.25rem;
+  transition: background-color 0.4s ease-in, color 0.4s ease-in;
+
+  .material-symbols-rounded {
+    font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+    font-size: 1.3rem;
+    color: $clr;
+    transition: all 0.4s ease-in;
+  }
+
+  &:hover {
+    background-color: $clr;
+    color: #fff;
+    transition: background-color 0.4s ease-out, color 0.4s ease-out;
+
+    .material-symbols-rounded {
+      font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+      color: #fff;
+      transition: all 0.4s ease-out;
+    }
+  }
+}
+
+.dashboard-transaction {
+  @include m.flex($direction: column, $start: true);
+  width: 100%;
+  gap: 2.8rem;
+
+  &-cards {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.8rem 2rem;
+
+    .card-item {
+      @include m.flex();
+      border: 1px solid v.$main-dark;
+      border-radius: 0.4rem;
+      min-height: 5rem;
+
+      &-title {
+      }
+
+      &-content {
+      }
+    }
+  }
+
+  &-table {
+    @include m.flex($direction: column, $start: true);
+    width: 100%;
+
+    .table-thead {
+      display: grid;
+      grid-template-columns: 5rem 1fr 1fr 0.8fr 0.8fr 0.8fr;
+      width: 100%;
+      background-color: v.$main-orange;
+      border-radius: 0.4rem;
+
+      &-col {
+        padding: 1.1rem 0.9rem;
+        font-weight: 600;
+        text-transform: capitalize;
+
+        &:first-child,
+        &:last-child {
+          text-align: center;
+        }
+      }
+    }
+
+    .table-tbody {
+      display: grid;
+      grid-template-columns: 5rem 1fr 1fr 0.8fr 0.8fr 0.8fr;
+      width: 100%;
+
+      &:last-child {
+        padding-bottom: 1.7rem;
+      }
+
+      &-col {
+        padding: 1.7rem 0.9rem 0;
+
+        &:first-child {
+          text-align: center;
+        }
+
+        &:nth-child(2) {
+          @include m.flex($direction: column, $start: true);
+          gap: 0.15rem;
+
+          span {
+            &:first-child {
+              font-size: 0.9rem;
+              color: v.$main-grey;
+            }
+          }
+        }
+
+        &:nth-child(3) {
+          font-size: 0.98rem;
+        }
+
+        &:nth-child(4) {
+          @include m.flex($start: true);
+
+          span {
+            @include badge(v.$ds-purple, v.$ds-purple-more);
+
+            &.pet {
+              @include badge(v.$ds-sky, v.$ds-sky-more);
+            }
+
+            &.product {
+              @include badge(v.$ds-lime, v.$ds-lime-more);
+            }
+
+            &.gromming {
+              @include badge(v.$ds-slate, v.$ds-slate-more);
+            }
+          }
+        }
+
+        &:nth-child(5) {
+          @include m.flex($start: true);
+
+          span {
+            @include badge(v.$ds-yellow, v.$ds-yellow-more);
+
+            &.done {
+              @include badge(v.$ds-green, v.$ds-green-more);
+            }
+
+            &.cancelled {
+              @include badge(v.$ds-red, v.$ds-red-more);
+            }
+          }
+        }
+
+        &:last-child {
+          @include m.flex($align: flex-start);
+          gap: 0.25rem;
+
+          button {
+            &.detail {
+              @include button(v.$ds-blue-more);
+            }
+
+            &.edit {
+              @include button(v.$ds-orange-mid);
+            }
+
+            &.delete {
+              @include button(v.$ds-red-more);
+            }
+          }
+        }
+      }
+    }
+  }
 
   @media (max-width: 767.98px) {
-    justify-content: flex-start;
-    min-height: 80vh;
+    .dashboard-transaction-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 0.8rem;
+      width: 100%;
+
+      .list-item {
+        padding: 0.8rem;
+        border: 1px solid v.$main-dark;
+        border-radius: 0.4rem;
+
+        &-user {
+          @include m.flex($direction: column, $start: true);
+
+          span {
+            &:first-child {
+              font-size: 0.9rem;
+              color: v.$main-grey;
+            }
+          }
+        }
+
+        &-type {
+          margin-top: 1.3rem;
+          @include m.flex($justify: flex-start);
+
+          .text {
+            margin-left: 0.2rem;
+            font-size: 0.88rem;
+          }
+
+          span {
+            @include badge(v.$ds-purple, v.$ds-purple-more);
+
+            &.pet {
+              @include badge(v.$ds-sky, v.$ds-sky-more);
+            }
+
+            &.product {
+              @include badge(v.$ds-lime, v.$ds-lime-more);
+            }
+
+            .gromming {
+              @include badge(v.$ds-slate, v.$ds-slate-more);
+            }
+          }
+        }
+
+        &-status {
+          margin-top: 0.3rem;
+          @include m.flex($justify: flex-start);
+
+          .text {
+            margin-left: 0.2rem;
+            font-size: 0.88rem;
+          }
+
+          span {
+            @include badge(v.$ds-yellow, v.$ds-yellow-more);
+
+            &.done {
+              @include badge(v.$ds-green, v.$ds-green-more);
+            }
+
+            &.cancelled {
+              @include badge(v.$ds-red, v.$ds-red-more);
+            }
+          }
+        }
+
+        &-action {
+          @include m.flex($justify: flex-end);
+          gap: 0.25rem;
+          margin-top: 0.8rem;
+
+          .date {
+            margin-right: auto;
+            font-size: 0.9rem;
+          }
+
+          button {
+            &.detail {
+              @include button(v.$ds-blue-more);
+            }
+
+            &.edit {
+              @include button(v.$ds-orange-mid);
+            }
+
+            &.delete {
+              @include button(v.$ds-red-more);
+            }
+          }
+        }
+      }
+    }
   }
 }

@@ -5,12 +5,15 @@ import { toastDevelop } from "../../../helpers/AlertMessage";
 import Logo from "../../logo/Logo";
 import Cookies from "js-cookie";
 import DashboardCore from "../../../context/dashboardCore/DashboardCore";
+import Modal from "../Modal/Modal";
 
 function Topbar() {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
   const settingRef = useRef();
   const sidebarRef = useRef();
+  const confirmLogoutRef = useRef();
 
   const { token, isMe } = DashboardCore();
 
@@ -22,13 +25,18 @@ function Topbar() {
         setIsSettingOpen(false);
       } else if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
         setIsSidebarOpen(false);
+      } else if (
+        confirmLogoutRef.current &&
+        !confirmLogoutRef.current.contains(e.target)
+      ) {
+        setConfirmLogout(false);
       }
     },
-    [settingRef, sidebarRef]
+    [settingRef, sidebarRef, confirmLogoutRef]
   );
 
   useEffect(() => {
-    if (isSettingOpen || isSidebarOpen) {
+    if (isSettingOpen || isSidebarOpen || confirmLogout) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -37,11 +45,11 @@ function Topbar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isSettingOpen, isSidebarOpen]);
+  }, [isSettingOpen, isSidebarOpen, confirmLogout, handleClickOutside]);
 
-  useEffect(() => {
-    console.log(isMe);
-  }, [isMe]);
+  // useEffect(() => {
+  //   console.log(isMe);
+  // }, [isMe]);
 
   const handleLogout = useCallback(() => {
     Cookies.remove("tailbuddy");
@@ -145,9 +153,31 @@ function Topbar() {
             <div className="item" onClick={() => toastDevelop("language")}>
               Language
             </div>
-            <div className="item" onClick={handleLogout}>
+            <div className="item" onClick={() => setConfirmLogout(true)}>
               Logout
             </div>
+            {confirmLogout ? (
+              <Modal
+                isOpen={confirmLogout}
+                setIsOpen={setConfirmLogout}
+                modalRef={confirmLogoutRef}
+                type="confirm"
+                titleModal={"Confirmation!"}
+                descModal={"Are you sure you want to logout?"}
+              >
+                <div className="confirm-dashboard-action">
+                  <div
+                    className="cancel"
+                    onClick={() => setConfirmLogout(false)}
+                  >
+                    cancel
+                  </div>
+                  <div className="confirm" onClick={handleLogout}>
+                    logout
+                  </div>
+                </div>
+              </Modal>
+            ) : null}
           </div>
         </>
       )}

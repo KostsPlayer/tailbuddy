@@ -28,8 +28,6 @@ function ShowItems({ itemsData, items }) {
     [activeFavorite]
   );
 
-
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -66,7 +64,7 @@ function ShowItems({ itemsData, items }) {
               return (
                 <div
                   className="item"
-                  key={items === "pets" ? data.pets_id : data.id}
+                  key={items === "pets" ? data.pets_id : data.products_id}
                   onClick={() => {
                     setOpenTransaction(true);
                     if (items === "pets") {

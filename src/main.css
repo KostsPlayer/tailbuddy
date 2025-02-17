@@ -2246,31 +2246,579 @@
   }
 }
 
-.dashboard-user,
-.dashboard-seller,
-.dashboard-admin {
+.dashboard-transaction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 2.8rem;
+}
+.dashboard-transaction-cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.8rem 2rem;
+}
+.dashboard-transaction-cards .card-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-family: "Cherry Bomb One", system-ui;
-  font-size: 5.2rem;
-  text-transform: lowercase;
-  min-height: 60vh;
-  color: #2e2d31;
-  overflow-x: auto;
+  border: 1px solid #2e2d31;
+  border-radius: 0.4rem;
+  min-height: 5rem;
 }
-.dashboard-user span,
-.dashboard-seller span,
-.dashboard-admin span {
-  color: #f3734c;
+.dashboard-transaction-table {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+.dashboard-transaction-table .table-thead {
+  display: grid;
+  grid-template-columns: 5rem 1fr 1fr 0.8fr 0.8fr 0.8fr;
+  width: 100%;
+  background-color: #f3734c;
+  border-radius: 0.4rem;
+}
+.dashboard-transaction-table .table-thead-col {
+  padding: 1.1rem 0.9rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.dashboard-transaction-table .table-thead-col:first-child, .dashboard-transaction-table .table-thead-col:last-child {
+  text-align: center;
+}
+.dashboard-transaction-table .table-tbody {
+  display: grid;
+  grid-template-columns: 5rem 1fr 1fr 0.8fr 0.8fr 0.8fr;
+  width: 100%;
+}
+.dashboard-transaction-table .table-tbody:last-child {
+  padding-bottom: 1.7rem;
+}
+.dashboard-transaction-table .table-tbody-col {
+  padding: 1.7rem 0.9rem 0;
+}
+.dashboard-transaction-table .table-tbody-col:first-child {
+  text-align: center;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.15rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(2) span:first-child {
+  font-size: 0.9rem;
+  color: #b5aeb4;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(3) {
+  font-size: 0.98rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.827 0.119 306.383);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.627 0.265 303.9);
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.pet {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.828 0.111 230.318);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.pet .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.685 0.169 237.323);
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.product {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.897 0.196 126.665);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.product .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.768 0.233 130.85);
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.gromming {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.869 0.022 252.894);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.gromming .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.554 0.046 257.417);
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) span {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.905 0.182 98.111);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) span .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.795 0.184 86.047);
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) span.done {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.871 0.15 154.449);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) span.done .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.723 0.219 149.579);
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) span.cancelled {
+  padding: 0.35rem 0.9rem;
+  border-radius: 50vw;
+  background-color: oklch(0.808 0.114 19.571);
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.dashboard-transaction-table .table-tbody-col:nth-child(5) span.cancelled .box {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 0.2rem;
+  background-color: oklch(0.637 0.237 25.331);
+}
+.dashboard-transaction-table .table-tbody-col:last-child {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.25rem;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.detail {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  outline: none;
+  padding: 0.2rem;
+  border: 1px solid oklch(0.623 0.214 259.815);
+  border-radius: 0.25rem;
+  transition: background-color 0.4s ease-in, color 0.4s ease-in;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.detail .material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+  font-size: 1.3rem;
+  color: oklch(0.623 0.214 259.815);
+  transition: all 0.4s ease-in;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.detail:hover {
+  background-color: oklch(0.623 0.214 259.815);
+  color: #fff;
+  transition: background-color 0.4s ease-out, color 0.4s ease-out;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.detail:hover .material-symbols-rounded {
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+  color: #fff;
+  transition: all 0.4s ease-out;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.edit {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  outline: none;
+  padding: 0.2rem;
+  border: 1px solid oklch(0.75 0.183 55.934);
+  border-radius: 0.25rem;
+  transition: background-color 0.4s ease-in, color 0.4s ease-in;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.edit .material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+  font-size: 1.3rem;
+  color: oklch(0.75 0.183 55.934);
+  transition: all 0.4s ease-in;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.edit:hover {
+  background-color: oklch(0.75 0.183 55.934);
+  color: #fff;
+  transition: background-color 0.4s ease-out, color 0.4s ease-out;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.edit:hover .material-symbols-rounded {
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+  color: #fff;
+  transition: all 0.4s ease-out;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.delete {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  outline: none;
+  padding: 0.2rem;
+  border: 1px solid oklch(0.637 0.237 25.331);
+  border-radius: 0.25rem;
+  transition: background-color 0.4s ease-in, color 0.4s ease-in;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.delete .material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+  font-size: 1.3rem;
+  color: oklch(0.637 0.237 25.331);
+  transition: all 0.4s ease-in;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.delete:hover {
+  background-color: oklch(0.637 0.237 25.331);
+  color: #fff;
+  transition: background-color 0.4s ease-out, color 0.4s ease-out;
+}
+.dashboard-transaction-table .table-tbody-col:last-child button.delete:hover .material-symbols-rounded {
+  font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+  color: #fff;
+  transition: all 0.4s ease-out;
 }
 @media (max-width: 767.98px) {
-  .dashboard-user,
-  .dashboard-seller,
-  .dashboard-admin {
+  .dashboard-transaction .dashboard-transaction-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.8rem;
+    width: 100%;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item {
+    padding: 0.8rem;
+    border: 1px solid #2e2d31;
+    border-radius: 0.4rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
-    min-height: 80vh;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-user span:first-child {
+    font-size: 0.9rem;
+    color: #b5aeb4;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type {
+    margin-top: 1.3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type .text {
+    margin-left: 0.2rem;
+    font-size: 0.88rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.827 0.119 306.383);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.627 0.265 303.9);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span.pet {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.828 0.111 230.318);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span.pet .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.685 0.169 237.323);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span.product {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.897 0.196 126.665);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span.product .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.768 0.233 130.85);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span .gromming {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.869 0.022 252.894);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span .gromming .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.554 0.046 257.417);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status {
+    margin-top: 0.3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status .text {
+    margin-left: 0.2rem;
+    font-size: 0.88rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status span {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.905 0.182 98.111);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status span .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.795 0.184 86.047);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status span.done {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.871 0.15 154.449);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status span.done .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.723 0.219 149.579);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status span.cancelled {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50vw;
+    background-color: oklch(0.808 0.114 19.571);
+    font-size: 0.85rem;
+    text-transform: capitalize;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.3rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-status span.cancelled .box {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background-color: oklch(0.637 0.237 25.331);
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    margin-top: 0.8rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action .date {
+    margin-right: auto;
+    font-size: 0.9rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.detail {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    outline: none;
+    padding: 0.2rem;
+    border: 1px solid oklch(0.623 0.214 259.815);
+    border-radius: 0.25rem;
+    transition: background-color 0.4s ease-in, color 0.4s ease-in;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.detail .material-symbols-rounded {
+    font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+    font-size: 1.3rem;
+    color: oklch(0.623 0.214 259.815);
+    transition: all 0.4s ease-in;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.detail:hover {
+    background-color: oklch(0.623 0.214 259.815);
+    color: #fff;
+    transition: background-color 0.4s ease-out, color 0.4s ease-out;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.detail:hover .material-symbols-rounded {
+    font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+    color: #fff;
+    transition: all 0.4s ease-out;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.edit {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    outline: none;
+    padding: 0.2rem;
+    border: 1px solid oklch(0.75 0.183 55.934);
+    border-radius: 0.25rem;
+    transition: background-color 0.4s ease-in, color 0.4s ease-in;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.edit .material-symbols-rounded {
+    font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+    font-size: 1.3rem;
+    color: oklch(0.75 0.183 55.934);
+    transition: all 0.4s ease-in;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.edit:hover {
+    background-color: oklch(0.75 0.183 55.934);
+    color: #fff;
+    transition: background-color 0.4s ease-out, color 0.4s ease-out;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.edit:hover .material-symbols-rounded {
+    font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+    color: #fff;
+    transition: all 0.4s ease-out;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.delete {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    outline: none;
+    padding: 0.2rem;
+    border: 1px solid oklch(0.637 0.237 25.331);
+    border-radius: 0.25rem;
+    transition: background-color 0.4s ease-in, color 0.4s ease-in;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.delete .material-symbols-rounded {
+    font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+    font-size: 1.3rem;
+    color: oklch(0.637 0.237 25.331);
+    transition: all 0.4s ease-in;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.delete:hover {
+    background-color: oklch(0.637 0.237 25.331);
+    color: #fff;
+    transition: background-color 0.4s ease-out, color 0.4s ease-out;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-action button.delete:hover .material-symbols-rounded {
+    font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+    color: #fff;
+    transition: all 0.4s ease-out;
   }
 }
 

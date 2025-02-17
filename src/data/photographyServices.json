@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Basic Pet Photography",
+    "price": 150000
+  },
+  {
+    "id": 2,
+    "name": "Premium Pet Photography",
+    "price": 300000
+  },
+  {
+    "id": 3,
+    "name": "Outdoor Adventure",
+    "price": 500000
+  },
+  {
+    "id": 4,
+    "name": "Pet Portrait",
+    "price": 200000
+  },
+  {
+    "id": 5,
+    "name": "Pet Family Portrait",
+    "price": 400000
+  }
+]

@@ -27,6 +27,7 @@ const endpointsServer = {
   petSales: `/api/pet-sales`,
   productSales: `/api/product-sales`,
   grommingReservation: `/api/grooming-reservations`,
+  photograpy: `/api/photograpy`,
 };
 
 export default endpointsServer;

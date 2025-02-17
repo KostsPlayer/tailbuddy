@@ -108,10 +108,16 @@ function Business() {
                   setOpenBook(true);
                   setBookType("gromming");
                 }
+              : activeCategory === "7fcf3672-7811-49fb-a241-53b9d0c2dbe1"
+              ? () => {
+                  setOpenBook(true);
+                  setBookType("photography");
+                }
               : null
           }
         >
-          {activeCategory === "a67555c1-4472-4320-8ae3-5287ea9d2aa9"
+          {activeCategory === "a67555c1-4472-4320-8ae3-5287ea9d2aa9" ||
+          activeCategory === "7fcf3672-7811-49fb-a241-53b9d0c2dbe1"
             ? "book now"
             : "view all business"}
         </div>
