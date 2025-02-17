@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import Modal from "../../../components/layout/Modal/Modal";
 import PropTypes from "prop-types";
 import apiConfig from "../../../helpers/apiConfig";
-import { transactionsSchema } from "../../../validations/transactions";
+import { transactionsSchema } from "../../../validations/Transactions";
 import endpointsServer from "../../../helpers/endpointsServer";
 import LandingCore from "../../../context/landingCore/LandingCore";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
