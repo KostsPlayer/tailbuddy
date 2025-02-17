@@ -62,6 +62,10 @@
   }
 }
 
+.dashboard-text {
+  @include text-loan();
+}
+
 .dashboard-transaction {
   @include m.flex($direction: column, $start: true);
   width: 100%;
@@ -201,6 +205,11 @@
   }
 
   @media (max-width: 767.98px) {
+    .dashboard-text {
+      justify-content: flex-start;
+      min-height: 80vh;
+    }
+
     .dashboard-transaction-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
@@ -243,7 +252,7 @@
               @include badge(v.$ds-lime, v.$ds-lime-more);
             }
 
-            .grooming {
+            &.grooming {
               @include badge(v.$ds-slate, v.$ds-slate-more);
             }
           }

@@ -122,36 +122,45 @@ function Topbar() {
               <span className="material-symbols-rounded">manage_accounts</span>
               <div className="text">Users Management</div>
             </NavLink> */}
-            <NavLink to={"/pets"} className="item">
-              <span className="material-symbols-rounded">pets</span>
-              <div className="text">Pets</div>
-            </NavLink>
-            <NavLink to={"/pet-categories"} className="item">
-              <span className="material-symbols-rounded">pet_supplies</span>
-              <div className="text">Pet Categories</div>
-            </NavLink>
-            <NavLink to={"/products"} className="item">
-              <span className="material-symbols-rounded">inventory</span>
-              <div className="text">Products</div>
-            </NavLink>
-            <NavLink to={"/business"} className="item">
-              <span className="material-symbols-rounded">equalizer</span>
-              <div className="text">Business</div>
-            </NavLink>
-            <NavLink to={"/business-category"} className="item">
-              <span className="material-symbols-rounded">category</span>
-              <div className="text">Business Category</div>
-            </NavLink>
-            <NavLink to={"/grooming-services"} className="item">
-              <span className="material-symbols-rounded">content_cut</span>
-              <div className="text">Grooming Services</div>
-            </NavLink>
-            <NavLink to={"/photography-services"} className="item">
-              <span className="material-symbols-rounded">
-                planner_banner_ad_pt
-              </span>
-              <div className="text">Photography Services</div>
-            </NavLink>
+            {isMe.role_id === "067c970c-6870-406b-8b29-de9fc21f3675" ||
+            isMe.role_id === "5bc702b0-cb8a-4996-a4f9-3feef9710b10" ||
+            isMe.role_id === "0ed16806-0500-448d-b245-524f2c5ee8bc" ? (
+              <NavLink to={"/pets"} className="item">
+                <span className="material-symbols-rounded">pets</span>
+                <div className="text">Pets</div>
+              </NavLink>
+            ) : null}
+            {isMe.role_id === "067c970c-6870-406b-8b29-de9fc21f3675" ||
+            isMe.role_id === "5bc702b0-cb8a-4996-a4f9-3feef9710b10" ? (
+              <>
+                <NavLink to={"/pet-categories"} className="item">
+                  <span className="material-symbols-rounded">pet_supplies</span>
+                  <div className="text">Pet Categories</div>
+                </NavLink>
+                <NavLink to={"/products"} className="item">
+                  <span className="material-symbols-rounded">inventory</span>
+                  <div className="text">Products</div>
+                </NavLink>
+                <NavLink to={"/business"} className="item">
+                  <span className="material-symbols-rounded">equalizer</span>
+                  <div className="text">Business</div>
+                </NavLink>
+                <NavLink to={"/business-category"} className="item">
+                  <span className="material-symbols-rounded">category</span>
+                  <div className="text">Business Category</div>
+                </NavLink>
+                <NavLink to={"/grooming-services"} className="item">
+                  <span className="material-symbols-rounded">content_cut</span>
+                  <div className="text">Grooming Services</div>
+                </NavLink>
+                <NavLink to={"/photography-services"} className="item">
+                  <span className="material-symbols-rounded">
+                    planner_banner_ad_pt
+                  </span>
+                  <div className="text">Photography Services</div>
+                </NavLink>
+              </>
+            ) : null}
             <div className="username">{isMe?.username}</div>
             <div className="email">{isMe?.email}</div>
             <div className="item" onClick={() => toastDevelop("help support")}>

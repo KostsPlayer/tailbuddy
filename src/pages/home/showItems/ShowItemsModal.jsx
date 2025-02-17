@@ -94,12 +94,17 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
                 },
               }
             )
-            .then((res) => {
+            .then(() => {
               // console.log(res.data.data);
               toastMessage(
                 "success",
                 "Success to progress pet transaction data!"
               );
+            })
+            .finally(() => {
+              setTransactionLoading(false);
+              setIsOpen(false);
+              setQuantity(0);
             });
         } else if (type === "products") {
           apiConfig
@@ -117,12 +122,17 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
                 },
               }
             )
-            .then((res) => {
+            .then(() => {
               // console.log(res.data.data);
               toastMessage(
                 "success",
                 "Success to progress product transaction data!"
               );
+            })
+            .finally(() => {
+              setTransactionLoading(false);
+              setIsOpen(false);
+              setQuantity(0);
             });
         }
       } catch (error) {
@@ -130,9 +140,6 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
         toastMessage("error", "Failed to create data!", {
           position: "top-center",
         });
-      } finally {
-        setTransactionLoading(false);
-        setIsOpen(false);
       }
     },
     [token, dataId, type, quantity, productId, setIsOpen, toastMessage]
