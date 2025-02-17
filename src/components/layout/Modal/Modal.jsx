@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 function Modal({
   type = "form",
-  typeFor = null,
   titleModal = null,
   otherTitleModal = null,
   descModal = null,

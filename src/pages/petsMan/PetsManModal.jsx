@@ -295,60 +295,57 @@ function PetsManModal({
               />
             </div>
             <div className="modal-form-group">
-              <div className="modal-form-group">
-                <div className="label">
-                  Pet Category's Parent <span>(Required)</span>
-                </div>
-                <div
-                  className="select-default"
-                  onClick={() => setOpenCategories(true)}
-                >
-                  <div className="text">
-                    {values.pet_category_id === ""
-                      ? "Select Pet Parent"
-                      : categories
-                          .filter(
-                            (item) =>
-                              item.pet_categories_id ===
-                              values.pet_category_id
-                          )
-                          .map((data) => data.name)}
-                  </div>
-                  <span
-                    className={`material-symbols-outlined ${
-                      openCategories ? "default-closed" : ""
-                    }`}
-                  >
-                    south_east
-                  </span>
-                </div>
-                {openCategories && (
-                  <div className="select-list" ref={categoriesRef}>
-                    {categories
-                      .filter(
-                        (item) =>
-                          item.pet_categories_id !== values.pet_category_id
-                      )
-                      .map((data) => {
-                        return (
-                          <div
-                            className="select-list-item"
-                            key={data.pet_categories_id}
-                            onClick={() => {
-                              setValues((prev) => ({
-                                ...prev,
-                                pet_category_id: data.pet_categories_id,
-                              }));
-                              setOpenCategories(false);
-                            }}
-                          >
-                            <div className="name">{data.name}</div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                )}
+              <div className="label">
+                Pet Category's Parent <span>(Required)</span>
               </div>
+              <div
+                className="select-default"
+                onClick={() => setOpenCategories(true)}
+              >
+                <div className="text">
+                  {values.pet_category_id === ""
+                    ? "Select Pet Parent"
+                    : categories
+                        .filter(
+                          (item) =>
+                            item.pet_categories_id === values.pet_category_id
+                        )
+                        .map((data) => data.name)}
+                </div>
+                <span
+                  className={`material-symbols-outlined ${
+                    openCategories ? "default-closed" : ""
+                  }`}
+                >
+                  south_east
+                </span>
+              </div>
+              {openCategories && (
+                <div className="select-list" ref={categoriesRef}>
+                  {categories
+                    .filter(
+                      (item) =>
+                        item.pet_categories_id !== values.pet_category_id
+                    )
+                    .map((data) => {
+                      return (
+                        <div
+                          className="select-list-item"
+                          key={data.pet_categories_id}
+                          onClick={() => {
+                            setValues((prev) => ({
+                              ...prev,
+                              pet_category_id: data.pet_categories_id,
+                            }));
+                            setOpenCategories(false);
+                          }}
+                        >
+                          <div className="name">{data.name}</div>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
             </div>
             <div className="modal-form-group">
               <label className="label" htmlFor="image">

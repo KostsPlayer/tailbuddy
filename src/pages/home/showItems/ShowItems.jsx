@@ -14,6 +14,8 @@ function ShowItems({ itemsData, items }) {
   const [getPet, setGetPet] = useState([]);
   const [getProduct, setGetProduct] = useState([]);
 
+  const refTransaction = useRef(null);
+
   const handleActiveFavorite = useCallback(
     (id) => {
       const isFavorite = activeFavorite.includes(id);
@@ -26,7 +28,7 @@ function ShowItems({ itemsData, items }) {
     [activeFavorite]
   );
 
-  const refTransaction = useRef(null);
+
 
   useEffect(() => {
     const handleClickOutside = (e) => {

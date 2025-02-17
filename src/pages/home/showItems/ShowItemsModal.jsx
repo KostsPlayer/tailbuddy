@@ -13,6 +13,7 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
   const [productId, setProductId] = useState({});
   const [transactionLoading, setTransactionLoading] = useState(false);
   const transactionStatus = useRef(null);
+  const [quantity, setQuantity] = useState(0);
 
   const { token, toastPromise, toastMessage, isMe } = LandingCore();
 
@@ -69,7 +70,8 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
           `${endpointsServer.transactions}/create`,
           {
             status: "pending",
-            type: "pets",
+            type:
+              type === "pets" ? "pet" : type === "products" ? "product" : "idk",
           },
           {
             headers: {
@@ -94,7 +96,33 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
             )
             .then((res) => {
               // console.log(res.data.data);
-              toastMessage("success", "Success to create data!");
+              toastMessage(
+                "success",
+                "Success to progress pet transaction data!"
+              );
+            });
+        } else if (type === "products") {
+          apiConfig
+            .post(
+              `${endpointsServer.productSales}/create`,
+              {
+                transaction_id: promiseTransaction.data.data[0].transactions_id,
+                product_id: dataId,
+                quantity,
+                price: productId.price * quantity,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((res) => {
+              // console.log(res.data.data);
+              toastMessage(
+                "success",
+                "Success to progress product transaction data!"
+              );
             });
         }
       } catch (error) {
@@ -107,15 +135,26 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
         setIsOpen(false);
       }
     },
-    [token, dataId, type]
+    [token, dataId, type, quantity, productId, setIsOpen, toastMessage]
   );
+
+  const handleQuantityAdd = useCallback(() => {
+    setQuantity((prev) => prev + 1);
+  }, []);
+
+  const handleQuantityRemove = useCallback(() => {
+    if (quantity === 0) {
+      return;
+    }
+
+    setQuantity((prev) => prev - 1);
+  }, [quantity]);
 
   return (
     <>
       <Modal
         titleModal={"Detail"}
         otherTitleModal={"Transaction"}
-        typeFor="transaction"
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         modalRef={modalRef}
@@ -163,13 +202,30 @@ function TransactionModal({ isOpen, setIsOpen, modalRef, dataId, type }) {
                 </span>
                 {type === "pets" ? (
                   <span className="location">{petId.location}</span>
-                ) : null}
-                {type === "products" ? (
+                ) : type === "products" ? (
                   <>
-                    <button>+</button>
-                    <input type="text" />
-
-                    <button>-</button>
+                    <div className="quantity">
+                      <span
+                        className="quantity-remove"
+                        onClick={handleQuantityRemove}
+                      >
+                        -
+                      </span>
+                      <input
+                        className="quantity-input"
+                        type="number"
+                        value={quantity === 0 ? "" : quantity}
+                      />
+                      <span
+                        className="quantity-add"
+                        onClick={handleQuantityAdd}
+                      >
+                        +
+                      </span>
+                    </div>
+                    <div className="total-price">
+                      {FormatCurrencyIDR(productId.price * quantity)}
+                    </div>
                   </>
                 ) : null}
               </div>

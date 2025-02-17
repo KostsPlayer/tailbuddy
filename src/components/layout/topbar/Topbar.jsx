@@ -110,10 +110,10 @@ function Topbar() {
               <span className="material-symbols-rounded">dashboard</span>
               <div className="text">Dashboard</div>
             </NavLink>
-            <NavLink to={"/users-management"} className="item">
+            {/* <NavLink to={"/users-management"} className="item">
               <span className="material-symbols-rounded">manage_accounts</span>
               <div className="text">Users Management</div>
-            </NavLink>
+            </NavLink> */}
             <NavLink to={"/pets"} className="item">
               <span className="material-symbols-rounded">pets</span>
               <div className="text">Pets</div>

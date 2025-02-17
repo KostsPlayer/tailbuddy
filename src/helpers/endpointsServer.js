@@ -25,6 +25,8 @@ const endpointsServer = {
   productId: `/api/product-id`,
   transactions: `/api/transactions`,
   petSales: `/api/pet-sales`,
+  productSales: `/api/product-sales`,
+  grommingReservation: `/api/grooming-reservations`,
 };
 
 export default endpointsServer;
