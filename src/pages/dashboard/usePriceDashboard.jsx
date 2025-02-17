@@ -3,7 +3,7 @@ import apiConfig from "../../helpers/apiConfig";
 import endpointsServer from "../../helpers/endpointsServer";
 import DashboardCore from "../../context/dashboardCore/DashboardCore";
 import { filterToday } from "../../helpers/FilterToday";
-import { filterThisMonth } from "../../helpers/filterThisMonth";
+import { filterThisMonth } from "../../helpers/FilterThisMonth";
 import useFetchDashboard from "./useFetchDashboard";
 
 function usePriceDashboard() {
