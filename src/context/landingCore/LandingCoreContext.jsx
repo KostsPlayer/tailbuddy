@@ -11,6 +11,8 @@ const LandingCoreContext = createContext({
   businessCategories: [],
   pets: [],
   products: [],
+  groomingServices: [],
+  photographyServices: [],
   isMe: {},
 });
 

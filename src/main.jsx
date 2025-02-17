@@ -28,6 +28,12 @@ const PetsMan = useLoadable(lazy(() => import("./pages/petsMan/PetsMan")));
 const ProductsMan = useLoadable(
   lazy(() => import("./pages/productsMan/ProductsMan"))
 );
+const GroomingServicesMan = useLoadable(
+  lazy(() => import("./pages/groomingServicesMan/GroomingServicesMan"))
+);
+const PhotographyServicesMan = useLoadable(
+  lazy(() => import("./pages/photographyServicesMan/PhotographyServicesMan"))
+);
 const Auth = useLoadable(lazy(() => import("./pages/auth/Auth")));
 const ChooseRole = useLoadable(
   lazy(() => import("./pages/chooseRole/ChooseRole"))
@@ -76,6 +82,14 @@ createRoot(document.getElementById("root")).render(
             <Route
               path="/business-category"
               element={<BusinessCategoryMan />}
+            />
+            <Route
+              path="/grooming-services"
+              element={<GroomingServicesMan />}
+            />
+            <Route
+              path="/photography-services"
+              element={<PhotographyServicesMan />}
             />
           </Route>
         </Routes>

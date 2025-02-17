@@ -18,10 +18,5 @@
     "id": 4,
     "name": "Pet Portrait",
     "price": 200000
-  },
-  {
-    "id": 5,
-    "name": "Pet Family Portrait",
-    "price": 400000
   }
 ]

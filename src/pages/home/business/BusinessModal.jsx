@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Modal from "../../../components/layout/Modal/Modal";
 import LandingCore from "../../../context/landingCore/LandingCore";
 import { FormatCurrencyIDR } from "../../../helpers/FormatCurrencyIDR";
-import grommingServices from "../../../data/grommingServices.json";
-import photographyServices from "../../../data/photographyServices.json";
+// import groomingServices from "../../../data/groomingServices.json";
+// import photographyServices from "../../../data/photographyServices.json";
 import apiConfig from "../../../helpers/apiConfig";
 import endpointsServer from "../../../helpers/endpointsServer";
 import LoaderProgress from "../../../components/loader/LoaderProgress";
@@ -18,7 +18,8 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
     schedule: "",
   });
 
-  const { toastMessage, token } = LandingCore();
+  const { toastMessage, token, groomingServices, photographyServices } =
+    LandingCore();
 
   const handleChange = useCallback((e) => {
     const selectedValue = e.target.value;
@@ -71,8 +72,8 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
           {
             status: "pending",
             type:
-              type === "gromming"
-                ? "gromming"
+              type === "grooming"
+                ? "grooming"
                 : type === "photography"
                 ? "photography"
                 : "idk",
@@ -87,7 +88,7 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
         if (type === "grooming") {
           apiConfig
             .post(
-              `${endpointsServer.grommingReservation}/create`,
+              `${endpointsServer.groomingReservation}/create`,
               {
                 transaction_id: promiseTransaction.data.data[0].transactions_id,
                 service: values.service,
@@ -101,10 +102,21 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                 },
               }
             )
-            .then((res) => {
-              toastMessage("success", "Success to take gromming reservation!");
+            .then(() => {
+              toastMessage("success", "Success to take grooming reservation!");
+            })
+            .finally(() => {
+              setBookLoading(false);
+              setIsOpen(false);
+              setValues({
+                service: 0,
+                price: 0,
+                schedule: "",
+              });
             });
         } else if (type === "photography") {
+          // console.log(values);
+
           apiConfig
             .post(
               `${endpointsServer.photograpy}/create`,
@@ -131,17 +143,17 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
               setBookLoading(false);
               setIsOpen(false);
               setValues({
-                service: "",
+                service: 0,
+                price: 0,
                 schedule: "",
-                price: "",
               });
             });
         }
       } catch (err) {
         console.log(err);
 
-        if (type === "gromming") {
-          toastMessage("error", "Failed to take gromming reservation!");
+        if (type === "grooming") {
+          toastMessage("error", "Failed to take grooming reservation!");
         } else if (type === "photography") {
           toastMessage("error", "Failed to take photography reservation!");
         }
@@ -152,7 +164,7 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
 
   return (
     <Modal
-      titleModal={type === "gromming" ? "Gromming" : "Photography"}
+      titleModal={type === "grooming" ? "Grooming" : "Photography"}
       otherTitleModal={"Reservation"}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
@@ -178,12 +190,13 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                 <div className="text">
                   {values.service === 0
                     ? "Select Service"
-                    : type === "gromming"
-                    ? grommingServices.find(
-                        (item) => item.id === values.service
+                    : type === "grooming"
+                    ? groomingServices.find(
+                        (item) => item.grooming_services_id === values.service
                       )?.name || "Unknown Service"
                     : photographyServices.find(
-                        (item) => item.id === values.service
+                        (item) =>
+                          item.photography_services_id === values.service
                       )?.name || "Unknown Service"}
                 </div>
                 <span
@@ -197,8 +210,8 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
 
               {openService && (
                 <div className="select-list" ref={serviceRef}>
-                  {(type === "gromming"
-                    ? grommingServices
+                  {(type === "grooming"
+                    ? groomingServices
                     : photographyServices
                   ).map((data) => (
                     <div
@@ -207,7 +220,10 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                       onClick={() => {
                         setValues((prev) => ({
                           ...prev,
-                          service: data.id,
+                          service:
+                            type === "grooming"
+                              ? data.grooming_services_id
+                              : data.photography_services_id,
                           price: data.price,
                         }));
                         setOpenService(false);

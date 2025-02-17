@@ -142,6 +142,16 @@ function Topbar() {
               <span className="material-symbols-rounded">category</span>
               <div className="text">Business Category</div>
             </NavLink>
+            <NavLink to={"/grooming-services"} className="item">
+              <span className="material-symbols-rounded">content_cut</span>
+              <div className="text">Grooming Services</div>
+            </NavLink>
+            <NavLink to={"/photography-services"} className="item">
+              <span className="material-symbols-rounded">
+                planner_banner_ad_pt
+              </span>
+              <div className="text">Photography Services</div>
+            </NavLink>
             <div className="username">{isMe?.username}</div>
             <div className="email">{isMe?.email}</div>
             <div className="item" onClick={() => toastDevelop("help support")}>

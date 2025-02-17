@@ -22,6 +22,8 @@ const LandingCoreProvider = ({ children }) => {
   const [businessCategories, setBusinessCategories] = useState([]);
   const [pets, setPets] = useState([]);
   const [products, setProducts] = useState([]);
+  const [groomingServices, setGroomingServices] = useState([]);
+  const [photographyServices, setPhotographyServices] = useState([]);
   const [isMe, setIsMe] = useState(null);
 
   const navigate = useNavigate();
@@ -47,6 +49,8 @@ const LandingCoreProvider = ({ children }) => {
         businessCategoriesPromise,
         petsPromise,
         productsPromise,
+        groomingServicesPromise,
+        photographyServicesPromise,
       ] = await Promise.all([
         apiConfig.get(endpointsServer.business),
         apiConfig.get(endpointsServer.businessCategoriesAll),
@@ -54,12 +58,16 @@ const LandingCoreProvider = ({ children }) => {
           withCredentials: true,
         }),
         apiConfig.get(endpointsServer.products),
+        apiConfig.get(endpointsServer.groomingServices),
+        apiConfig.get(endpointsServer.photographyServices),
       ]);
 
       setBusiness(businessPromise.data.data);
       setBusinessCategories(businessCategoriesPromise.data.data);
       setPets(petsPromise.data.data);
       setProducts(productsPromise.data.data);
+      setGroomingServices(groomingServicesPromise.data.data);
+      setPhotographyServices(photographyServicesPromise.data.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -103,6 +111,8 @@ const LandingCoreProvider = ({ children }) => {
       businessCategories,
       pets,
       products,
+      groomingServices,
+      photographyServices,
       isMe,
     }),
     [
@@ -113,6 +123,8 @@ const LandingCoreProvider = ({ children }) => {
       businessCategories,
       pets,
       products,
+      groomingServices,
+      photographyServices,
       isMe,
     ]
   );

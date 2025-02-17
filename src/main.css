@@ -2379,7 +2379,7 @@
   border-radius: 0.2rem;
   background-color: oklch(0.768 0.233 130.85);
 }
-.dashboard-transaction-table .table-tbody-col:nth-child(4) span.gromming {
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.grooming {
   padding: 0.35rem 0.9rem;
   border-radius: 50vw;
   background-color: oklch(0.869 0.022 252.894);
@@ -2391,7 +2391,7 @@
   justify-content: flex-start;
   gap: 0.3rem;
 }
-.dashboard-transaction-table .table-tbody-col:nth-child(4) span.gromming .box {
+.dashboard-transaction-table .table-tbody-col:nth-child(4) span.grooming .box {
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 0.2rem;
@@ -2638,7 +2638,7 @@
     border-radius: 0.2rem;
     background-color: oklch(0.768 0.233 130.85);
   }
-  .dashboard-transaction .dashboard-transaction-list .list-item-type span .gromming {
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span .grooming {
     padding: 0.35rem 0.9rem;
     border-radius: 50vw;
     background-color: oklch(0.869 0.022 252.894);
@@ -2650,7 +2650,7 @@
     justify-content: flex-start;
     gap: 0.3rem;
   }
-  .dashboard-transaction .dashboard-transaction-list .list-item-type span .gromming .box {
+  .dashboard-transaction .dashboard-transaction-list .list-item-type span .grooming .box {
     width: 0.6rem;
     height: 0.6rem;
     border-radius: 0.2rem;
@@ -3456,6 +3456,264 @@
 }
 @media (max-width: 767.98px) {
   .products-man .header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+}
+
+.grooming-services-man .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.grooming-services-man .header-title {
+  font-family: "Funnel Display", sans-serif;
+  font-size: 2.5rem;
+  overflow-x: auto;
+  color: #f3734c;
+}
+.grooming-services-man .header-title span {
+  color: #2e2d31;
+}
+.grooming-services-man .header-new-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.4rem;
+  color: #fff;
+  background-color: #2e2d31;
+  transition: all 0.4s ease-in;
+  cursor: pointer;
+}
+.grooming-services-man .header-new-item .material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+  font-size: 20px;
+}
+.grooming-services-man .header-new-item .text {
+  font-size: 0.9rem;
+}
+.grooming-services-man .header-new-item:hover {
+  transition: all 0.4s ease-out;
+  background-color: #f3734c;
+}
+.grooming-services-man .content {
+  margin-top: 1.7rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1.4rem;
+}
+.grooming-services-man .content-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 0.4rem;
+  border: 3px solid #2e2d31;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+.grooming-services-man .content-item-image {
+  height: 100%;
+  max-height: 12rem;
+  min-height: 10rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: auto;
+  padding: 1.6rem;
+}
+.grooming-services-man .content-item-core {
+  width: 100%;
+  background-color: #2e2d31;
+  color: #fff;
+  padding: 1.2rem;
+}
+.grooming-services-man .content-item-core .name {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.grooming-services-man .content-item-core .price {
+  margin-top: 0.7rem;
+}
+.grooming-services-man .content-item-core .location {
+  margin-top: 0.2rem;
+  font-size: 0.88rem;
+}
+.grooming-services-man .content-item-core .stock {
+  margin-top: 0.25rem;
+  font-size: 0.93rem;
+}
+.grooming-services-man .content-item-core .stock span {
+  font-weight: 600;
+}
+.grooming-services-man .content-item-core .category {
+  margin-top: 0.25rem;
+  font-size: 0.93rem;
+}
+.grooming-services-man .content-item-core .core-action {
+  margin-top: 2.3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.3rem;
+}
+.grooming-services-man .content-item-core .core-action .material-symbols-rounded {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+  font-size: 22px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.3rem;
+  color: #fff;
+  background-color: #f3734c;
+  transition: all 0.4s ease-in;
+  cursor: pointer;
+}
+.grooming-services-man .content-item-core .core-action .material-symbols-rounded:hover {
+  transition: all 0.4s ease-out;
+  background-color: #fff;
+  color: #f3734c;
+}
+@media (max-width: 767.98px) {
+  .grooming-services-man .header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+}
+
+.photography-services-man .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.photography-services-man .header-title {
+  font-family: "Funnel Display", sans-serif;
+  font-size: 2.5rem;
+  overflow-x: auto;
+  color: #f3734c;
+}
+.photography-services-man .header-title span {
+  color: #2e2d31;
+}
+.photography-services-man .header-new-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.4rem;
+  color: #fff;
+  background-color: #2e2d31;
+  transition: all 0.4s ease-in;
+  cursor: pointer;
+}
+.photography-services-man .header-new-item .material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+  font-size: 20px;
+}
+.photography-services-man .header-new-item .text {
+  font-size: 0.9rem;
+}
+.photography-services-man .header-new-item:hover {
+  transition: all 0.4s ease-out;
+  background-color: #f3734c;
+}
+.photography-services-man .content {
+  margin-top: 1.7rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1.4rem;
+}
+.photography-services-man .content-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 0.4rem;
+  border: 3px solid #2e2d31;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+.photography-services-man .content-item-image {
+  height: 100%;
+  max-height: 12rem;
+  min-height: 10rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: auto;
+  padding: 1.6rem;
+}
+.photography-services-man .content-item-core {
+  width: 100%;
+  background-color: #2e2d31;
+  color: #fff;
+  padding: 1.2rem;
+}
+.photography-services-man .content-item-core .name {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.photography-services-man .content-item-core .price {
+  margin-top: 0.7rem;
+}
+.photography-services-man .content-item-core .location {
+  margin-top: 0.2rem;
+  font-size: 0.88rem;
+}
+.photography-services-man .content-item-core .stock {
+  margin-top: 0.25rem;
+  font-size: 0.93rem;
+}
+.photography-services-man .content-item-core .stock span {
+  font-weight: 600;
+}
+.photography-services-man .content-item-core .category {
+  margin-top: 0.25rem;
+  font-size: 0.93rem;
+}
+.photography-services-man .content-item-core .core-action {
+  margin-top: 2.3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.3rem;
+}
+.photography-services-man .content-item-core .core-action .material-symbols-rounded {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+  font-size: 22px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.3rem;
+  color: #fff;
+  background-color: #f3734c;
+  transition: all 0.4s ease-in;
+  cursor: pointer;
+}
+.photography-services-man .content-item-core .core-action .material-symbols-rounded:hover {
+  transition: all 0.4s ease-out;
+  background-color: #fff;
+  color: #f3734c;
+}
+@media (max-width: 767.98px) {
+  .photography-services-man .header {
     display: flex;
     flex-direction: column;
     align-items: flex-start;

@@ -106,7 +106,7 @@ function Business() {
             activeCategory === "a67555c1-4472-4320-8ae3-5287ea9d2aa9"
               ? () => {
                   setOpenBook(true);
-                  setBookType("gromming");
+                  setBookType("grooming");
                 }
               : activeCategory === "7fcf3672-7811-49fb-a241-53b9d0c2dbe1"
               ? () => {
