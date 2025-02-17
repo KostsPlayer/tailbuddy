@@ -13,5 +13,5 @@ export const indonesianTime = (isoString) => {
   const date = dayjs(isoString).tz("Asia/Jakarta");
 
   // Format: Sen, 15 Jan 2025 05:46:02
-  return date.format("ddd, DD MMM YYYY");
+  return date.format("ddd, DD MMM YYYY — HH.mm");
 };

@@ -8,25 +8,49 @@ import LoaderPages from "../../components/loader/LoaderPages";
 import { indonesianTime } from "../../helpers/IndonesianTime";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
 import UpdateStatusModal from "./UpdateStatusModal";
+import { FormatCurrencyIDR } from "../../helpers/FormatCurrencyIDR";
+import usePriceDashboard from "./usePriceDashboard";
+import useFetchDashboard from "./useFetchDashboard";
+import DetailTransactionModal from "./DetailTransactionModal";
 
 function Dashboard() {
   const [transactionData, setTransactionData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [openUpdateStatus, setOpenUpdateStatus] = useState(false);
+  const [openDetailTransaction, setOpenDetailTransaction] = useState(false);
   const [transactionId, setTransactionId] = useState({});
+  const [detailTransaction, setDetailTransaction] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const updateStatusRef = useRef(null);
+  const detailTransactionRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { toastMessage, token, isMe } = DashboardCore();
+  const {
+    toastMessage,
+    token,
+    isMe,
+    setDashboardCoreLoader,
+    isLoadingDashboardCore,
+  } = DashboardCore();
+  const { grooming, pet, product, photography } = useFetchDashboard();
+  const {
+    groomingPriceToday,
+    groomingPriceThisMonth,
+    petPriceToday,
+    petPriceThisMonth,
+    productPriceThisMonth,
+    productPriceToday,
+    photographyPriceThisMonth,
+    photographyPriceToday,
+  } = usePriceDashboard();
 
   const widthWindow = useWindowWidth();
 
   const fetchTransactionData = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setDashboardCoreLoader(true);
 
       await apiConfig
         .get(endpointsServer.transactions, {
@@ -39,12 +63,26 @@ function Dashboard() {
             (a, b) => new Date(b.created_at) - new Date(a.created_at)
           );
 
+          sortedData.forEach((item) => {
+            const combinedArray = [
+              ...grooming,
+              ...pet,
+              ...product,
+              ...photography,
+            ];
+            const data = combinedArray.find(
+              (data) => data.transaction_id === item.transactions_id
+            );
+
+            return Object.assign(item, data);
+          });
+
           setTransactionData(sortedData);
         });
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false);
+      setDashboardCoreLoader(false);
     }
   }, [token]);
 
@@ -74,10 +112,6 @@ function Dashboard() {
   }, [updateStatusRef, openUpdateStatus]);
 
   useEffect(() => {
-    console.log(isMe);
-  }, [isMe]);
-
-  useEffect(() => {
     if (location.state?.messageLogin) {
       toastMessage("success", location.state.messageLogin);
       navigate(location.pathname, {
@@ -89,27 +123,90 @@ function Dashboard() {
 
   return (
     <>
-      {isLoading ? (
+      {isLoadingDashboardCore ? (
         <LoaderPages />
       ) : (
         <LayoutDashboard>
           {isMe.role_id === "067c970c-6870-406b-8b29-de9fc21f3675" ||
           isMe.role_id === "5bc702b0-cb8a-4996-a4f9-3feef9710b10" ? (
             <div className="dashboard-transaction">
-              {/* <div className="dashboard-transaction-cards">
-              <div className="card-item">
-                <div className="card-item-title">Jumlah Pengguna</div>
-                <div className="card-item-content"></div>
+              <div className="dashboard-transaction-cards">
+                <div className="card-item">
+                  <div className="card-item-title">Profit Harian</div>
+                  <div className="card-item-content">
+                    <div className="total">
+                      {FormatCurrencyIDR(
+                        groomingPriceToday +
+                          productPriceToday +
+                          petPriceToday +
+                          photographyPriceToday
+                      )}
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Grooming</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(groomingPriceToday)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Product</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(productPriceToday)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Pet</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(petPriceToday)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Photography</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(photographyPriceToday)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-item">
+                  <div className="card-item-title">Profit Bulanan</div>
+                  <div className="card-item-content">
+                    <div className="total">
+                      {" "}
+                      {FormatCurrencyIDR(
+                        groomingPriceThisMonth +
+                          productPriceThisMonth +
+                          petPriceThisMonth +
+                          photographyPriceThisMonth
+                      )}
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Grooming</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(groomingPriceThisMonth)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Product</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(productPriceThisMonth)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Pet</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(petPriceThisMonth)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Photography</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(photographyPriceThisMonth)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="card-item">
-                <div className="card-item-title">Profit Harian</div>
-                <div className="card-item-content"></div>
-              </div>
-              <div className="card-item">
-                <div className="card-item-title">Profit Bulanan</div>
-                <div className="card-item-content"></div>
-              </div>
-            </div> */}
               {widthWindow < 767.98 ? (
                 <>
                   <div className="dashboard-transaction-list">
@@ -120,6 +217,7 @@ function Dashboard() {
                             <span>{transaction.users.email}</span>
                             <span>{transaction.users.username}</span>
                           </div>
+                          <div className="list-item-price"></div>
                           <div className="list-item-type">
                             <span className={`${transaction.type}`}>
                               <div className="box"></div>
@@ -138,11 +236,33 @@ function Dashboard() {
                             <div className="date">
                               {indonesianTime(transaction.created_at)}
                             </div>
-                            {/* <button className="detail">
-                              <span className="material-symbols-rounded">
-                                info
-                              </span>
-                            </button> */}
+                            {transaction.status === "done" ? (
+                              <button
+                                className="detail"
+                                onClick={() => {
+                                  const combinedArray = [
+                                    ...grooming,
+                                    ...pet,
+                                    ...product,
+                                    ...photography,
+                                  ];
+
+                                  const data = combinedArray.find(
+                                    (item) =>
+                                      item.transaction_id ===
+                                      transaction.transactions_id
+                                  );
+
+                                  setTransactionId(transaction);
+                                  setDetailTransaction(data);
+                                  setOpenDetailTransaction(true);
+                                }}
+                              >
+                                <span className="material-symbols-rounded">
+                                  info
+                                </span>
+                              </button>
+                            ) : null}
                             <button
                               className="edit"
                               onClick={() => {
@@ -154,16 +274,25 @@ function Dashboard() {
                                 edit
                               </span>
                             </button>
-                            {/* <button className="delete">
+                            <button className="delete">
                               <span className="material-symbols-rounded">
                                 delete
                               </span>
-                            </button> */}
+                            </button>
                           </div>
                         </div>
                       );
                     })}
                   </div>
+
+                  {openDetailTransaction ? (
+                    <DetailTransactionModal
+                      isOpen={openDetailTransaction}
+                      setIsOpen={setOpenDetailTransaction}
+                      modalRef={detailTransactionRef}
+                      data={[detailTransaction, transactionId]}
+                    />
+                  ) : null}
 
                   {openUpdateStatus ? (
                     <UpdateStatusModal
@@ -209,21 +338,21 @@ function Dashboard() {
                           </span>
                         </div>
                         <div className="table-tbody-col">
-                          {/* <button className="detail">
+                          <button className="detail">
                             <span className="material-symbols-rounded">
                               info
                             </span>
-                          </button> */}
+                          </button>
                           <button className="edit">
                             <span className="material-symbols-rounded">
                               edit
                             </span>
                           </button>
-                          {/* <button className="delete">
+                          <button className="delete">
                             <span className="material-symbols-rounded">
                               delete
                             </span>
-                          </button> */}
+                          </button>
                         </div>
                       </div>
                     );
