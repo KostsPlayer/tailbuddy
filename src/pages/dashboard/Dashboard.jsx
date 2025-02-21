@@ -59,24 +59,28 @@ function Dashboard() {
         .then((res) => {
           // console.log(res.data.data);
 
-          const sortedData = res.data.data.sort(
-            (a, b) => new Date(b.created_at) - new Date(a.created_at)
-          );
+          const combinedArray = [
+            ...grooming,
+            ...pet,
+            ...product,
+            ...photography,
+          ];
 
-          sortedData.forEach((item) => {
-            const combinedArray = [
-              ...grooming,
-              ...pet,
-              ...product,
-              ...photography,
-            ];
+          const getData = res.data.data.map((item) => {
             const data = combinedArray.find(
               (data) => data.transaction_id === item.transactions_id
             );
 
-            return Object.assign(item, data);
+            return { type: item.type, status: item.status, users: item.users, ...data }
           });
 
+           const sortedData = getData.sort(
+            (a, b) => new Date(b.created_at) - new Date(a.created_at)
+          );
+
+          console.log(sortedData);
+          
+          
           setTransactionData(sortedData);
         });
     } catch (error) {
@@ -84,7 +88,7 @@ function Dashboard() {
     } finally {
       setDashboardCoreLoader(false);
     }
-  }, [token]);
+  }, [token, setDashboardCoreLoader, grooming, pet, product, photography]);
 
   useEffect(() => {
     fetchTransactionData();
@@ -217,7 +221,15 @@ function Dashboard() {
                             <span>{transaction.users.email}</span>
                             <span>{transaction.users.username}</span>
                           </div>
-                          <div className="list-item-price"></div>
+                          <div className="list-item-price">
+                            {FormatCurrencyIDR(transaction.type === "pet" ? transaction?.pets?.price : transaction.type === "product" ? transaction?.price * transaction?.quantity : transaction?.price )}
+                          </div>
+                          <div className="list-item-service">
+                            <span>{transaction.type === "pet" ? transaction.pets?.pet : transaction.type === "product" ? transaction.products?.name : transaction.type === "grooming" ? transaction.gromming_services?.name : transaction.photography_services?.name}</span>
+                            {transaction.type === "product" ? (
+                                <span>x {transaction.quantity}</span>
+                              ) : null}
+                          </div>
                           <div className="list-item-type">
                             <span className={`${transaction.type}`}>
                               <div className="box"></div>
