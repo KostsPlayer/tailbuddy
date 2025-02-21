@@ -7,7 +7,7 @@ import endpointsServer from "../../helpers/endpointsServer";
 import LoaderPages from "../../components/loader/LoaderPages";
 import { indonesianTime } from "../../helpers/IndonesianTime";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
-import UpdateStatusModal from "./UpdateStatusModal";
+import UpdateDeleteModal from "./UpdateDeleteModal";
 import { FormatCurrencyIDR } from "../../helpers/FormatCurrencyIDR";
 import usePriceDashboard from "./usePriceDashboard";
 import useFetchDashboard from "./useFetchDashboard";
@@ -16,12 +16,13 @@ import DetailTransactionModal from "./DetailTransactionModal";
 function Dashboard() {
   const [transactionData, setTransactionData] = useState([]);
   const [openUpdateStatus, setOpenUpdateStatus] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [openDetailTransaction, setOpenDetailTransaction] = useState(false);
   const [transactionId, setTransactionId] = useState({});
   const [detailTransaction, setDetailTransaction] = useState({});
-  const [totalPrice, setTotalPrice] = useState(0);
 
   const updateStatusRef = useRef(null);
+  const deleteRef = useRef(null);
   const detailTransactionRef = useRef(null);
 
   const location = useLocation();
@@ -37,16 +38,24 @@ function Dashboard() {
   const { grooming, pet, product, photography } = useFetchDashboard();
   const {
     groomingPriceToday,
+    groomingPriceThisWeek,
     groomingPriceThisMonth,
     petPriceToday,
+    petPriceThisWeek,
     petPriceThisMonth,
-    productPriceThisMonth,
     productPriceToday,
-    photographyPriceThisMonth,
+    productPriceThisWeek,
+    productPriceThisMonth,
     photographyPriceToday,
+    photographyPriceThisWeek,
+    photographyPriceThisMonth,
   } = usePriceDashboard();
 
   const widthWindow = useWindowWidth();
+
+  useEffect(() => {
+    console.log(isMe);
+  }, [isMe]);
 
   const fetchTransactionData = useCallback(async () => {
     try {
@@ -71,16 +80,20 @@ function Dashboard() {
               (data) => data.transaction_id === item.transactions_id
             );
 
-            return { type: item.type, status: item.status, users: item.users, ...data }
+            return {
+              type: item.type,
+              status: item.status,
+              users: item.users,
+              ...data,
+            };
           });
 
-           const sortedData = getData.sort(
+          const sortedData = getData.sort(
             (a, b) => new Date(b.created_at) - new Date(a.created_at)
           );
 
-          console.log(sortedData);
-          
-          
+          console.log(sortedData.length);
+
           setTransactionData(sortedData);
         });
     } catch (error) {
@@ -101,10 +114,12 @@ function Dashboard() {
         !updateStatusRef.current.contains(e.target)
       ) {
         setOpenUpdateStatus(false);
+      } else if (deleteRef.current && !deleteRef.current.contains(e.target)) {
+        setOpenDelete(false);
       }
     };
 
-    if (openUpdateStatus) {
+    if (openUpdateStatus || openDelete) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -113,7 +128,7 @@ function Dashboard() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [updateStatusRef, openUpdateStatus]);
+  }, [updateStatusRef, openUpdateStatus, deleteRef, openDelete]);
 
   useEffect(() => {
     if (location.state?.messageLogin) {
@@ -173,6 +188,43 @@ function Dashboard() {
                   </div>
                 </div>
                 <div className="card-item">
+                  <div className="card-item-title">Profit Mingguan</div>
+                  <div className="card-item-content">
+                    <div className="total">
+                      {FormatCurrencyIDR(
+                        groomingPriceThisWeek +
+                          productPriceThisWeek +
+                          petPriceThisWeek +
+                          photographyPriceThisWeek
+                      )}
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Grooming</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(groomingPriceThisWeek)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Product</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(productPriceThisWeek)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Pet</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(petPriceThisWeek)}
+                      </div>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-text">Photography</div>
+                      <div className="detail-number">
+                        {FormatCurrencyIDR(photographyPriceThisWeek)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-item">
                   <div className="card-item-title">Profit Bulanan</div>
                   <div className="card-item-content">
                     <div className="total">
@@ -221,15 +273,36 @@ function Dashboard() {
                             <span>{transaction.users.email}</span>
                             <span>{transaction.users.username}</span>
                           </div>
-                          <div className="list-item-price">
-                            {FormatCurrencyIDR(transaction.type === "pet" ? transaction?.pets?.price : transaction.type === "product" ? transaction?.price * transaction?.quantity : transaction?.price )}
-                          </div>
                           <div className="list-item-service">
-                            <span>{transaction.type === "pet" ? transaction.pets?.pet : transaction.type === "product" ? transaction.products?.name : transaction.type === "grooming" ? transaction.gromming_services?.name : transaction.photography_services?.name}</span>
+                            <span>
+                              {transaction.type === "pet"
+                                ? transaction.pets?.pet
+                                : transaction.type === "product"
+                                ? transaction.products?.name
+                                : transaction.type === "grooming"
+                                ? transaction.grooming_services?.name
+                                : transaction.photography_services?.name}
+                            </span>
                             {transaction.type === "product" ? (
-                                <span>x {transaction.quantity}</span>
-                              ) : null}
+                              <span>x {transaction.quantity}</span>
+                            ) : null}
                           </div>
+                          <div className="list-item-price">
+                            {FormatCurrencyIDR(
+                              transaction.type === "pet"
+                                ? transaction?.pets?.price
+                                : transaction.type === "product"
+                                ? transaction?.price * transaction?.quantity
+                                : transaction?.price
+                            )}
+                          </div>
+                          {transaction.type === "grooming" ||
+                          transaction.type === "photography" ? (
+                            <div className="list-item-schedule">
+                              {indonesianTime(transaction.schedule)}
+                              <div className="text">— Schedule</div>
+                            </div>
+                          ) : null}
                           <div className="list-item-type">
                             <span className={`${transaction.type}`}>
                               <div className="box"></div>
@@ -248,7 +321,7 @@ function Dashboard() {
                             <div className="date">
                               {indonesianTime(transaction.created_at)}
                             </div>
-                            {transaction.status === "done" ? (
+                            {/* {transaction.status === "done" ? (
                               <button
                                 className="detail"
                                 onClick={() => {
@@ -274,7 +347,7 @@ function Dashboard() {
                                   info
                                 </span>
                               </button>
-                            ) : null}
+                            ) : null} */}
                             <button
                               className="edit"
                               onClick={() => {
@@ -286,7 +359,13 @@ function Dashboard() {
                                 edit
                               </span>
                             </button>
-                            <button className="delete">
+                            <button
+                              className="delete"
+                              onClick={() => {
+                                setOpenDelete(true);
+                                setTransactionId(transaction);
+                              }}
+                            >
                               <span className="material-symbols-rounded">
                                 delete
                               </span>
@@ -307,11 +386,29 @@ function Dashboard() {
                   ) : null}
 
                   {openUpdateStatus ? (
-                    <UpdateStatusModal
+                    <UpdateDeleteModal
+                      type="update"
                       isOpen={openUpdateStatus}
                       setIsOpen={setOpenUpdateStatus}
                       modalRef={updateStatusRef}
-                      refreshData={fetchTransactionData}
+                      refreshData={() => {
+                        setOpenUpdateStatus(false);
+                        window.location.reload();
+                      }}
+                      dataId={transactionId}
+                    />
+                  ) : null}
+
+                  {openDelete ? (
+                    <UpdateDeleteModal
+                      type="delete"
+                      isOpen={openDelete}
+                      setIsOpen={setOpenDelete}
+                      modalRef={deleteRef}
+                      refreshData={() => {
+                        window.location.reload();
+                        setOpenDelete(false);
+                      }}
                       dataId={transactionId}
                     />
                   ) : null}
@@ -373,8 +470,86 @@ function Dashboard() {
               )}
             </div>
           ) : (
-            <div className="dashboard-text">
-              Dashboard <span> User</span>
+            <div className="dashboard-transaction">
+              {widthWindow < 767.98 ? (
+                <>
+                  {transactionData.filter(
+                    (item) => item.users.users_id === isMe.users_id
+                  ).length !== 0 ? (
+                    <div className="dashboard-transaction-list">
+                      {transactionData
+                        .filter((item) => item.users.users_id === isMe.users_id)
+                        .map((transaction, index) => {
+                          return (
+                            <div className="list-item" key={index}>
+                              <div className="list-item-user">
+                                <span>{transaction.users.email}</span>
+                                <span>{transaction.users.username}</span>
+                              </div>
+                              <div className="list-item-service">
+                                <span>
+                                  {transaction.type === "pet"
+                                    ? transaction.pets?.pet
+                                    : transaction.type === "product"
+                                    ? transaction.products?.name
+                                    : transaction.type === "grooming"
+                                    ? transaction.grooming_services?.name
+                                    : transaction.photography_services?.name}
+                                </span>
+                                {transaction.type === "product" ? (
+                                  <span>x {transaction.quantity}</span>
+                                ) : null}
+                              </div>
+                              <div className="list-item-price">
+                                {FormatCurrencyIDR(
+                                  transaction.type === "pet"
+                                    ? transaction?.pets?.price
+                                    : transaction.type === "product"
+                                    ? transaction?.price * transaction?.quantity
+                                    : transaction?.price
+                                )}
+                              </div>
+                              {transaction.type === "grooming" ||
+                              transaction.type === "photography" ? (
+                                <div className="list-item-schedule">
+                                  {indonesianTime(transaction.schedule)}
+                                  <div className="text">— Schedule</div>
+                                </div>
+                              ) : null}
+                              <div className="list-item-type">
+                                <span className={`${transaction.type}`}>
+                                  <div className="box"></div>
+                                  {transaction.type}
+                                </span>
+                                <div className="text">— Transaction Type</div>
+                              </div>
+                              <div className="list-item-status">
+                                <span className={`${transaction.status}`}>
+                                  <div className="box"></div>
+                                  {transaction.status}
+                                </span>
+                                <div className="text">— Transaction Status</div>
+                              </div>
+                              <div className="list-item-action">
+                                <div className="date">
+                                  {indonesianTime(transaction.created_at)}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <div className="no-transaction">
+                      No Transaction <span>Found</span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="dashboard-text">
+                  Dashboard <span>Transaction</span>
+                </div>
+              )}
             </div>
           )}
         </LayoutDashboard>

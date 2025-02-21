@@ -2252,8 +2252,8 @@
 .dashboard-text {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   font-family: "Cherry Bomb One", system-ui;
   font-size: 5.2rem;
   text-transform: lowercase;
@@ -2642,8 +2642,40 @@
     font-size: 0.9rem;
     color: #b5aeb4;
   }
+  .dashboard-transaction .dashboard-transaction-list .list-item-service {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-service span:first-child {
+    text-transform: capitalize;
+    margin-right: 0.25rem;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-price {
+    margin-top: 0.2rem;
+    margin-bottom: 0.7rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-schedule {
+    margin-top: 0.2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .dashboard-transaction .dashboard-transaction-list .list-item-schedule .text {
+    margin-left: 0.3rem;
+    font-size: 0.88rem;
+  }
   .dashboard-transaction .dashboard-transaction-list .list-item-type {
-    margin-top: 1.3rem;
+    margin-top: 0.45rem;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -2888,6 +2920,22 @@
     font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
     color: #fff;
     transition: all 0.4s ease-out;
+  }
+  .dashboard-transaction .no-transaction {
+    font-family: "Cherry Bomb One", system-ui;
+    font-size: 3rem;
+    text-transform: lowercase;
+    min-height: 60vh;
+    color: #2e2d31;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .dashboard-transaction .no-transaction span {
+    color: #f3734c;
   }
 }
 
@@ -4041,4 +4089,4 @@ input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
+}/*# sourceMappingURL=main.css.map */

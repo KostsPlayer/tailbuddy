@@ -94,7 +94,6 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                 service: values.service,
                 schedule: values.schedule,
                 price: values.price,
-                status: "pending",
               },
               {
                 headers: {
@@ -125,7 +124,6 @@ function BusinessModal({ isOpen, setIsOpen, modalRef, type }) {
                 service: values.service,
                 schedule: values.schedule,
                 price: values.price,
-                status: "pending",
               },
               {
                 headers: {

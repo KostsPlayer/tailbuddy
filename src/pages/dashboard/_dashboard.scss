@@ -1,10 +1,13 @@
 @use "../../helpers/mixins" as m;
 @use "../../helpers/variables" as v;
 
-@mixin text-loan() {
-  @include m.flex();
+@mixin text-loan($fs: 5.2rem, $is-start: true) {
+  @if $is-start {
+    @include m.flex($start: true);
+  }
+
   font-family: v.$cherry;
-  font-size: 5.2rem;
+  font-size: $fs;
   text-transform: lowercase;
   min-height: 60vh;
   color: v.$main-dark;
@@ -279,8 +282,36 @@
           }
         }
 
+        &-service {
+          margin-top: 1.5rem;
+          @include m.flex($justify: flex-end);
+
+          span:first-child {
+            text-transform: capitalize;
+            margin-right: 0.25rem;
+          }
+        }
+
+        &-price {
+          margin-top: 0.2rem;
+          margin-bottom: 0.7rem;
+          font-size: 1.35rem;
+          font-weight: 700;
+          @include m.flex($justify: flex-end);
+        }
+
+        &-schedule {
+          margin-top: 0.2rem;
+          @include m.flex($justify: flex-start);
+
+          .text {
+            margin-left: 0.3rem;
+            font-size: 0.88rem;
+          }
+        }
+
         &-type {
-          margin-top: 1.3rem;
+          margin-top: 0.45rem;
           @include m.flex($justify: flex-start);
 
           .text {
@@ -352,6 +383,12 @@
           }
         }
       }
+    }
+
+    .no-transaction {
+      @include text-loan($fs: 3rem, $is-start: false);
+      @include m.flex($direction: column);
+      text-align: center;
     }
   }
 }
