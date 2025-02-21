@@ -534,20 +534,6 @@ function Dashboard() {
                                 <div className="date">
                                   {indonesianTime(transaction.created_at)}
                                 </div>
-                                {isMe.role_id ===
-                                "0ed16806-0500-448d-b245-524f2c5ee8bc" ? (
-                                  <button
-                                    className="edit"
-                                    onClick={() => {
-                                      setTransactionId(transaction);
-                                      setOpenUpdateStatus(true);
-                                    }}
-                                  >
-                                    <span className="material-symbols-rounded">
-                                      edit
-                                    </span>
-                                  </button>
-                                ) : null}
                               </div>
                             </div>
                           );
